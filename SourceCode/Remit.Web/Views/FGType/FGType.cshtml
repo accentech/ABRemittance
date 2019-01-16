@@ -1,0 +1,282 @@
+﻿
+@{
+    ViewBag.Title = "FGType";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgtypeCtrl">
+
+    @* ************ FORM - SECTION (Start) *************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceFGType.LblFGType</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGType.ResourceFGTypeList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="typeId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.TypeName for c in allFGTypeFromDb" name="typeId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-click="loadGradeById(typeId);"></select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceFGType.TypeName
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="TypeName" ng-model="TypeName" required ng-maxlength="50" focus-on="focusMe" />
+                                    <b class="help-block" ng-if="form.TypeName.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGType.TypeName)
+                                    </b>
+
+                                    <b class="help-block" ng-if="form.TypeName.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addFGType()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+
+                                    <input ng-if="typeId" type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deleteFGType()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgtypeService', ['$http', function ($http) {
+
+        return {
+            saveFGType: function (fgtype) {
+                return $http({
+                    url: '/FGType/CreateFGType',
+                    method: 'POST',
+                    data: fgtype
+                });
+            },
+            getFGType: function (id) {
+                return $http.get('/FGType/GetFGType/' + id);
+            },
+            getAllFGType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            deleteFGType: function (fgtype) {
+                return $http({
+                    url: '/FGType/DeleteFGType',
+                    method: 'POST',
+                    data: fgtype
+                });
+            }
+        };
+    }]);app.controller('fgtypeCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgtypeService, $log, $ngBootbox) {
+
+
+        if ('@ViewBag.permission' == "NO") {
+            $scope.NoPermission = true;
+        }
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        loadAllFGType();
+        $scope.showModalforSearch = false;
+        // Add a new fgtype
+        $scope.addFGType = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgtype = {};
+                fgtype["Id"] = $scope.Id;
+                fgtype["TypeName"] = $scope.TypeName;
+
+
+                fgtypeService.saveFGType(fgtype)
+                .then(function onSuccess(response) {
+                    loadAllFGType();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+        // Populate fgtype
+
+        $scope.selectedRow = null;
+        $scope.populateFGType = function (rowvalue) {
+            $scope.selectedRow = rowvalue;
+            $scope.Id = rowvalue.Id;
+            $scope.TypeName = rowvalue.TypeName;
+
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+            $scope.desableIdField = true;
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.selectedRow = null;
+            $scope.Id = '';
+            $scope.TypeName = '';
+
+        }
+
+        $scope.deleteFGType = function () {
+            var fgtype = {};
+                 fgtype["Id"] = $scope.Id;
+                 fgtypeService.deleteFGType(fgtype)
+                .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                $scope.reset();
+                loadAllFGType();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+
+        //$scope.deleteFGType = function () {
+        //    $scope.$broadcast('show-errors-check-validity');
+        //    if ($scope.form.$valid) {
+        //        var fgtype = {};
+        //        fgtype["Id"] = $scope.Id;
+
+        //        fgtypeService.deleteFGType(fgtype)
+        //            .then(function onSuccess(response) {
+        //                $scope.messageModalObj.message = response.data.message;
+        //                $scope.showModalforSearch = true;
+        //                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+        //                $scope.reset();
+        //                loadAllFGType();
+        //            });
+
+        //    }
+        //};
+
+        $scope.loadGradeById = function (gradeId) {
+
+            fgtypeService.getFGType(gradeId)
+                .then(function onSuccess(response) {
+
+                    $scope.populateFGType(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+
+
+        @*$scope.loadUOMById = function (uomId) {
+
+            fgtypeService.getFGType(uomId)
+                .then(function onSuccess(response) {
+
+                    $scope.UnitName = response.data.UnitName;
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }*@
+
+        // Load FGType
+        function loadAllFGType() {
+            $scope.allFGTypeFromDb = [];
+            fgtypeService.getAllFGType()
+                    .then(function onSuccess(response) {
+                        $scope.allFGTypeFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allFGTypeFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allFGTypeFromDb.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });</script>

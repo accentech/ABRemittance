@@ -1,0 +1,99 @@
+
+
+ul>li{
+	list-style:none;
+}
+
+/* Generic classes */
+.hide { /* Hide stuff without resorting to display:none; */
+	visibility: hidden !important;
+	width: 0 !important;
+	height: 0 !important;
+	line-height: 0 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.hide:after { /* Hide stuff without resorting to display:none; */
+	visibility: hidden !important;
+	width: 0 !important;
+	height: 0 !important;
+	line-height: 0 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.main{
+  display: inline-block;
+  padding: 2em;
+  width: 30em;
+  margin-bottom: 5em;
+}
+
+
+/* AUTOCOMPLETE */
+
+.autocomplete{
+  width: 100%;
+  position: relative;
+}
+
+.autocomplete input{
+    display: block;
+    width: 100%;
+    height: 25px;
+    padding: 4px 5px;
+    font-size: 12px;
+    line-height: 1.428571429;
+    vertical-align: middle;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.autocomplete input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    border-left: 5px solid #39B3D7;
+}
+
+.autocomplete ul{
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-left: 1px solid #39B3D7;
+  border-right: 1px solid #39B3D7;
+  border-bottom: 1px solid #39B3D7;
+  z-index: 1;
+}
+
+.autocomplete li{
+  text-align: left;
+  list-style:none;
+  width: 100%;
+  padding:0.4em;
+  background-color: #fff;
+}
+
+.autocomplete li.active{
+  width: 100%;
+  background-color: #39B3D7;
+}
+
+.autocomplete .highlight {
+  background-color: #69cdeb;
+}
+
+.autocomplete li.active .highlight {
+  background: #434343;
+  color: #fff;
+}
+
+#autocomplete-list{
+    z-index:999
+}

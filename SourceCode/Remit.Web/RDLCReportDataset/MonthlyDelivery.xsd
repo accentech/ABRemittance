@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MonthlyDelivery" targetNamespace="http://tempuri.org/MonthlyDelivery.xsd" xmlns:mstns="http://tempuri.org/MonthlyDelivery.xsd" xmlns="http://tempuri.org/MonthlyDelivery.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="DBConnection" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="DBConnection (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.DBConnection.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="MonthlyDeliveryTableAdapter" GeneratorDataComponentClassName="MonthlyDeliveryTableAdapter" Name="MonthlyDelivery" UserDataComponentName="MonthlyDeliveryTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="DBConnection (Web.config)" DbObjectName="SELECT a.DeliverySite, b.ZoneName, CAST(a.DeliveryDate AS date) AS DeliveryDate, a.TruckNo FROM FGSalesDelivery a JOIN FGDealerZone b ON a.DeliverZoneId = b.Id GROUP BY a.DeliverySite, b.ZoneName, CAST(a.DeliveryDate AS date), a.TruckNo" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>select DeliverySite, ZoneName, DeliveryDate, count(TruckNo) as NumTruck, STUFF((SELECT ',' + InvoiceNo FROM FGSalesDelivery x join FGDealerZone y on x.DeliverZoneId = y.Id WHERE x.DeliverySite = A.DeliverySite and CAST(x.DeliveryDate as date) = A.DeliveryDate and y.ZoneName = A.ZoneName group by InvoiceNo FOR XML PATH('')), 1, 1, '') AS Invoices 
+from (
+	select a.DeliverySite, b.ZoneName, CAST(a.DeliveryDate as date) as DeliveryDate, a.TruckNo from FGSalesDelivery a join FGDealerZone b on a.DeliverZoneId = b.Id group by a.DeliverySite, b.ZoneName, CAST(a.DeliveryDate as date), a.TruckNo
+) as A group by DeliverySite, ZoneName, DeliveryDate </CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="DeliverySite" DataSetColumn="DeliverySite" />
+              <Mapping SourceColumn="ZoneName" DataSetColumn="ZoneName" />
+              <Mapping SourceColumn="DeliveryDate" DataSetColumn="DeliveryDate" />
+              <Mapping SourceColumn="NumTruck" DataSetColumn="NumTruck" />
+              <Mapping SourceColumn="Invoices" DataSetColumn="Invoices" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="MonthlyDelivery" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="MonthlyDelivery" msprop:Generator_UserDSName="MonthlyDelivery">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="MonthlyDelivery" msprop:Generator_TableClassName="MonthlyDeliveryDataTable" msprop:Generator_TableVarName="tableMonthlyDelivery" msprop:Generator_TablePropName="_MonthlyDelivery" msprop:Generator_RowDeletingName="MonthlyDeliveryRowDeleting" msprop:Generator_RowChangingName="MonthlyDeliveryRowChanging" msprop:Generator_RowEvHandlerName="MonthlyDeliveryRowChangeEventHandler" msprop:Generator_RowDeletedName="MonthlyDeliveryRowDeleted" msprop:Generator_UserTableName="MonthlyDelivery" msprop:Generator_RowChangedName="MonthlyDeliveryRowChanged" msprop:Generator_RowEvArgName="MonthlyDeliveryRowChangeEvent" msprop:Generator_RowClassName="MonthlyDeliveryRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DeliverySite" msprop:Generator_ColumnVarNameInTable="columnDeliverySite" msprop:Generator_ColumnPropNameInRow="DeliverySite" msprop:Generator_ColumnPropNameInTable="DeliverySiteColumn" msprop:Generator_UserColumnName="DeliverySite" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="200" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ZoneName" msprop:Generator_ColumnVarNameInTable="columnZoneName" msprop:Generator_ColumnPropNameInRow="ZoneName" msprop:Generator_ColumnPropNameInTable="ZoneNameColumn" msprop:Generator_UserColumnName="ZoneName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DeliveryDate" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnDeliveryDate" msprop:Generator_ColumnPropNameInRow="DeliveryDate" msprop:Generator_ColumnPropNameInTable="DeliveryDateColumn" msprop:Generator_UserColumnName="DeliveryDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="NumTruck" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnNumTruck" msprop:Generator_ColumnPropNameInRow="NumTruck" msprop:Generator_ColumnPropNameInTable="NumTruckColumn" msprop:Generator_UserColumnName="NumTruck" type="xs:int" minOccurs="0" />
+              <xs:element name="Invoices" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnInvoices" msprop:Generator_ColumnPropNameInRow="Invoices" msprop:Generator_ColumnPropNameInTable="InvoicesColumn" msprop:Generator_UserColumnName="Invoices" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DealerName" msprop:Generator_ColumnVarNameInTable="columnDealerName" msprop:Generator_ColumnPropNameInRow="DealerName" msprop:Generator_ColumnPropNameInTable="DealerNameColumn" msprop:Generator_UserColumnName="DealerName" type="xs:string" minOccurs="0" />
+              <xs:element name="InvoiceDates" msprop:Generator_ColumnVarNameInTable="columnInvoiceDates" msprop:Generator_ColumnPropNameInRow="InvoiceDates" msprop:Generator_ColumnPropNameInTable="InvoiceDatesColumn" msprop:Generator_UserColumnName="InvoiceDates" type="xs:string" minOccurs="0" />
+              <xs:element name="DeliveryOption" msprop:Generator_ColumnVarNameInTable="columnDeliveryOption" msprop:Generator_ColumnPropNameInRow="DeliveryOption" msprop:Generator_ColumnPropNameInTable="DeliveryOptionColumn" msprop:Generator_UserColumnName="DeliveryOption" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

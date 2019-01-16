@@ -1,0 +1,396 @@
+﻿
+@{
+    ViewBag.Title = "FGAdjustmentSetup";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgadjustmentsetupCtrl">
+
+    @* ************ FORM - SECTION (Start) *************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceFGAdjustmentSetup.LblFGAdjustmentSetup</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGAdjustmentSetup.ResourceFGAdjustmentSetupList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="adjustmentId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.AdjustmnetName for c in allFGAdjustmentSetupFromDb" name="adjustmentId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-click="loadAdjustmentById(adjustmentId);"></select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceFGAdjustmentSetup.AdjustmnetName
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="AdjustmnetName" ng-model="AdjustmnetName" required ng-maxlength="100" focus-on="focusMe" />
+                                    <b class="help-block" ng-if="form.Size.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGAdjustmentSetup.AdjustmnetName)
+                                    </b>
+
+                                    <b class="help-block" ng-if="form.Size.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+
+                                </div>
+                               
+                            </div>
+                            
+                            
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceFGAdjustmentSetup.ApplyMode
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="ApplyMode" class="form-control" name="ApplyMode" ng-required="true">
+                                        <option value="">@Resources.ResourceFGAdjustmentSetup.Select</option>
+                                        <option value="Input">@Resources.ResourceFGAdjustmentSetup.Input</option>
+                                        <option value="Fixed">@Resources.ResourceFGAdjustmentSetup.Fixed</option>
+                                        <option value="Percentage">@Resources.ResourceFGAdjustmentSetup.Percentage</option>
+                                        <option value="CommissionSetup">@Resources.ResourceFGAdjustmentSetup.CommissionSetup</option>
+                                        <option value="BreakageSetup">@Resources.ResourceFGAdjustmentSetup.BreakageSetup</option>
+                                    </select>
+                                   
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceFGAdjustmentSetup.CalculationOn
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="CalculationOn" class="form-control" name="CalculationOn" ng-required="false">
+                                        <option value="">@Resources.ResourceFGAdjustmentSetup.Select</option>
+                                        <option value="Quantity">@Resources.ResourceFGAdjustmentSetup.Quantity</option>
+                                        <option value="Amount">@Resources.ResourceFGAdjustmentSetup.Amount</option>
+                                       
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                            @*<div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceFGAdjustmentSetup.CalculationOn
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="CalculationOn" ng-model="CalculationOn"  ng-maxlength="50" focus-on="focusMe" />
+                                    
+                                </div>
+                            </div>*@
+                            
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceFGAdjustmentSetup.DefaultValue
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="number" name="DefaultValue" ng-model="DefaultValue" min="0" focus-on="focusMe" />
+
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceFGAdjustmentSetup.UOM
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="UOM" class="form-control"
+                                            data-ng-options="c.Id as c.UnitName for c in allFGUnitFromDb | orderBy: 'UnitName'" name="UOM" ng-required="false">
+                                        <option value="">@Resources.ResourceFGAdjustmentSetup.SelectUOM</option>
+                                    </select>
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addFGAdjustmentSetup()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+
+                                    <input ng-if="adjustmentId" type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deleteFGAdjustmentSetup()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgadjustmentsetupService', ['$http', function ($http) {
+
+        return {
+            saveFGAdjustmentSetup: function (fgadjustmentsetup) {
+                return $http({
+                    url: '/FGAdjustmentSetup/CreateFGAdjustmentSetup',
+                    method: 'POST',
+                    data: fgadjustmentsetup
+                });
+            },
+            getFGAdjustmentSetup: function (id) {
+                return $http.get('/FGAdjustmentSetup/GetFGAdjustmentSetup/' + id);
+            },
+            getAllFGUnit: function () {
+                return $http.get('/FGUOM/GetFGUOMList');
+            },
+            getAllFGAdjustmentSetup: function () {
+                return $http.get('/FGAdjustmentSetup/GetFGAdjustmentSetupList');
+            },
+            deleteFGAdjustmentSetup: function (fgadjustmentsetup) {
+                return $http({
+                    url: '/FGAdjustmentSetup/DeleteFGAdjustmentSetup',
+                    method: 'POST',
+                    data: fgadjustmentsetup
+                });
+            }
+        };
+    }]);app.controller('fgadjustmentsetupCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgadjustmentsetupService, $log, $ngBootbox) {
+
+
+        if ('@ViewBag.permission' == "NO") {
+            $scope.NoPermission = true;
+        }
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        loadAllFGAdjustmentSetup();
+        $scope.showModalforSearch = false;
+        // Add a new fgadjustmentsetup
+        $scope.addFGAdjustmentSetup = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgadjustmentsetup = {};
+                fgadjustmentsetup["Id"] = $scope.Id;
+                fgadjustmentsetup["AdjustmnetName"] = $scope.AdjustmnetName;
+                fgadjustmentsetup["ApplyMode"] = $scope.ApplyMode;
+                fgadjustmentsetup["CalculationOn"] = $scope.CalculationOn;
+                fgadjustmentsetup["DefaultValue"] = $scope.DefaultValue;
+                fgadjustmentsetup["UOM"] = $scope.UOM;
+
+
+                fgadjustmentsetupService.saveFGAdjustmentSetup(fgadjustmentsetup)
+                .then(function onSuccess(response) {
+                    loadAllFGAdjustmentSetup();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+
+        // Populate fgadjustmentsetup
+
+        $scope.selectedRow = null;
+        $scope.populateFGAdjustmentSetup = function (rowvalue) {
+            $scope.selectedRow = rowvalue;
+            $scope.Id = rowvalue.Id;
+            $scope.AdjustmnetName = rowvalue.AdjustmnetName;
+            $scope.ApplyMode = rowvalue.ApplyMode;
+            $scope.CalculationOn = rowvalue.CalculationOn;
+            $scope.DefaultValue = rowvalue.DefaultValue;
+            $scope.UOM = rowvalue.UOM;
+
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+            $scope.desableIdField = true;
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.selectedRow = null;
+            $scope.Id = '';
+            $scope.AdjustmnetName = '';
+            $scope.ApplyMode = '';
+            $scope.CalculationOn = '';
+            $scope.DefaultValue = '';
+            $scope.UOM = '';
+            $scope.adjustmentId = '';
+
+        }
+
+        $scope.deleteFGAdjustmentSetup = function () {
+            var fgadjustmentsetup = {};
+                 fgadjustmentsetup["Id"] = $scope.Id;
+                 fgadjustmentsetupService.deleteFGAdjustmentSetup(fgadjustmentsetup)
+                .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                $scope.reset();
+                loadAllFGAdjustmentSetup();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+
+        //$scope.deleteFGAdjustmentSetup = function () {
+        //    $scope.$broadcast('show-errors-check-validity');
+        //    if ($scope.form.$valid) {
+        //        var fgadjustmentsetup = {};
+        //        fgadjustmentsetup["Id"] = $scope.Id;
+
+        //        fgadjustmentsetupService.deleteFGAdjustmentSetup(fgadjustmentsetup)
+        //            .then(function onSuccess(response) {
+        //                $scope.messageModalObj.message = response.data.message;
+        //                $scope.showModalforSearch = true;
+        //                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+        //                $scope.reset();
+        //                loadAllFGAdjustmentSetup();
+        //            });
+
+        //    }
+        //};
+
+        $scope.loadAdjustmentById = function (adjustmentId) {
+
+            fgadjustmentsetupService.getFGAdjustmentSetup(adjustmentId)
+                .then(function onSuccess(response) {
+
+                    $scope.populateFGAdjustmentSetup(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+
+
+
+        @*$scope.loadUOMById = function (uomId) {
+
+            fgadjustmentsetupService.getFGAdjustmentSetup(uomId)
+                .then(function onSuccess(response) {
+
+                    $scope.UnitName = response.data.UnitName;
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }*@
+
+
+
+        loadAllFGUnit();
+        function loadAllFGUnit() {
+            $scope.allFGUnitFromDb = [];
+            fgadjustmentsetupService.getAllFGUnit()
+                .then(function onSuccess(response) {
+                    $scope.allFGUnitFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+
+
+
+
+        // Load FGAdjustmentSetup
+        function loadAllFGAdjustmentSetup() {
+            $scope.allFGAdjustmentSetupFromDb = [];
+            fgadjustmentsetupService.getAllFGAdjustmentSetup()
+                    .then(function onSuccess(response) {
+                        $scope.allFGAdjustmentSetupFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        //$scope.currentPage = 1; //current page
+        //$scope.entryLimit = 10; //max no of items to display in a page
+        //$scope.filteredItems = $scope.allFGAdjustmentSetupFromDb.length; //Initially for no filter
+        //$scope.totalItems = $scope.allFGAdjustmentSetupFromDb.length;
+        ////$scope.maxSize = 15;
+
+        //$scope.setPage = function (pageNo) {
+        //    $scope.currentPage = pageNo;
+        //};
+        //$scope.filter = function () {
+        //    $timeout(function () {
+        //        $scope.filteredItems = $scope.filtered.length;
+        //    }, 9000);
+        //};
+        //$scope.sort_by = function (predicate) {
+        //    $scope.predicate = predicate;
+        //    $scope.reverse = !$scope.reverse;
+        //};
+    });
+
+</script>

@@ -1,0 +1,468 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BankIndex" xml:space="preserve">
+    <value>Bank</value>
+  </data>
+  <data name="BinCardIndex" xml:space="preserve">
+    <value>BinCard</value>
+  </data>
+  <data name="BranchIndex" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="CityIndex" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="CommercialInvoiceIndex" xml:space="preserve">
+    <value>Commercial Invoice</value>
+  </data>
+  <data name="CompanyIndex" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="CountryIndex" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="DepartmentIndex" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="DesignationIndex" xml:space="preserve">
+    <value>Designation</value>
+  </data>
+  <data name="EmployeeIndex" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="SerialInitializerIndex" xml:space="preserve">
+    <value>Initial Serial</value>
+  </data>
+  <data name="ItemIndex" xml:space="preserve">
+    <value>New Item</value>
+  </data>
+  <data name="ItemCategoryIndex" xml:space="preserve">
+    <value>New ItemCategory</value>
+  </data>
+  <data name="ItemDemandIndex" xml:space="preserve">
+    <value>Item Demand</value>
+  </data>
+  <data name="ItemDisposeIndex" xml:space="preserve">
+    <value>Item Dispose</value>
+  </data>
+  <data name="ItemGroupIndex" xml:space="preserve">
+    <value>New Item Group</value>
+  </data>
+  <data name="ItemIssueIndex" xml:space="preserve">
+    <value>Item Issue</value>
+  </data>
+  <data name="ItemReceiveByLC" xml:space="preserve">
+    <value>Item Receive By LC</value>
+  </data>
+  <data name="ItemReceiveNonLC" xml:space="preserve">
+    <value>Item Receive Non LC</value>
+  </data>
+  <data name="LCIndex" xml:space="preserve">
+    <value>LC</value>
+  </data>
+  <data name="LCReportIndex" xml:space="preserve">
+    <value>LC Report</value>
+  </data>
+  <data name="LCShipmentExpenseHeadIndex" xml:space="preserve">
+    <value>LC Shipment Expense Head</value>
+  </data>
+  <data name="LCShipmentExpenseHeadCategoryIndex" xml:space="preserve">
+    <value>LC Shipment Expense Head Category</value>
+  </data>
+  <data name="LCShipmentShipmentExpenses" xml:space="preserve">
+    <value>LC Shipment &amp; Shipment Expenses</value>
+  </data>
+  <data name="ModuleIndex" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="ProformaInvoiceIndex" xml:space="preserve">
+    <value>Proforma Invoice</value>
+  </data>
+  <data name="PurchaseRequisitionIndex" xml:space="preserve">
+    <value>Purchase Requisition</value>
+  </data>
+  <data name="RoleIndex" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="RoleSubModuleItemIndex" xml:space="preserve">
+    <value>Role Sub Module Item</value>
+  </data>
+  <data name="SubModuleIndex" xml:space="preserve">
+    <value>SubModule</value>
+  </data>
+  <data name="SubModuleItemIndex" xml:space="preserve">
+    <value>SubModuleItem</value>
+  </data>
+  <data name="SupplierIndex" xml:space="preserve">
+    <value>New Supplier</value>
+  </data>
+  <data name="ToolsEntry" xml:space="preserve">
+    <value>Tools Entry</value>
+  </data>
+  <data name="UnitOfMeasurementIndex" xml:space="preserve">
+    <value>New Unit Of Measurement</value>
+  </data>
+  <data name="UserIndex" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="WarehouseIndex" xml:space="preserve">
+    <value>Warehouse</value>
+  </data>
+  <data name="WorkflowactionSettingIndex" xml:space="preserve">
+    <value>Workflow Action Setting</value>
+  </data>
+  <data name="AutoGeneratedNoIndex" xml:space="preserve">
+    <value>Auto generated Number</value>
+  </data>
+  <data name="BankAccountIndex" xml:space="preserve">
+    <value>Bank Account</value>
+  </data>
+  <data name="ItemCompositeItem" xml:space="preserve">
+    <value>New Composite Item</value>
+  </data>
+  <data name="ReportDealerInfo" xml:space="preserve">
+    <value>Dealer Information</value>
+  </data>
+  <data name="ReportDealerWiseSales" xml:space="preserve">
+    <value>Sales Statement in a Date Range</value>
+  </data>
+  <data name="ReportDealerWiseSizeWiseSales" xml:space="preserve">
+    <value>Dealer and Size Wise Sales Report</value>
+  </data>
+  <data name="ReportEmpWiseDealerWiseReport" xml:space="preserve">
+    <value>Employee Wise Sales Statement</value>
+  </data>
+  <data name="FGAdjustmentSetupIndex" xml:space="preserve">
+    <value>Adjustment Setup</value>
+  </data>
+  <data name="FGDealerIndex" xml:space="preserve">
+    <value>Dealer</value>
+  </data>
+  <data name="FGDealerZoneIndex" xml:space="preserve">
+    <value>Dealers District</value>
+  </data>
+  <data name="FGGradeIndex" xml:space="preserve">
+    <value>New Grade</value>
+  </data>
+  <data name="FGItemIndex" xml:space="preserve">
+    <value>New Product</value>
+  </data>
+  <data name="FGItemDisposeIndex" xml:space="preserve">
+    <value>Product Dispose</value>
+  </data>
+  <data name="FGItemInIndex" xml:space="preserve">
+    <value>Product In</value>
+  </data>
+  <data name="FGItemOpeningIndex" xml:space="preserve">
+    <value>Product Opening</value>
+  </data>
+  <data name="FGItemPriceFGItemPrice" xml:space="preserve">
+    <value>Product Pricing</value>
+  </data>
+  <data name="FGSaleIndex" xml:space="preserve">
+    <value>Invoice</value>
+  </data>
+  <data name="FGSalesDeliveryIndex" xml:space="preserve">
+    <value>Delivery</value>
+  </data>
+  <data name="FGSizeindex" xml:space="preserve">
+    <value>New Product Size</value>
+  </data>
+  <data name="FGTypeIndex" xml:space="preserve">
+    <value>New Product Type</value>
+  </data>
+  <data name="FGUOMIndex" xml:space="preserve">
+    <value>Unit of Measurement</value>
+  </data>
+  <data name="FilereadFGItemOpeningFileRead" xml:space="preserve">
+    <value>File Read</value>
+  </data>
+  <data name="ReportItemInScale" xml:space="preserve">
+    <value>Daily  Materials Scale Report</value>
+  </data>
+  <data name="ItemOpeningIndex" xml:space="preserve">
+    <value>Item Opening</value>
+  </data>
+  <data name="ReportItemReceive" xml:space="preserve">
+    <value>Category Wise Buying and Receiveing Report</value>
+  </data>
+  <data name="ReportItemUse" xml:space="preserve">
+    <value>Monthly  Material Use and Stock Report</value>
+  </data>
+  <data name="LCShipmentIndex" xml:space="preserve">
+    <value>LC Shipment</value>
+  </data>
+  <data name="ReportMonthlyDelivery" xml:space="preserve">
+    <value>Monthly Delivery Report (Truck Count)</value>
+  </data>
+  <data name="ReportProductIn" xml:space="preserve">
+    <value>Monthly Production Report</value>
+  </data>
+  <data name="ReportProductStock" xml:space="preserve">
+    <value>Factory Stock</value>
+  </data>
+  <data name="ReportProductWiseSales" xml:space="preserve">
+    <value>Product Wise Sales</value>
+  </data>
+  <data name="ReportSalesStatement" xml:space="preserve">
+    <value>Sales Statement  of a Dealer</value>
+  </data>
+  <data name="ReportSizeWiseGradeWiseDelivery" xml:space="preserve">
+    <value>Size Wise Grade Wize Delivery</value>
+  </data>
+  <data name="ReportYearGradeUnitWiseDealerSalesReport" xml:space="preserve">
+    <value>Year Wise Sales Report</value>
+  </data>
+  <data name="InstrumentIndex" xml:space="preserve">
+    <value>Machine</value>
+  </data>
+  <data name="InstrumentLocationIndex" xml:space="preserve">
+    <value>Machine Location</value>
+  </data>
+  <data name="InstrumentMaintenanceCreateView" xml:space="preserve">
+    <value>New Machine Maintenance</value>
+  </data>
+  <data name="InstrumentMaintenanceIndex" xml:space="preserve">
+    <value>Machine Maintenance</value>
+  </data>
+  <data name="InstrumentMaintenanceMaintenanceHistory" xml:space="preserve">
+    <value>Machine Maintenance History</value>
+  </data>
+  <data name="InstrumentMaintenanceMaintenanceStatus" xml:space="preserve">
+    <value>Machine Maintenance Status</value>
+  </data>
+  <data name="InstrumentMasterIndex" xml:space="preserve">
+    <value>Machine Family</value>
+  </data>
+  <data name="InstrumentScheduleCreateView" xml:space="preserve">
+    <value>New Maintenance Schedule</value>
+  </data>
+  <data name="InstrumentScheduleIndex" xml:space="preserve">
+    <value>Maintenance Schedule</value>
+  </data>
+  <data name="InstrumentStatusIndex" xml:space="preserve">
+    <value>Machine Status</value>
+  </data>
+  <data name="ManufacturerIndex" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="ServiceProviderIndex" xml:space="preserve">
+    <value>Service Provider</value>
+  </data>
+  <data name="ZoneCommisionIndex" xml:space="preserve">
+    <value>District Commision Setup</value>
+  </data>
+  <data name="ItemCategorySparePartsAndOtherIndex" xml:space="preserve">
+    <value>Item Category</value>
+  </data>
+  <data name="ItemDemandSparePartsAndOtherIndex" xml:space="preserve">
+    <value>Item Demand</value>
+  </data>
+  <data name="ItemSparePartsAndOtherIndex" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="ItemDisposeSparePartsAndOtherIndex" xml:space="preserve">
+    <value>Item Dispose</value>
+  </data>
+  <data name="ItemIssueSparePartsAndOtherIndex" xml:space="preserve">
+    <value>Item Issue</value>
+  </data>
+  <data name="PurchaseRequisitionSparePartsAndOtherIndex" xml:space="preserve">
+    <value>Purchase Requisition</value>
+  </data>
+  <data name="ItemGroupSparePartsAndOtherIndex" xml:space="preserve">
+    <value>Item Group </value>
+  </data>
+  <data name="ItemOpeningSparePartsAndOtherIndex" xml:space="preserve">
+    <value>Item Opening </value>
+  </data>
+  <data name="DealerCommisionDetailIndex" xml:space="preserve">
+    <value>Dealer Commission Setup</value>
+  </data>
+  <data name="ItemReceiveSparePartsAndOtherByLC" xml:space="preserve">
+    <value>Item Receive By LC</value>
+  </data>
+  <data name="ItemReceiveSparePartsAndOtherItemReceive" xml:space="preserve">
+    <value>Buying &amp; Receiving stock</value>
+  </data>
+  <data name="ItemReceiveSparePartsAndOtherNonLC" xml:space="preserve">
+    <value>Item Receive Non LC</value>
+  </data>
+  <data name="ReportItemStock" xml:space="preserve">
+    <value>Item Inventory</value>
+  </data>
+  <data name="ReportItemStockStatus" xml:space="preserve">
+    <value>Re Order Level Wise Item Stock</value>
+  </data>
+  <data name="ReportMonthlyDelivery2" xml:space="preserve">
+    <value>Monthly Delivery Detail Report</value>
+  </data>
+  <data name="ReportSparePartsAndOtherItemInScale" xml:space="preserve">
+    <value>Daily  Materials Scale </value>
+  </data>
+  <data name="ReportSparePartsAndOtherItemStock" xml:space="preserve">
+    <value>Item Inventory</value>
+  </data>
+  <data name="ReportSparePartsAndOtherItemStockStatus" xml:space="preserve">
+    <value>Re Order Level Wise Item Stock</value>
+  </data>
+  <data name="ReportSparePartsAndOtherItemUse" xml:space="preserve">
+    <value> Material Use</value>
+  </data>
+  <data name="FGItemAdjustmentIndex" xml:space="preserve">
+    <value>Stock Adjustment</value>
+  </data>
+  <data name="ItemAdjustmentIndex" xml:space="preserve">
+    <value>Stock Adjustment</value>
+  </data>
+  <data name="FGSalesDeliveryDeliveryByTruck" xml:space="preserve">
+    <value>Delivery By Truck</value>
+  </data>
+  <data name="CommissionCalculatorIndex" xml:space="preserve">
+    <value>Commission Calculator</value>
+  </data>
+  <data name="ReportItemStockRegister" xml:space="preserve">
+    <value>Item Stock Register</value>
+  </data>
+  <data name="DivisionIndex" xml:space="preserve">
+    <value>Division</value>
+  </data>
+  <data name="ReportItemWiseCommercialReport" xml:space="preserve">
+    <value>Item Wise Commercial Report</value>
+  </data>
+  <data name="ReportSupplierWiseCommercialReport" xml:space="preserve">
+    <value>Supplier Wise Commercial Report</value>
+  </data>
+  <data name="ReportSparePartsAndOtherItemReceive" xml:space="preserve">
+    <value>Buying &amp; Receiving stock</value>
+  </data>
+  <data name="ReportMonthlySizeWiseSalesAndUndelivery" xml:space="preserve">
+    <value>Monthly Size Wise Sales And Undelivered Report</value>
+  </data>
+  <data name="BreakageCalculatorIndex" xml:space="preserve">
+    <value>Breakage Calculator</value>
+  </data>
+  <data name="ReportEmpWiseItemUse" xml:space="preserve">
+    <value>Employee Wise Material Use Report</value>
+  </data>
+  <data name="ReportSparePartsAndOtherEmpWiseItemUse" xml:space="preserve">
+    <value>Employee Wise Material Use Report</value>
+  </data>
+</root>

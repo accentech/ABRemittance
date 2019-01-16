@@ -1,0 +1,2520 @@
+﻿@using System.Web.Configuration
+@using Remit.Web.Helpers
+@{
+    ViewBag.Title = Resources.ResourceFGSale.TitleFGSale;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+    int itemPosition = 0;
+}
+
+<style>
+    .sales-body {
+        padding: 5px 0px;
+    }
+
+    .sales-left-panel {
+        background: #B2DFDB;
+        /*        -webkit-box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 0.2);*/
+        /*        -moz-box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 0.2);*/
+        /*        box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 0.2);*/
+    }
+
+    .sales-right-panel {
+        padding: 0;
+    }
+
+    .sales-selector {
+        padding: 5px;
+        margin: 0 15px;
+        border: none;
+        border-radius: 0;
+        margin-bottom: 10px;
+    }
+
+    #sale-container table {
+        font-size: 11px !important;
+        margin-bottom: 5px;
+    }
+
+        #sale-container table td > .form-control {
+            font-size: 11px !important;
+        }
+
+    #sale-container .table tbody > tr > th, .table tbody > tr > td {
+        padding: 3px;
+    }
+
+    #sale-container .table thead > tr > th, .table thead > tr > td {
+        padding: 5px;
+    }
+
+    .border-none {
+        border: none;
+    }
+
+        .border-none thead {
+            border-top: 1px solid;
+            border-color: #ddd;
+        }
+
+        .border-none tbody > tr:last-child td {
+            border: none;
+        }
+</style>
+
+<div class="col-xs-12 col-sm-12" id="sale-container" ng-controller="fgSaleCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceFGSale.TitleFGSale
+        </div>
+        <div class="panel-body border-green pt pb sales-body">
+            <form name="form" novalidate>
+                <div class="row">
+
+                    <div class="col-lg-2 col-md-2  col-sm-2 col-xs-12 selector-container-div sales-left-panel">
+                        <div class="panel panel-default selector-container">
+                            <div class="panel-body" style="padding: 0;">
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.ResourceFGSale.InvoiceDate</label>
+                                    <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" ng-change="loadAllFGSaleList()" data-date-format="dd-MMM-yyyy"
+                                           data-autoclose="1" bs-datepicker data-trigger="click">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.ResourceFGSale.InvoiceList</label>
+                                    <div class="" style="height: 200px;">
+                                        <select multiple data-ng-model="SavedInvoiceNo" class="form-control listSelect" focus-on="focusMe"
+                                                data-ng-options="c.InvoiceNo as c.InvoiceNo for c in allFGSaleListByDate" name="SavedInvoiceNo"
+                                                style="height: 100%; overflow-y: auto; padding: 0;" ng-change="getFGSaleBYInvoice(SavedInvoiceNo)">
+                                            @*<option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGSale.InvoiceNo</option>*@
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 sales-right-panel">
+                        <div class="form-horizontal">
+
+                            <div class="row well well-sm sales-selector">
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 ">
+                                            <input type="radio" class="pull-right" ng-model="Reason" value="1" ng-change="selectReason()" ng-disabled="editmode">
+                                        </div>
+                                        <div class=" padding-right-zero">
+                                            <label class="pull-left" style="padding-top: 5px;">
+                                                @Resources.ResourceFGSale.Sales
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 ">
+                                            <input type="radio" class="pull-right" ng-model="Reason" value="2" ng-change="selectReason()" ng-disabled="editmode">
+                                        </div>
+                                        <div class=" padding-right-zero">
+                                            <label class="pull-left" style="padding-top: 5px;">
+                                                @Resources.ResourceFGSale.Sample
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 ">
+                                            <input type="radio" class="pull-right" ng-model="Reason" value="3" ng-change="selectReason()" ng-disabled="editmode">
+                                        </div>
+                                        <div class=" padding-right-zero">
+                                            <label class="pull-left" style="padding-top: 5px;">
+                                                @Resources.ResourceFGSale.FreeOfCost
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 ">
+                                            <input type="radio" class="pull-right" ng-model="Reason" value="4" ng-change="selectReason()" ng-disabled="editmode">
+                                        </div>
+                                        <div class=" padding-right-zero">
+                                            <label class="pull-left" style="padding-top: 5px;">
+                                                @Resources.ResourceFGSale.InternalUse
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.InvoiceNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" ng-model="InvoiceNo" ng-disabled="true" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6" show-errors>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGSale.InvoiceDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <div class="col-xs-12 col-sm-6 col-md-6" style="padding: 0">
+                                                <input type="text" class="form-control" ng-required="true" ng-model="InvoiceDate" name="InvoiceDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6" style="padding: 0">
+                                                <input type="text" class="form-control" size="8" ng-model="InvoiceDate" name="InvoiceDate" bs-timepicker>
+                                            </div>
+                                            <b class="help-block" ng-if="form.InvoiceDate.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGSale.InvoiceDate)
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.CustomType
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8" style="padding-top: 4px;">
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4 ">
+                                                        <input type="radio" class="pull-right" ng-model="customType" value="1" ng-change="regularTypeOk()">
+                                                    </div>
+                                                    <div class=" padding-right-zero">
+                                                        <label class="pull-left" style="padding-top: 5px;">
+                                                            @Resources.ResourceFGSale.Regular
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <input type="radio" class="pull-right" ng-model="customType" value="2" ng-change="irregularType()">
+                                                    </div>
+                                                    <div class=" padding-right-zero">
+                                                        <label class="pull-left" style="padding-top: 5px;">
+                                                            @Resources.ResourceFGSale.Irregular
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                    @*<div ng-switch="customType">*@
+                                    <div ng-show="regularType">
+                                        <div class="">
+                                            <div class="form-group">
+                                                <div class="padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                        @Resources.ResourceFGSale.Dealer
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                                    <select ng-model="selectedDealerId" class="form-control"
+                                                            ng-options="c.Id as c.Name for c in allFGDealerFromDb | orderBy: 'Name'" name="selectedDealerId" ng-change="selectDealer(selectedDealerId)">
+                                                        <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <div class="form-group">
+                                                <div class="padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                        @Resources.ResourceFGSale.AvailabelCreditLimit
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                                    <input type="number" class="form-control" style="text-align: right" ng-model="AvailableCreditLimit" ng-disabled="true" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*</div>*@
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.Name
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="Name" ng-disabled="customType == '1'">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.ContactPhone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="ContactPhone">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.ContactName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="ContactPersonName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.DeliveryZone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="DeliveryZoneId" class="form-control"
+                                                    data-ng-options="c.Id as c.ZoneName for c in allFGDealerZone | orderBy: 'ZoneName'" name="DeliveryZoneId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.Address
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <textarea class="form-control" ng-model="Address" rows="3" ng-disabled="customType == '1'"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.DeliverySite
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <textarea class="form-control" rows="3"
+                                                      ng-model="DefaultDeliverySite"></textarea>
+                                            @*<input class="form-control" type="text" ng-model="DefaultDeliverySite">*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.DeliverBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8" style="padding-top: 4px;">
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4 ">
+                                                        <input type="radio" class="pull-right" ng-model="deliverOptionType" value="1">
+                                                    </div>
+                                                    <div class=" padding-right-zero">
+                                                        <label class="pull-left" style="padding-top: 5px;">
+                                                            @Resources.ResourceFGSale.Company
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <input type="radio" class="pull-right" ng-model="deliverOptionType" value="2">
+                                                    </div>
+                                                    <div class=" padding-right-zero">
+                                                        <label class="pull-left" style="padding-top: 5px;">
+                                                            @Resources.ResourceFGSale.Customer
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h3 class="heading">@Resources.ResourceFGSale.SalesDetail</h3>
+                    <div class="">
+                        <table class="table slidable-table table-bordered border-none">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.ResourceFGSale.SN</th>
+                                    <th>@Resources.ResourceFGSale.ProductType</th>
+                                    <th>@Resources.ResourceFGSale.ProductCode</th>
+                                    <th>@Resources.ResourceFGSale.Size</th>
+                                    <th>@Resources.ResourceFGSale.Grade</th>
+                                    <th>@Resources.ResourceFGSale.Lot</th>
+                                    <th>@Resources.ResourceFGSale.StockQuantity</th>
+                                    <th>@Resources.ResourceFGSale.PackQuantity</th>
+                                    @*<th>@Resources.ResourceFGItem.PackUnit</th>*@
+                                    <th>@Resources.ResourceFGSale.SalesQuantity</th>
+                                    @*<th>@Resources.ResourceFGItem.SalesUnit</th>*@
+                                    <th>@Resources.ResourceFGSale.UnitPrice</th>
+                                    <th>@Resources.ResourceFGSale.SpecialDiscount</th>
+                                    <th>@Resources.ResourceFGSale.UnitPriceDiscount</th>
+                                    <th>@Resources.ResourceFGSale.AmountAfterDiscount</th>
+                                    <th>@Resources.ResourceCommon.LblAction</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="itemSales in FGSalesDetail">
+                                    <td>{{$index+1}}</td>
+                                    <td>
+                                        <select data-ng-model="itemSales.FGTypeId" class="form-control" style="width: 80px"
+                                                data-ng-options="c.Id as c.TypeName for c in allFGTypeFromDb | orderBy: 'Name'" name="FGTypeId" ng-change="getAllFGItemByTypeId($index,itemSales.FGTypeId)">
+                                            <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select data-ng-model="itemSales.FGItemId" class="form-control" ng-change="getItemInfo($index,itemSales.FGItemId)"
+                                                data-ng-options="c.Id as c.Code for c in itemSales.allItemFromDb | orderBy: 'Code'" name="FGItemId" style="width: 100px">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblItem</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-model="itemSales.FGSizeId" class="form-control" ng-hide="true" name="FGSizeId" />
+                                        <input type="text" ng-model="itemSales.FGSize" class="form-control" ng-disabled="true" name="FGSize" style="width: 70px" />
+                                    </td>
+                                    <td>
+                                        <select data-ng-model="itemSales.FGGradeId" class="form-control" style="width: 60px"
+                                                data-ng-options="c.Id as c.Grade for c in itemSales.allFGGradeFromDb | orderBy: 'Grade'" name="FGGradeId" ng-change="selectGrade($index,itemSales.FGGradeId)">
+                                            <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        @*<input data-ng-class="form-control" type="text" class="form-control" ng-model="itemSales.Lot" name="Lot" style="width: 80px">*@
+                                        <select data-ng-model="itemSales.Lot" class="form-control" style="width: 60px"
+                                                data-ng-options="c as c for c in itemSales.allLotFromInv" name="Lot" ng-change="selectLot($index,itemSales.Lot)">
+                                            <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input data-ng-class="form-control" style="text-align: right" type="number" ng-disabled="true" class="form-control" ng-model="itemSales.StockQuantity" name="StockQuantity" min="0" style="width: 100px">
+                                        <input data-ng-class="form-control" style="text-align: right" type="number" ng-hide="true" class="form-control" ng-model="itemSales.HandStockQuantity" name="HandStockQuantity" min="0" style="width: 100px">
+                                    </td>
+                                    <td>
+                                        @*<input data-ng-class="form-control" type="text" class="form-control" ng-model="itemSales.UnitName" readonly name="UnitName">*@
+                                        <input type="number" ng-hide="true" ng-model="itemSales.HandPackQuantity" name="HandPackQuantity">
+                                        <input type="number" class="" style="text-align: right; width: 80px; padding-right: 5px;" ng-model="itemSales.PackQuantity" name="PackQuantity" ng-change="getSalesQty($index,itemSales.PackQuantity, itemSales.HandPackQuantity)">
+                                        {{itemSales.PackUnit}}
+                                        <input data-ng-class="form-control" type="text" class="form-control" ng-model="itemSales.PackUnit" readonly ng-hide="true" name="PackUnit">
+                                    </td>
+                                    @*<td>
+
+                                        </td>*@
+                                    <td>
+                                        <input type="number" class="" style="text-align: right; width: 100px; padding-right: 5px;" ng-model="itemSales.SalesQuantity" ng-disabled="true" name="SalesQuantity" style="width: 70px;">
+                                        {{itemSales.SalesUnit}}
+                                        <input class="form-control" type="text" class="form-control" ng-model="itemSales.SalesUnit" readonly ng-hide="true" name="SalesUnit">
+                                    </td>
+                                    @*<td>
+
+                                        </td>*@
+                                    <td>
+                                        <input class="form-control" type="number" style="text-align: right; width: 80px;" ng-model="itemSales.UnitPrice" ng-disabled="true" name="UnitPrice">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" style="text-align: right; width: 100px; padding-right: 5px;" ng-model="itemSales.DiscountPerUnit" name="DiscountPerUnit" ng-change="getAmountAfterDiscount($index,itemSales.DiscountPerUnit)">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" style="text-align: right;width:100px; padding-right: 5px;" ng-model="itemSales.UnitRateAfterDiscount" ng-disabled="true" name="UnitRateAfterDiscount">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" style="text-align: right" ng-model="itemSales.Amount" ng-disabled="true" name="Amount" />
+                                    </td>
+                                    <td>
+                                        <input type="button" class=" btn btn-danger" ng-click="FGSalesDetail.splice($index, 1) ; totalSalesDet()" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" style=" padding: 10px 12px; height: 5px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="text-align: right">
+                                        <input type="button" class=" btn btn-sm btn-info buttonadditem pull-left" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 50px;" />
+                                    </td>
+                                    <td colspan="4" style="text-align: right">
+                                        @Resources.ResourceCommon.Total
+                                    </td>
+                                    <td>
+                                        <input class="" type="text" style="text-align: right; width: 80px; padding-right: 5px;" ng-model="totalPackQuantityString" ng-disabled="true" name="totalPackQuantity" />
+                                    </td>
+                                    <td>
+                                        <input class="" type="text" style="text-align: right; width: 100px; padding-right: 5px;" ng-model="totalSalesQuantityString" ng-disabled="true" name="totalSalesQuantity" />
+                                    </td>
+                                    <td colspan="3" style="text-align: right"></td>
+                                    <td style="text-align: right">
+                                        <input class="" type="text" style="text-align: right" ng-model="totalSalesAmountString" ng-disabled="true" name="totalSalesAmount" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row"></div>
+                </div>
+
+                <div class="row" ng-switch="Reason">
+                    <div class="col-xs-12 col-sm-9 col-md-9" ng-switch-when="1" style="padding-left: 0;">
+                        <div class="col-xs-12 col-sm-7 col-md-7" style="padding: 0px;">
+                            <h3 class="heading">@Resources.ResourceFGSale.AdjustmentSetup</h3>
+                            <table class="table table-bordered slidable-table border-none">
+                                <thead>
+                                    <tr>
+                                        <th>@Resources.ResourceFGSale.AdjustmentName</th>
+                                        @*<th>@Resources.ResourceFGSale.CommissionPeriod</th>
+                                        <th>@Resources.ResourceFGSale.BreakagePeriod</th>*@
+                                        <th>@Resources.ResourceFGSale.Period</th>
+                                        <th>@Resources.ResourceFGSale.Note</th>
+                                        <th>@Resources.ResourceFGSale.Percentage</th>
+                                        <th>@Resources.ResourceFGSale.AdjustAmount</th>
+                                        <th>@Resources.ResourceCommon.LblAction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="salesAdjust in FGSalesAdjustment">
+                                        <td>
+                                            <select data-ng-model="salesAdjust.FGAdjustmentSetupId" class="form-control" style="width: 130px"
+                                                    data-ng-options="c.Id as c.AdjustmnetName for c in allAdjustmentSetupFromDb | orderBy: 'AdjustmnetName'" name="FGAdjustmentSetupId" ng-change="getAdjustmentInfo($index,salesAdjust.FGAdjustmentSetupId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="salesAdjust.CommissionCalculatorId" class="form-control" style="width: 100px" ng-hide="salesAdjust.commissionCalculator"
+                                                    data-ng-options="c.Id as c.showValueName for c in salesAdjust.commissionPeriods | orderBy: 'showValueName'" name="CommissionCalculatorId" ng-change="getAdjustmentInfoByCommissionPeriodSelect($index,salesAdjust.CommissionCalculatorId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                            </select>
+                                            <select data-ng-model="salesAdjust.BreakageCalculatorId" class="form-control" style="width: 100px" ng-hide="salesAdjust.breakageCalculator"
+                                                    data-ng-options="c.Id as c.showValueName for c in salesAdjust.breakagePeriods | orderBy: 'showValueName'" name="BreakageCalculatorId" ng-change="getAdjustmentInfoByBreakagePeriodSelect($index,salesAdjust.BreakageCalculatorId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                            </select>
+                                        </td>
+                                        @*<td></td>*@
+                                        <td>
+                                            <textarea class="form-control" ng-model="salesAdjust.Note" name="Note" rows="1" style="width: 80px"></textarea>
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" style="text-align: right; width: 55px" type="number" ng-disabled="salesAdjust.percentageDisable" class="form-control" ng-model="salesAdjust.Percentage" name="Percentage" min="0" ng-change="changePercentageAmount($index, salesAdjust.Percentage)">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" style="text-align: right; width: 80px" ng-disabled="salesAdjust.AdjustmentAmountDisable" ng-model="salesAdjust.AdjustmentAmount" name="AdjustmentAmount" ng-change="totalAdjustDet()">
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="FGSalesAdjustment.splice($index, 1); totalAdjustDet()" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" style="padding: 10px 12px; height: 5px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="text-align: right">
+                                            <div class="row">
+                                                <input type="button" class=" btn btn-sm btn-info buttonadditem  pull-left" style="width: 50px;" ng-click="addNewAdjustmentDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem">
+                                                <div class="pull-right">
+                                                    @Resources.ResourceFGSale.TotalAmount @*<input class="" type="number" style="text-align: right" ng-model="totalAdjustmentAmount" ng-disabled="true" name="totalAdjustmentAmount">*@
+                                                    <input class="" type="text" style="text-align: right" ng-model="totalAdjustmentAmountString" ng-disabled="true" name="totalAdjustmentAmountString" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-5 col-md-5" style="padding-right: 0;">
+                            <h3 class="heading">@Resources.ResourceFGSale.DueAdvancedAdjustment</h3>
+                            <table class="table table-bordered slidable-table border-none">
+                                <thead>
+                                    <tr>
+                                        <th>@Resources.ResourceFGSale.InvoiceNo</th>
+                                        <th>@Resources.ResourceFGSale.InvoiceDate</th>
+                                        <th>@Resources.ResourceFGSale.Amount</th>
+                                        <th>@Resources.ResourceCommon.LblAction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="dueAdvancedAdjustment in FGSalesDueAdvancedAdjustment">
+                                        <td>
+                                            <select ng-hide="editmode" data-ng-model="dueAdvancedAdjustment.InvoiceNo" class="form-control" style="width: 100px"
+                                                    data-ng-options="c.InvoiceNo as c.InvoiceNo for c in dueAdvancedInvoiceList | orderBy: '-InvoiceDate'" name="DueAdvancedInvoiceNo" ng-change="getInvoiceDet($index,dueAdvancedAdjustment.InvoiceNo)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                            </select>
+                                            <input type="text" ng-show="editmode" class="form-control" ng-model="dueAdvancedAdjustment.InvoiceNo" name="DueAdvancedInvoiceNo">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-disabled="true" ng-model="dueAdvancedAdjustment.InvoiceDate" name="DueAdvancedInvoiceDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                            @*<input type="text" class="form-control" ng-disabled="true" ng-model="dueAdvancedAdjustment.InvoiceDateString" name="DueAdvancedInvoiceDateString">*@
+                                        </td>
+                                        <td>
+                                            <input style="text-align: right; width: 100px" ng-disabled="true" type="number" class="form-control" ng-model="dueAdvancedAdjustment.DueAdvancedAmount" name="DueAdvancedAmount" /> @*ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01">*@
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="FGSalesDueAdvancedAdjustment.splice($index, 1); totalDueAdvancedAdjustmentDet()" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" style="padding: 10px 12px; height: 5px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right">
+                                            <div class="row">
+                                                <input type="button" class=" btn btn-sm btn-info buttonadditem  pull-left" style="width: 50px;" ng-click="addNewDueAdvancedAdjustmentDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem">
+                                                <div class="pull-right">
+                                                    @Resources.ResourceFGSale.TotalAmount
+                                                    @*<input data-ng-class="form-control" type="number" style="text-align: right" ng-model="totalDueAdvancedAdjustmentAmount" ng-disabled="true" name="totalDueAdvancedAdjustmentAmount">*@
+                                                    <input class="" type="text" style="text-align: right" ng-model="totalDueAdvancedAdjustmentAmountString" ng-disabled="true" name="totalDueAdvancedAdjustmentAmountString" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3" style="padding: 0px;">
+                        <h3 class="heading">@Resources.ResourceFGSale.Discount</h3>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-4">
+                                    @Resources.ResourceFGSale.Percentage
+                                </label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="number" ng-model="DiscountPercentage"
+                                           ng-change="discountPercentage()">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4">
+                                    @Resources.ResourceFGSale.Amount
+                                </label>
+                                <div class="col-md-8">
+                                    @*<input class="form-control" type="number" ng-disabled="true" ng-model="DiscountAmount">*@
+                                    <input class="form-control" type="text" style="text-align:right" ng-disabled="true" ng-model="DiscountAmountString">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4">
+                                    @Resources.ResourceFGSale.FilePath
+                                </label>
+                                <div class="col-md-8">
+                                    <input type="file" id="fileInput" file-model="DiscountApprovalDocumentNameUI" ng-model="DiscountApprovalDocumentNameUI" name="DiscountApprovalDocumentNameUI" data-autoclose="true">
+                                </div>
+                            </div>
+                            <div class="form-group" ng-hide="DiscountApprovalDocumentName == null">
+                                <div class="col-md-8 pull-right">
+                                    <a class="btn btn-primary" ng-hide="!editmode" href="{{DiscountApprovalDocumentNamePath}}" download target="_blank"> @Resources.ResourceFGItemPrice.LblDownloadDoc</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <h3 class="heading">@Resources.ResourceFGSale.TotalPayable</h3>
+                        <div class="form-horizontal">
+                            <div class="form-group" style="margin-bottom: 5px">
+                                <label class="control-label col-md-6">
+                                    @Resources.ResourceFGSale.TotalPayable
+                                </label>
+                                <div class="col-md-6">
+                                    @*<input class="form-control" style="font-weight: 900; color: red; font-size: 14px" type="number"
+                                        ng-model="TotalPayable" ng-disabled="true" />*@
+                                    <input class="form-control" style="font-weight: 900; color: red; font-size: 14px; text-align: right" type="text"
+                                           ng-model="TotalPayableString" ng-disabled="true" />
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 5px">
+                                <label class="control-label col-md-6">
+                                    @Resources.ResourceFGSale.TotalPayableAfterDiscount
+                                </label>
+                                <div class="col-md-6">
+                                    @*<input class="form-control" style="font-weight: 900; color: red; font-size: 14px" type="number" ng-model="TotalPayableAfterDiscount" ng-disabled="true" />*@
+                                    <input class="form-control" style="font-weight: 900; color: red; font-size: 14px; text-align: right" type="text" ng-model="TotalPayableAfterDiscountString" ng-disabled="true" />
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 5px">
+                                <label class="control-label col-md-6">
+                                    @Resources.ResourceFGSale.TotalDueAdvanceAmount
+                                </label>
+                                <div class="col-md-6">
+                                    @*<input type="number" style="font-weight: 900; color: red; font-size: 14px" class="form-control col-md-6" ng-model="totalDueAdvancedAmount" ng-disabled="true" />*@
+                                    <input class="form-control" style="font-weight: 900; color: red; font-size: 14px; text-align: right" type="text" ng-model="totalDueAdvancedAmountString" ng-disabled="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8" style="padding: 0;">
+                        <div ng-switch="Reason">
+                            <div ng-switch-when="1">
+                                <h3 class="heading"> @Resources.ResourceFGSale.SalesPayment</h3>
+                                <table class="table table-responsive table-bordered border-none">
+                                    <thead>
+                                        <tr>
+                                            <th>@Resources.ResourceFGSale.PaymentMode</th>
+                                            <th>@Resources.ResourceFGSale.Bank</th>
+                                            <th>@Resources.ResourceFGSale.AccountNo</th>
+                                            <th>@Resources.ResourceFGSale.Cheque</th>
+                                            <th>@Resources.ResourceFGSale.PaymentDate</th>
+                                            <th>@Resources.ResourceFGSale.Amount</th>
+                                            <th>@Resources.ResourceCommon.LblAction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="salesPayment in FGSalesPayment">
+                                            <td>
+                                                <select data-ng-model="salesPayment.PaymentMode" class="form-control" name="PaymentMode" ng-change="showDueAmount($index)">
+                                                    <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                                    <option value="@((int) Remit.Service.Enums.PaymentModeEnum.Cash)">@Remit.Service.Enums.PaymentModeEnum.Cash</option>
+                                                    <option value="@((int) Remit.Service.Enums.PaymentModeEnum.CD)">@Remit.Service.Enums.PaymentModeEnum.CD</option>
+                                                    <option value="@((int) Remit.Service.Enums.PaymentModeEnum.PDC)">@Remit.Service.Enums.PaymentModeEnum.PDC</option>
+                                                    <option value="@((int) Remit.Service.Enums.PaymentModeEnum.Online)">@Remit.Service.Enums.PaymentModeEnum.Online</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select data-ng-model="salesPayment.BankId" class="form-control" ng-disabled="salesPayment.PaymentMode == 1" ng-change="getBankAccount($index,salesPayment.BankId)"
+                                                        data-ng-options="c.Id as c.Name for c in allBankFromDb | orderBy: 'Name'" name="BankId" style="width: 100px">
+                                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGSale.Bank</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select data-ng-model="salesPayment.BankAccountId" class="form-control" ng-disabled="salesPayment.PaymentMode == 1 || salesPayment.PaymentMode == 2 || salesPayment.PaymentMode == 3"
+                                                        data-ng-options="c.Id as c.AccountName for c in salesPayment.allBankAccountFromDb | orderBy: 'AccountName'" name="BankAccountId" style="width: 150px">
+                                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGSale.AccountNo</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" ng-model="salesPayment.ChequeNo" class="form-control" name="ChequeNo" style="width: 120px" ng-disabled="salesPayment.PaymentMode == 1" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" ng-model="salesPayment.PaymentDate" name="PaymentDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true" data-placement="top-left" data-container="body">
+                                            </td>
+                                            <td>
+                                                <input data-ng-class="form-control" type="number" style="text-align: right; width: 100px" class="form-control" ng-model="salesPayment.PaymentAmount" name="PaymentAmount" ng-change="totalpaymentDet()" /> @*ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01">*@
+                                            </td>
+                                            <td>
+                                                <input type="button" class=" btn btn-danger" ng-click="FGSalesPayment.splice($index, 1); totalpaymentDet()" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" style="padding: 10px 12px; height: 5px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" style="text-align: right">
+
+                                                <div class="row">
+                                                    <input type="button" class=" btn btn-sm btn-info buttonadditem  pull-left" style="width: 50px;"
+                                                           ng-click="addNewPayment($event)" value="@Resources.ResourceCommon.LblAddDetailItem">
+                                                    <div class="pull-right">
+                                                        @Resources.ResourceFGSale.TotalAmount
+                                                        @*<input data-ng-class="form-control" type="number" style="text-align: right" ng-model="totalPayment" ng-disabled="true" name="totalPayment">*@
+                                                        <input class="" type="text" style="text-align: right" ng-model="totalPaymentString" ng-disabled="true" name="totalPaymentString" />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                @*Buttons (Save,Reset, Delete)*@
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <input type="button" ng-click="addFGSales('add')" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                            <input type="button" ng-click="addFGSales('update')" ng-show="editmode && notApprovemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                            <input type="button" ng-click="addFGSales('update')" ng-show="HardApprove" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                            <input type="button" @*ng-click="deleteFGSale()"*@ ng-show="editmode && notApprovemode" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                   ng-bootbox-confirm-action="deleteFGSale()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                            <input type="button" ng-click="buttonReset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+
+                            <input type="button" ng-click="addFGSales('review')" ng-show="editmode && notApprovemode && !ReviewedBy" class="btn btn-primary" value=@Resources.ResourceCommon.LblReview />
+                            <input type="button" ng-click="addFGSales('approve')" ng-show="editmode && notApprovemode && ReviewedBy" class="btn btn-primary" value=@Resources.ResourceCommon.LblApprove />
+                            <a target="_blank" class="btn btn-primary" role="button" ng-show="editmode" @*ng-show="editmode && !notApprovemode"*@
+                               href="/RDLCReport/SalesInvoiceReport.aspx?invoiceNo={{InvoiceNo}}&deliverOptionType={{deliverOptionType}}">
+                                @Resources.ResourceCommon.LblPreview
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgSaleService', ['$http', function ($http) {
+        return {
+            saveFGSale: function (fgSale) {
+                var params = { fgSale: fgSale }
+                return $http({
+                    url: '/FGSale/CreateFGSale',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            updateFGSale: function (fgSale, insertType) {
+                var params = { fgSale: fgSale, insertType: insertType }
+                return $http({
+                    url: '/FGSale/UpdateFGSale',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+
+                });
+            },
+            getAllFGDealer: function () {
+                return $http.get('/FGDealer/GetActiveFGDealerList');
+            },
+            getAllFGType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getFGSaleListByDate: function (date) {
+                return $http.get('/FGSale/GetFGSaleListByDate', { params: { date: date } });
+            },
+
+            deleteFGSale: function (fgSale) {
+                return $http({
+                    url: '/FGSale/DeleteFGSale',
+                    method: 'POST',
+                    data: fgSale
+                });
+            },
+
+            getAllFGDealerZone: function () {
+                return $http.get('/FGDealerZone/GetFGDealerZoneList');
+            },
+            getAllFGItemByTypeId: function (id) {
+                return $http.get('/FGItem/GetFgItemListInFgItemInventoryByType?typeId=' + id);
+            },
+            getFgItemGradeListFromFGInventory: function (id) {
+                return $http.get('/FGItem/GetFgItemGradeListFromFGInventory?itemId=' + id);
+            },
+            getItemFrmInventoryByItemAndGrade: function (itemId, gradeId) {
+                return $http.get('/FGItem/GetItemFrmInventoryByItemAndGrade?itemId=' + itemId + '&gradeId=' + gradeId);
+            },
+            getItemFrmInventoryByItemAndGradeWhenPopulate: function (itemId, gradeId, lot) {
+                return $http.get('/FGItem/GetItemFrmInventoryByItemAndGradeWhenPopulate?itemId=' + itemId + '&gradeId=' + gradeId + '&lot=' + lot);
+            },
+            getItemFrmInventoryByItemGradeAndLot: function (itemId, gradeId, lot) {
+                return $http.get('/FGItem/GetItemFrmInventoryByItemGradeAndLot?itemId=' + itemId + '&gradeId=' + gradeId + '&lot=' + lot);
+            },
+
+
+            genInvoiceNo: function () {
+                var id = "SalesInvoiceNo";
+                return $http.get('/AutoGeneratedNo/GenNo?id=' + id);
+            },
+            getAllAdjustmentSetup: function () {
+                return $http.get('/FGAdjustmentSetup/GetFGAdjustmentSetupList');
+            },
+            getAllBank: function () {
+                return $http.get('/Bank/GetBankList');
+            },
+            getBankAccountByBankId: function (id) {
+                return $http.get('/BankAccount/GetBankAccountListByBankId?id=' + id);
+            },
+            getFGDealerWithInvoice: function (id) {
+                return $http.get('/FGDealer/GetFGDealerWithInvoice?id=' + id);
+            },
+            getFGSale: function (id) {
+                return $http.get('/FGSale/GetFGSale?id=' + id);
+            },
+
+            uploadFile: function (file, invoiceNo) {
+                var fdata = new FormData();
+                var url = '/FGSale/UpoladFile';
+                fdata.append('invoiceNo', invoiceNo);
+                fdata.append('file', file);
+                return $http.post(url,
+                    fdata,
+                    {
+                        transformRequest: angular.identity,
+                        headers: { 'Content-Type': undefined }
+                    });
+            },
+
+            getdealerCommission: function (dealerId, type) {
+                return $http.get('/CommissionCalculator/GetCommissionByDealerAndType?dealerId=' + dealerId + '&type=' + type);
+            },
+            getdealerBreakage: function (dealerId, type) {
+                return $http.get('/BreakageCalculator/GetBreakageByDealerAndType?dealerId=' + dealerId + '&type=' + type);
+            }
+
+        };
+    }]);
+
+    app.controller('fgSaleCtrl',
+        function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgSaleService, $log, $ngBootbox, $filter) {
+            //$scope.DemandNoURL = "/ItemDemand/GetItemDemandListForAutoCompleteSerchKey/";
+            $scope.Reason = "1";
+            $scope.customType = "1";
+            $scope.deliverOptionType = "1";
+            $scope.InvoiceDate = new Date().toISOString();
+            $scope.selectedYear = new Date();
+            $scope.ReceivedDate = new Date().toISOString();
+            $scope.editmode = false;
+            $scope.notApprovemode = true;
+            $scope.regularType = true;
+            $scope.HardApprove = false;
+            //$scope.commissionHeaderHide = true;
+            //$scope.breakageHeaderHide = true;
+
+            $scope.TotalPayable = 0.00;
+            $scope.TotalPayableString = "";
+
+            $scope.totalPackQuantity = 0.0000;
+            $scope.totalPackQuantityString = "";
+
+            $scope.totalSalesQuantity = 0.0000;
+            $scope.totalSalesQuantityString = "";
+
+            $scope.totalSalesAmount = 0.0000;
+            $scope.totalSalesAmountString = "";
+
+            $scope.totalAdjustmentAmount = 0.0000;
+            $scope.totalAdjustmentAmountString = "";
+
+            $scope.totalDueAdvancedAdjustmentAmount = 0.0000;
+            $scope.totalDueAdvancedAdjustmentAmountString = "";
+
+            $scope.totalPayment = 0.0000;
+            $scope.totalPaymentString = "";
+
+            $scope.totalDueAdvancedAmount = 0.0000;
+            $scope.totalDueAdvancedAmountString = "";
+
+            $scope.TotalPayableAfterDiscount = 0.0000;
+            $scope.TotalPayableAfterDiscountString = "";
+
+            $scope.DiscountAmount = 0.00;
+            $scope.DiscountAmountString = "";
+
+            $scope.yesDoc = false;
+            //$scope.AuthorisedByName = "@UserSession.GetUserFromSession().LoginName";
+            $scope.GenIssueNo = function () {
+                fgSaleService.genInvoiceNo().then(function onSuccess(response) {
+                    $scope.InvoiceNo = response.data;
+                });
+            }
+            $scope.GenIssueNo();
+
+            $scope.selectReason = function () {
+                if ($scope.Reason === "1") {
+                    $scope.DiscountPercentage = '';
+                    $scope.DiscountAmount = '';
+                } else {
+                    $scope.DiscountPercentage = 100;
+                }
+
+                $scope.discountPercentage();
+            }
+
+            $scope.messageModalObj = {};
+            $scope.messageModalObj.message = '';
+            $scope.showModalforSearch = false;
+            $scope.selectedRow = null;
+
+            $scope.FGSalesDetail = [];
+            $scope.FGSalesDetail.push({
+                Id: '',
+                FGItemId: null,
+                FGGradeId: null,
+                Lot: '',
+                StockQuantity: '',
+                PackUnitId: '',
+                Amount: 0
+            });
+            $scope.addNewDetail = function ($event) {
+                $scope.FGSalesDetail.push({
+                    Id: '',
+                    FGItemId: null,
+                    FGGradeId: null,
+                    Lot: '',
+                    StockQuantity: '',
+                    PackUnitId: '',
+                    Amount: 0,
+                    HandPackQuantity: 0.00
+                });
+            }
+
+            $scope.FGSalesAdjustment = [];
+            $scope.FGSalesAdjustment.push({
+                Id: '',
+                percentageDisable: true,
+                FGAdjustmentSetupId: null,
+                Note: '',
+                Percentage: '',
+                AdjustmentAmount: '',
+                commissionCalculator: true,
+                breakageCalculator: true
+            });
+            $scope.addNewAdjustmentDetail = function ($event) {
+                $scope.FGSalesAdjustment.push({
+                    Id: '',
+                    percentageDisable: true,
+                    FGAdjustmentSetupId: null,
+                    Note: '',
+                    Percentage: '',
+                    CalculationOn: '',
+                    AdjustmentAmount: ''
+                });
+            }
+
+            $scope.FGSalesDueAdvancedAdjustment = [];
+            $scope.FGSalesDueAdvancedAdjustment.push(
+                { Id: '', InvoiceNo: null, InvoiceDate: '', DueAdvancedAmount: '' });
+            $scope.addNewDueAdvancedAdjustmentDetail = function ($event) {
+                $scope.FGSalesDueAdvancedAdjustment.push({
+                    Id: '',
+                    InvoiceNo: null,
+                    InvoiceDate: '',
+                    DueAdvancedAmount: ''
+                });
+            }
+
+            $scope.FGSalesPayment = [];
+            $scope.FGSalesPayment.push({
+                Id: '',
+                PaymentMode: null,
+                BankId: null,
+                BankAccountId: null,
+                ChequeNo: '',
+                PaymentDate: '',
+                PaymentAmount: ''
+            });
+            $scope.addNewPayment = function ($event) {
+                $scope.FGSalesPayment.push({
+                    Id: '',
+                    PaymentMode: null,
+                    BankId: null,
+                    BankAccountId: null,
+                    ChequeNo: '',
+                    PaymentDate: '',
+                    PaymentAmount: ''
+                });
+            }
+
+            $scope.calculation = function () {
+                $scope.totalPackQuantity = 0.0000;
+                $scope.totalSalesQuantity = 0.0000;
+                $scope.totalSalesAmount = 0.0000;
+                $scope.totalAdjustmentAmount = 0.0000;
+                $scope.totalDueAdvancedAdjustmentAmount = 0.0000;
+                $scope.totalPayment = 0.0000;
+                $scope.totalDueAdvancedAmount = 0.0000;
+                $scope.TotalPayableAfterDiscount = 0.0000;
+                $scope.DiscountAmount = 0.00;
+
+                // Sales Detail...............
+                angular.forEach($scope.FGSalesDetail,
+                    function (value, key) {
+                        if ($scope.FGSalesDetail[key].Amount !== "") {
+                            $scope.FGSalesDetail[key].Amount = $scope.FGSalesDetail[key].Amount.toFixed(2);
+                            $scope.FGSalesDetail[key].Amount = parseFloat($scope.FGSalesDetail[key].Amount);
+                        }
+                        $scope.totalPackQuantity += $scope.FGSalesDetail[key].PackQuantity === "" ? 0.00 : $scope.FGSalesDetail[key].PackQuantity;
+                        $scope.totalPackQuantity = $scope.totalPackQuantity.toFixed(2);
+                        $scope.totalPackQuantity = parseFloat($scope.totalPackQuantity);
+                        $scope.totalPackQuantityString = Intl.NumberFormat().format($scope.totalPackQuantity);
+
+                        $scope.totalSalesQuantity += $scope.FGSalesDetail[key].SalesQuantity === "" ? 0.00 : $scope.FGSalesDetail[key].SalesQuantity;
+                        $scope.totalSalesQuantity = $scope.totalSalesQuantity.toFixed(2);
+                        $scope.totalSalesQuantity = parseFloat($scope.totalSalesQuantity);
+                        $scope.totalSalesQuantityString = Intl.NumberFormat().format($scope.totalSalesQuantity);
+
+                        $scope.totalSalesAmount += $scope.FGSalesDetail[key].Amount === "" ? 0.00 : $scope.FGSalesDetail[key].Amount;
+                        $scope.totalSalesAmount = $scope.totalSalesAmount.toFixed(2);
+                        $scope.totalSalesAmount = parseFloat($scope.totalSalesAmount);
+                        $scope.totalSalesAmountString = Intl.NumberFormat().format($scope.totalSalesAmount);
+                    });
+                if ($scope.FGSalesDetail.length === 0) {
+                    $scope.totalPackQuantity = 0.00;
+                    $scope.totalPackQuantityString = Intl.NumberFormat().format($scope.totalPackQuantity);
+
+                    $scope.totalSalesQuantity = 0.00;
+                    $scope.totalSalesQuantityString = Intl.NumberFormat().format($scope.totalSalesQuantity);
+
+                    $scope.totalSalesAmount = 0.00;
+                    $scope.totalSalesAmountString = Intl.NumberFormat().format($scope.totalSalesAmount);
+                }
+                // Sales Adjustment.........
+                angular.forEach($scope.FGSalesAdjustment,
+                    function (value, key) {
+                        if ($scope.FGSalesAdjustment[key].CalculationOn === "Amount" &&
+                            $scope.FGSalesAdjustment[key].ApplyMode !== "Input") {
+                            $scope.FGSalesAdjustment[key].AdjustmentAmount =
+                                $scope.totalSalesAmount * $scope.FGSalesAdjustment[key].AdjustmentAmount / 100;
+                        } else if ($scope.FGSalesAdjustment[key].CalculationOn === "Quantity") {
+                            if ($scope.FGSalesAdjustment[key].UOM != null) {
+                                $scope.totalQty = 0.0000;
+                                angular.forEach($scope.FGSalesDetail,
+                                    function (va, ke) {
+                                        if ($scope.FGSalesAdjustment[key].UOM === 1) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInCTN;
+                                        } else if ($scope.FGSalesAdjustment[key].UOM === 2) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInPCs;
+                                        } else if ($scope.FGSalesAdjustment[key].UOM === 3) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInSFT;
+                                        } else if ($scope.FGSalesAdjustment[key].UOM === 4) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInSMT;
+                                        }
+                                    });
+                            }
+                            $scope.FGSalesAdjustment[key].AdjustmentAmount =
+                                $scope.totalQty * $scope.FGSalesAdjustment[key].Percentage;
+                            $scope.FGSalesAdjustment[key].Note = "@@" + $scope.FGSalesAdjustment[key].Percentage;
+                        }
+
+                        if ($scope.FGSalesAdjustment[key].AdjustmentAmount !== "") {
+                            $scope.FGSalesAdjustment[key].AdjustmentAmount =
+                                $scope.FGSalesAdjustment[key].AdjustmentAmount.toFixed(2);
+                            $scope.FGSalesAdjustment[key].AdjustmentAmount =
+                                parseFloat($scope.FGSalesAdjustment[key].AdjustmentAmount);
+                        }
+
+                        $scope.totalAdjustmentAmount += $scope.FGSalesAdjustment[key].AdjustmentAmount === ""
+                            ? 0.00
+                            : $scope.FGSalesAdjustment[key].AdjustmentAmount;
+                        $scope.totalAdjustmentAmount = $scope.totalAdjustmentAmount.toFixed(2);
+                        $scope.totalAdjustmentAmount = parseFloat($scope.totalAdjustmentAmount);
+                        $scope.totalAdjustmentAmountString = Intl.NumberFormat().format($scope.totalAdjustmentAmount);
+                    });
+                if ($scope.FGSalesAdjustment.length === 0) {
+                    $scope.totalAdjustmentAmount = 0.00;
+                    $scope.totalAdjustmentAmountString = Intl.NumberFormat().format($scope.totalAdjustmentAmount);
+                }
+                // Due/Advanced Invoices Adjustment...............
+                angular.forEach($scope.FGSalesDueAdvancedAdjustment,
+                    function (value, key) {
+                        if ($scope.FGSalesDueAdvancedAdjustment[key].DueAdvancedAmount !== "") {
+                            $scope.FGSalesDueAdvancedAdjustment[key].DueAdvancedAmount =
+                                $scope.FGSalesDueAdvancedAdjustment[key].DueAdvancedAmount.toFixed(2);
+                            $scope.FGSalesDueAdvancedAdjustment[key].DueAdvancedAmount =
+                                parseFloat($scope.FGSalesDueAdvancedAdjustment[key].DueAdvancedAmount);
+                        }
+                        $scope.totalDueAdvancedAdjustmentAmount += $scope.FGSalesDueAdvancedAdjustment[key]
+                            .DueAdvancedAmount ===
+                            ""
+                            ? 0.00
+                            : $scope.FGSalesDueAdvancedAdjustment[key].DueAdvancedAmount;
+                        $scope.totalDueAdvancedAdjustmentAmount = $scope.totalDueAdvancedAdjustmentAmount.toFixed(2);
+                        $scope.totalDueAdvancedAdjustmentAmount = parseFloat($scope.totalDueAdvancedAdjustmentAmount);
+                        $scope.totalDueAdvancedAdjustmentAmountString = Intl.NumberFormat().format($scope.totalDueAdvancedAdjustmentAmount);
+                    });
+                if ($scope.FGSalesDueAdvancedAdjustment.length === 0) {
+                    $scope.totalDueAdvancedAdjustmentAmount = 0.00;
+                    $scope.totalDueAdvancedAdjustmentAmountString = Intl.NumberFormat().format($scope.totalDueAdvancedAdjustmentAmount);
+                }
+                //..Total Paid Amount
+                angular.forEach($scope.FGSalesPayment,
+                    function (value, key) {
+                        $scope.totalPayment += $scope.FGSalesPayment[key].PaymentAmount === ""
+                            ? 0.00
+                            : $scope.FGSalesPayment[key].PaymentAmount;
+                        $scope.totalPayment = $scope.totalPayment.toFixed();
+                        $scope.totalPayment = parseFloat($scope.totalPayment);
+                        $scope.totalPaymentString = Intl.NumberFormat().format($scope.totalPayment);
+                    });
+
+                if ($scope.FGSalesPayment.length === 0) {
+                    $scope.totalPayment = 0.00;
+                    $scope.totalPaymentString = Intl.NumberFormat().format($scope.totalPayment);
+                }
+                $scope.TotalPayable = $scope.totalSalesAmount - $scope.totalAdjustmentAmount + $scope.totalDueAdvancedAdjustmentAmount;
+                $scope.TotalPayable = $scope.TotalPayable.toFixed(2);
+                $scope.TotalPayable = parseFloat($scope.TotalPayable);
+                $scope.TotalPayableString = Intl.NumberFormat().format($scope.TotalPayable);
+
+                if ($scope.DiscountPercentage != null &&
+                    $scope.DiscountPercentage !== undefined &&
+                    $scope.DiscountPercentage !== "") {
+
+                    //$scope.DiscountAmount = ($scope.DiscountPercentage / 100) * $scope.TotalPayable;
+                    $scope.DiscountAmount = ($scope.DiscountPercentage / 100) * $scope.totalSalesAmount;
+
+                    $scope.DiscountAmount = $scope.DiscountAmount.toFixed(2);
+                    $scope.DiscountAmount = parseFloat($scope.DiscountAmount);
+                    $scope.DiscountAmountString = Intl.NumberFormat().format($scope.DiscountAmount);
+
+                    if ($scope.DiscountAmount > $scope.TotalPayable) {
+                        $scope.DiscountPercentage = '';
+                        $scope.DiscountAmount = '';
+                        $ngBootbox.alert('@Resources.ResourceFGSale.DiscountOver');
+                        return;
+                    }
+                }
+
+                $scope.TotalPayableAfterDiscount = $scope.TotalPayable - $scope.DiscountAmount;
+                $scope.TotalPayableAfterDiscount = $scope.TotalPayableAfterDiscount.toFixed(2);
+                $scope.TotalPayableAfterDiscount = parseFloat($scope.TotalPayableAfterDiscount);
+                $scope.TotalPayableAfterDiscountString = Intl.NumberFormat().format($scope.TotalPayableAfterDiscount);
+
+                var val = $scope.TotalPayableAfterDiscount.toFixed();
+                val = parseFloat(val);
+                $scope.totalDueAdvancedAmount = val - $scope.totalPayment;
+                $scope.totalDueAdvancedAmountString = Intl.NumberFormat().format($scope.totalDueAdvancedAmount);
+            }
+
+            $scope.totalSalesDet = function () {
+                $scope.calculation();
+            }
+
+            $scope.totalAdjustDet = function () {
+                $scope.calculation();
+            }
+
+            $scope.totalDueAdvancedAdjustmentDet = function () {
+                $scope.calculation();
+            }
+
+            $scope.totalpaymentDet = function () {
+                $scope.calculation();
+            }
+
+            $scope.discountPercentage = function () {
+                $scope.calculation();
+            }
+
+
+            // add Sale......
+            $scope.addFGSales = function (insertType) {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+                    var fgSales = {};
+                    fgSales["InvoiceNo"] = $scope.InvoiceNo;
+                    fgSales["InvoiceDate"] = $scope.InvoiceDate;
+                    fgSales["Reason"] = $scope.Reason;
+                    fgSales["DeliveredBy"] = $scope.deliverOptionType;
+                    fgSales["DealerId"] = $scope.selectedDealerId;
+                    fgSales["CustomerType"] = $scope.customType;
+                    fgSales["Name"] = $scope.Name;
+                    fgSales["ContactPersonName"] = $scope.ContactPersonName;
+                    fgSales["ContactPhone"] = $scope.ContactPhone;
+                    fgSales["Address"] = $scope.Address;
+                    fgSales["DefaultDeliverySite"] = $scope.DefaultDeliverySite;
+                    fgSales["DeliverZoneId"] = $scope.DeliveryZoneId;
+                    fgSales["Reason"] = $scope.Reason;
+                    fgSales["TotalAmount"] = $scope.totalSalesAmount;
+                    fgSales["TotalDueOrAdvanceAdjustment"] = $scope.totalDueAdvancedAdjustmentAmount;
+                    fgSales["TotalAdjustment"] = $scope.totalAdjustmentAmount;
+                    fgSales["TotalPriceAfterAdjustment"] = $scope.TotalPayable;
+                    fgSales["TotalPaidAmount"] = $scope.totalPayment;
+                    fgSales["TotalDueAdvancedAmount"] = $scope.totalDueAdvancedAmount;
+                    fgSales["FGSalesDetails"] = $scope.FGSalesDetail;
+                    fgSales["FGSalesAdjustments"] = $scope.FGSalesAdjustment;
+                    fgSales["FGSalesDueAdvancedAdjustments"] = $scope.FGSalesDueAdvancedAdjustment;
+                    fgSales["FGSalesPayments"] = $scope.FGSalesPayment;
+
+                    fgSales["DiscountPercentage"] = $scope.DiscountPercentage;
+                    fgSales["DiscountAmount"] = $scope.DiscountAmount;
+                    //fgSales["DiscountApprovalDocumentName"] = $scope.DiscountApprovalDocumentName;
+
+                    if ($scope.FGSalesDetail != null && $scope.FGSalesDetail !== "") {
+                        if ($scope.FGSalesDetail.length > 0) {
+                            for (var i = 0; i < $scope.FGSalesDetail.length; i++) {
+                                if ($scope.FGSalesDetail[i].FGItemId !== undefined &&
+                                    $scope.FGSalesDetail[i].FGItemId !== null &&
+                                    $scope.FGSalesDetail[i].FGItemId !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceFGSale.ItemRequired');
+                                    return;
+                                }
+                                if ($scope.FGSalesDetail[i].FGGradeId !== undefined &&
+                                    $scope.FGSalesDetail[i].FGGradeId !== null &&
+                                    $scope.FGSalesDetail[i].FGGradeId !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceFGSale.GradeReq');
+                                    return;
+                                }
+                                if ($scope.FGSalesDetail[i].Lot !== undefined &&
+                                    $scope.FGSalesDetail[i].Lot !== null &&
+                                    $scope.FGSalesDetail[i].Lot !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceFGSale.LotReq');
+                                    return;
+                                }
+                                if ($scope.FGSalesDetail[i].PackQuantity !== undefined &&
+                                    $scope.FGSalesDetail[i].PackQuantity !== null &&
+                                    $scope.FGSalesDetail[i].PackQuantity !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceFGSale.PackQtyReq');
+                                    return;
+                                } if ($scope.FGSalesDetail[i].UnitPrice!== undefined &&
+                                    $scope.FGSalesDetail[i].UnitPrice !== null &&
+                                    $scope.FGSalesDetail[i].UnitPrice !== 0.00) {
+                                } else {
+                                   
+                                    $ngBootbox.alert('@Resources.ResourceFGSale.UnitPriceReqPart1' + (i+1) + " " +'@Resources.ResourceFGSale.UnitPriceReqPart2');
+                                    return;
+                                }
+
+                                if ($scope.FGSalesDetail[i].StockQuantity + $scope.FGSalesDetail[i].HandPackQuantity < $scope.FGSalesDetail[i].PackQuantity) {
+                                    return $ngBootbox.alert('@Resources.ResourceFGSale.BalanceExceed');
+                                }
+                            }
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceFGItemIn.NeedFGItemInDetails');
+                            return;
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceFGItemIn.NeedFGItemInDetails');
+                        return;
+                    }
+
+                    if ($scope.FGSalesAdjustment != null && $scope.FGSalesAdjustment !== "") {
+                        if ($scope.FGSalesAdjustment.length > 0) {
+                            $scope.newArray = [];
+                            $scope.carraigeIds = '@WebConfigurationManager.AppSettings["CarraigeId"]';
+                            $scope.aCarraigeId = $scope.carraigeIds.split(",");
+                            for (var j = 0; j < $scope.aCarraigeId.length; j++) {
+                                $scope.newArray.push($scope.aCarraigeId[j]);
+                            }
+
+                            var i = $scope.FGSalesAdjustment.length;
+                            while (i--) {
+                                if (!$scope.FGSalesAdjustment[i].AdjustmentAmount) {
+                                    $scope.FGSalesAdjustment.splice(i, 1);
+                                } else {
+                                    if ($scope.FGSalesAdjustment[i].FGAdjustmentSetupId) {
+                                        for (var k = 0; k < $scope.newArray.length; k++) {
+                                            if ($scope.FGSalesAdjustment[i].FGAdjustmentSetupId === parseInt($scope.newArray[k])) {
+                                                if (parseInt($scope.deliverOptionType) === 1) {
+                                                    $ngBootbox.alert('@Resources.ResourceFGSale.DeliveryByCustomerCheck');
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else { }
+                    } else { }
+
+                    if ($scope.FGSalesDueAdvancedAdjustment != null && $scope.FGSalesDueAdvancedAdjustment !== "") {
+                        if ($scope.FGSalesDueAdvancedAdjustment.length > 0) {
+                            var i = $scope.FGSalesDueAdvancedAdjustment.length;
+                            while (i--) {
+                                if (!$scope.FGSalesDueAdvancedAdjustment[i].DueAdvancedAmount) {
+                                    $scope.FGSalesDueAdvancedAdjustment.splice(i, 1);
+                                } else {
+                                    $scope.FGSalesDueAdvancedAdjustment[i].InvoiceDate = new Date($scope.FGSalesDueAdvancedAdjustment[i].InvoiceDate);
+                                }
+                            }
+                        } else { }
+                    } else { }
+
+                    if ($scope.FGSalesPayment != null && $scope.FGSalesPayment !== "") {
+                        if ($scope.FGSalesPayment.length > 0) {
+                            var i = $scope.FGSalesPayment.length;
+                            while (i--) {
+                                if (!$scope.FGSalesPayment[i].PaymentAmount ||
+                                    !$scope.FGSalesPayment[i].PaymentMode) {
+                                    $scope.FGSalesPayment.splice(i, 1);
+                                } else {
+                                    if ($scope.FGSalesPayment[i].PaymentMode === "2" || $scope.FGSalesPayment[i].PaymentMode === "3") {
+                                        if ($scope.FGSalesPayment[i].BankId !== undefined &&
+                                            $scope.FGSalesPayment[i].BankId !== null &&
+                                            $scope.FGSalesPayment[i].BankId !== "") {
+                                        } else {
+                                            $ngBootbox.alert('@Resources.ResourceFGSale.BankReq');
+                                            return;
+                                        }
+                                        @*if ($scope.FGSalesPayment[i].ChequeNo !== undefined &&
+                                            $scope.FGSalesPayment[i].ChequeNo !== null &&
+                                            $scope.FGSalesPayment[i].ChequeNo !== "") {
+                                        } else {
+                                            $ngBootbox.alert('@Resources.ResourceFGSale.ChequeReq');
+                                            return;
+                                        }*@
+                                    } else if ($scope.FGSalesPayment[i].PaymentMode === "4") {
+                                        @*if ($scope.FGSalesPayment[i].BankAccountId !== undefined &&
+                                            $scope.FGSalesPayment[i].BankAccountId !== null &&
+                                            $scope.FGSalesPayment[i].BankAccountId !== "") {
+                                        } else {
+                                            $ngBootbox.alert('@Resources.ResourceFGSale.BankAccountRequ');
+                                            return;
+                                        }*@
+                                    }
+                                }
+                            }
+                        } else { }
+                    } else { }
+
+                    if (insertType === "add") {
+                        //return;
+                        if ($scope.DiscountPercentage !== null &&
+                            $scope.DiscountPercentage !== "" &&
+                            $scope.DiscountPercentage !== undefined) {
+                            if ($scope.DiscountApprovalDocumentNameUI === null || $scope.DiscountApprovalDocumentNameUI === undefined || $scope.DiscountApprovalDocumentNameUI === "") {
+                                $ngBootbox.alert('@Resources.ResourceFGSale.FileReq');
+                                return;
+                            }
+                        }
+
+                        if ($scope.DiscountApprovalDocumentNameUI != null) {
+                            fgSales["DiscountApprovalDocumentName"] = $scope.DiscountApprovalDocumentNameUI.name;
+                        }
+
+                        fgSaleService.saveFGSale(fgSales)
+                            .then(function onSuccess(response) {
+
+                                if ($scope.DiscountApprovalDocumentNameUI != null) {
+                                    $scope.UploadFile();
+                                } else {
+                                    //$scope.reset();
+                                }
+
+                                $scope.messageModalObj.message = response.data.message;
+                                $scope.showModalforSearch = true;
+                                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                $scope.loadAllFGSaleList();
+                                $scope.loadAllFGDealer();
+                                $scope.reset();
+                            })
+                            .catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                            });
+                    }
+                    else if (insertType === "update" || insertType === "review" || insertType === "approve") {
+                        //return;
+                        if ($scope.DiscountApprovalDocumentNameUI == null || $scope.DiscountApprovalDocumentNameUI == undefined || $scope.DiscountApprovalDocumentNameUI == "") {
+                            fgSales["DiscountApprovalDocumentName"] = $scope.DiscountApprovalDocumentName;
+                        } else {
+                            fgSales["DiscountApprovalDocumentName"] = $scope.DiscountApprovalDocumentNameUI.name;
+                            $scope.UploadFile();
+                        }
+
+                        fgSaleService.updateFGSale(fgSales, insertType)
+                            .then(function onSuccess(response) {
+                                $scope.messageModalObj.message = response.data.message;
+                                $scope.showModalforSearch = true;
+                                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                $scope.loadAllFGSaleList();
+                                $scope.loadAllFGDealer();
+                                $scope.reset();
+                            })
+                            .catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                            });
+                    }
+
+                }
+            };
+
+            $scope.UploadFile = function () {
+                fgSaleService.uploadFile($scope.DiscountApprovalDocumentNameUI, $scope.InvoiceNo)
+                    .then(function onSuccess(response) {
+                        //$scope.reset();
+                    })
+                    .catch(function onError(response) {
+                        //$ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            $scope.reset = function () {
+                $scope.editmode = false;
+                $scope.regularType = true;
+                $scope.HardApprove = false;
+                $scope.Reason = "1";
+                $scope.customType = "1";
+                $scope.deliverOptionType = "1";
+                $scope.notApprovemode = true;
+                $scope.InvoiceDate = new Date().toISOString();
+
+                $scope.AvailableCreditLimit = "";
+                $scope.Name = "";;
+                $scope.ContactPersonName = "";
+                $scope.ContactPhone = "";
+                $scope.Address = "";
+                $scope.DefaultDeliverySite = "";
+                $scope.DeliveryZoneId = null;
+                $scope.selectedDealerId = null;
+                $scope.SavedInvoiceNo = null;
+                $scope.TotalPayable = 0.00;
+                $scope.TotalPayableString = "";
+
+                $scope.totalPackQuantity = 0.0000;
+                $scope.totalPackQuantityString = "";
+
+                $scope.totalSalesQuantity = 0.0000;
+                $scope.totalSalesQuantityString = "";
+
+                $scope.totalSalesAmount = 0.0000;
+                $scope.totalSalesAmountString = "";
+
+                $scope.totalAdjustmentAmount = 0.0000;
+                $scope.totalAdjustmentAmountString = "";
+
+                $scope.totalDueAdvancedAdjustmentAmount = 0.0000;
+                $scope.totalDueAdvancedAdjustmentAmountString = "";
+
+                $scope.totalPayment = 0.0000;
+                $scope.totalPaymentString = "";
+
+                $scope.totalDueAdvancedAmount = 0.0000;
+                $scope.totalDueAdvancedAmountString = "";
+
+                $scope.TotalPayableAfterDiscount = 0.00;
+                $scope.TotalPayableAfterDiscountString = "";
+
+                $scope.DiscountPercentage = "";
+
+                $scope.DiscountAmount = 0.00;
+                $scope.DiscountAmountString = "";
+                $scope.DiscountApprovalDocumentName = "";
+
+                angular.forEach(
+                    angular.element("input[type='file']"),
+                    function (inputElem) {
+                        angular.element(inputElem).val(null);
+                    });
+
+                $scope.TotalPriceAfterAdjustment = "";
+                $scope.FGSalesDetail = [];
+                $scope.FGSalesDetail.push({
+                    Id: '', FGItemId: null, FGGradeId: null, Lot: '', StockQuantity: '', PackUnitId: '', Amount: 0,
+                    HandPackQuantity: 0.00
+                });
+                $scope.FGSalesAdjustment = [];
+                $scope.FGSalesAdjustment.push({
+                    Id: '', percentageDisable: true, FGAdjustmentSetupId: null, Note: '', Percentage: '', AdjustmentAmount: '', commissionCalculator: true, breakageCalculator: true
+                });
+                $scope.FGSalesDueAdvancedAdjustment = [];
+                $scope.FGSalesDueAdvancedAdjustment.push({ Id: '', InvoiceNo: null, InvoiceDate: '', DueAdvancedAmount: '' });
+                $scope.FGSalesPayment = [];
+                $scope.FGSalesPayment.push({ Id: '', PaymentMode: null, BankId: null, BankAccountId: null, ChequeNo: '', PaymentDate: '', PaymentAmount: '' });
+                $scope.GenIssueNo();
+            }
+
+            $scope.buttonReset = function () {
+                $scope.editmode = false;
+                $scope.regularType = true;
+                $scope.HardApprove = false;
+                $scope.Reason = "1";
+                $scope.customType = "1";
+                $scope.deliverOptionType = "1";
+                $scope.notApprovemode = true;
+                $scope.InvoiceDate = new Date().toISOString();
+
+                $scope.AvailableCreditLimit = "";
+                $scope.Name = "";;
+                $scope.ContactPersonName = "";
+                $scope.ContactPhone = "";
+                $scope.Address = "";
+                $scope.DefaultDeliverySite = "";
+                $scope.DeliveryZoneId = null;
+                $scope.selectedDealerId = null;
+                $scope.SavedInvoiceNo = null;
+                $scope.TotalPayable = 0.00;
+                $scope.TotalPayableString = "";
+
+                $scope.totalPackQuantity = 0.0000;
+                $scope.totalPackQuantityString = "";
+
+                $scope.totalSalesQuantity = 0.0000;
+                $scope.totalSalesQuantityString = "";
+
+                $scope.totalSalesAmount = 0.0000;
+                $scope.totalSalesAmountString = "";
+
+                $scope.totalAdjustmentAmount = 0.0000;
+                $scope.totalAdjustmentAmountString = "";
+
+                $scope.totalDueAdvancedAdjustmentAmount = 0.0000;
+                $scope.totalDueAdvancedAdjustmentAmountString = "";
+
+                $scope.totalPayment = 0.0000;
+                $scope.totalPaymentString = "";
+
+                $scope.totalDueAdvancedAmount = 0.0000;
+                $scope.totalDueAdvancedAmountString = "";
+
+                $scope.TotalPayableAfterDiscount = 0.00;
+                $scope.TotalPayableAfterDiscountString = "";
+
+                $scope.DiscountPercentage = "";
+
+                $scope.DiscountAmount = 0.00;
+                $scope.DiscountAmountString = "";
+                $scope.DiscountApprovalDocumentName = "";
+
+                angular.forEach(
+                    angular.element("input[type='file']"),
+                    function (inputElem) {
+                        angular.element(inputElem).val(null);
+                    });
+
+                $scope.TotalPriceAfterAdjustment = "";
+                $scope.FGSalesDetail = [];
+                $scope.FGSalesDetail.push({
+                    Id: '', FGItemId: null, FGGradeId: null, Lot: '', StockQuantity: '', PackUnitId: '', Amount: 0,
+                    HandPackQuantity: 0.00
+                });
+                $scope.FGSalesAdjustment = [];
+                $scope.FGSalesAdjustment.push({
+                    Id: '', percentageDisable: true, FGAdjustmentSetupId: null, Note: '', Percentage: '', AdjustmentAmount: '', commissionCalculator: true, breakageCalculator: true
+                });
+                $scope.FGSalesDueAdvancedAdjustment = [];
+                $scope.FGSalesDueAdvancedAdjustment.push({ Id: '', InvoiceNo: null, InvoiceDate: '', DueAdvancedAmount: '' });
+                $scope.FGSalesPayment = [];
+                $scope.FGSalesPayment.push({ Id: '', PaymentMode: null, BankId: null, BankAccountId: null, ChequeNo: '', PaymentDate: '', PaymentAmount: '' });
+                $scope.GenIssueNo();
+
+                $scope.selectedYear = new Date();
+                $scope.loadAllFGSaleList();
+            }
+
+            $scope.populateFGSale = function (data) {
+                // Firefox 1.0+
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                $scope.editmode = true;
+                $scope.notApprovemode = true;
+                $scope.InvoiceNo = data.InvoiceNo;
+
+                if (isFirefox) {
+                    $scope.InvoiceDate = new Date(data.InvoiceDateStringForFireFox);
+                } else {
+                    $scope.InvoiceDate = new Date(data.InvoiceDateString);
+                }
+                //$scope.InvoiceDate = new Date(data.InvoiceDateString);
+
+                $scope.selectedDealerId = data.DealerId;
+                $scope.selectDealerWhenPopulate(data.DealerId);
+                if (data.CustomerType === 1) {
+                    $scope.regularType = true;
+                } else {
+                    $scope.regularType = false;
+                }
+
+                $scope.Reason = data.Reason.toString();
+                $scope.customType = data.CustomerType.toString();
+                $scope.deliverOptionType = data.DeliveredBy.toString();
+
+                $scope.Name = data.Name;
+                $scope.ContactPersonName = data.ContactPerson;
+                $scope.ContactPhone = data.ContactPhone;
+                $scope.Address = data.Address;
+                $scope.DefaultDeliverySite = data.DefaultDeliverySite;
+                $scope.DeliveryZoneId = data.DeliverZoneId;;
+
+                $scope.DiscountApprovalDocumentNamePath = data.DiscountApprovalDocumentNamePath;
+                $scope.yesDoc = data.yesDoc;
+
+                $scope.DiscountPercentage = data.DiscountPercentage;
+                $scope.DiscountAmount = data.DiscountAmount;
+                $scope.DiscountAmountString = Intl.NumberFormat().format($scope.DiscountAmount);
+                $scope.DiscountApprovalDocumentName = data.DiscountApprovalDocumentName;
+
+                $scope.Status = data.Status;
+                $scope.ApprovedBy = data.ApprovedBy;
+                $scope.ReviewedBy = data.ReviewedBy;
+
+                if (data.ApprovedBy != null) {
+                    $scope.notApprovemode = false;
+                }
+
+                $scope.HardApprove = data.HardApprove;
+
+                $scope.FGSalesDetail = data.FGSalesDetailsList;
+                for (x in data.FGSalesDetailsList) {
+                    $scope.getAllFGItemByTypeIdwhenPopulate(x, data.FGSalesDetailsList[x].TypeId);//..........
+                    $scope.FGSalesDetail[x].FGTypeId = data.FGSalesDetailsList[x].TypeId;
+
+                    $scope.getItemInfoWhenPopulate(x, data.FGSalesDetailsList[x].FGItemId);//.............
+                    $scope.FGSalesDetail[x].FGItemId = data.FGSalesDetailsList[x].FGItemId;
+
+                    $scope.selectGradeWhenPopulate(x, data.FGSalesDetailsList[x].FGGradeId);//..........
+                    $scope.FGSalesDetail[x].FGGradeId = data.FGSalesDetailsList[x].FGGradeId;
+
+                    $scope.selectLotWhenPopulate(x, data.FGSalesDetailsList[x].Lot);
+                    $scope.FGSalesDetail[x].Lot = data.FGSalesDetailsList[x].Lot;
+
+                    $scope.FGSalesDetail[x].PackQuantity = data.FGSalesDetailsList[x].PackQuantity;
+                    $scope.FGSalesDetail[x].HandPackQuantity = data.FGSalesDetailsList[x].PackQuantity;
+
+                    $scope.FGSalesDetail[x].SalesQuantity = (data.FGSalesDetailsList[x].PackageToSalesRatio * data.FGSalesDetailsList[x].PackQuantity);//.toFixed(4);
+                    $scope.FGSalesDetail[x].SalesQuantity = $scope.FGSalesDetail[x].SalesQuantity.toFixed(2);
+                    $scope.FGSalesDetail[x].SalesQuantity = parseFloat($scope.FGSalesDetail[x].SalesQuantity);
+
+
+                    $scope.FGSalesDetail[x].UnitPrice = data.FGSalesDetailsList[x].UnitPrice;
+                    $scope.FGSalesDetail[x].DiscountPerUnit = data.FGSalesDetailsList[x].DiscountPerUnit;
+                    $scope.FGSalesDetail[x].UnitRateAfterDiscount = data.FGSalesDetailsList[x].UnitRateAfterDiscount;
+                    $scope.FGSalesDetail[x].Amount = data.FGSalesDetailsList[x].Amount;
+
+                    $scope.FGSalesDetail[x].FGSizeId = data.FGSalesDetailsList[x].FGSizeId;
+                    $scope.FGSalesDetail[x].FGSize = data.FGSalesDetailsList[x].FGSize;
+
+                    $scope.FGSalesDetail[x].QuantityInSFT = data.FGSalesDetailsList[x].QuantityInSFT;
+                    $scope.FGSalesDetail[x].QuantityInCTN = data.FGSalesDetailsList[x].QuantityInCTN;
+                    $scope.FGSalesDetail[x].QuantityInPCs = data.FGSalesDetailsList[x].QuantityInPCs;
+                    $scope.FGSalesDetail[x].QuantityInSMT = data.FGSalesDetailsList[x].QuantityInSMT;
+                }
+
+                $scope.FGSalesAdjustment = data.FGSalesAdjustmentList;
+                //for (y in data.FGSalesAdjustmentList) {
+
+                //}
+
+
+                $scope.FGSalesDueAdvancedAdjustment = data.FGSalesDueAdvancedAdjustmentList;
+                for (z in data.FGSalesDueAdvancedAdjustmentList) {
+                    $scope.FGSalesDueAdvancedAdjustment[z].InvoiceDate = data.FGSalesDueAdvancedAdjustmentList[z].InvoiceDateString;
+                    if (isFirefox) {
+                        $scope.FGSalesDueAdvancedAdjustment[z].InvoiceDateString = data.FGSalesDueAdvancedAdjustmentList[z].InvoiceDateStringForFireFox;
+                    } else {
+                        $scope.FGSalesDueAdvancedAdjustment[z].InvoiceDateString = data.FGSalesDueAdvancedAdjustmentList[z].InvoiceDateString;
+                    }
+                    //$scope.FGSalesDueAdvancedAdjustment[z].InvoiceDateString = data.FGSalesDueAdvancedAdjustmentList[z].InvoiceDateString;
+                }
+
+                $scope.FGSalesPayment = data.FGSalesPaymentList;
+                for (y in data.FGSalesPaymentList) {
+                    if (data.FGSalesPaymentList[y].PaymentDateString == null ||
+                        data.FGSalesPaymentList[y].PaymentDateString === "" ||
+                        data.FGSalesPaymentList[y].PaymentDateString == undefined) { } else {
+                        if (isFirefox) {
+                            $scope.FGSalesPayment[y].PaymentDate = new Date(data.FGSalesPaymentList[y].PaymentDateStringForFireFox);
+                        } else {
+                            $scope.FGSalesPayment[y].PaymentDate = new Date(data.FGSalesPaymentList[y].PaymentDateString);
+                        }
+                    }
+
+                    $scope.FGSalesPayment[y].allBankAccountFromDb = data.FGSalesPaymentList[y].BankAccountList;
+                    $scope.FGSalesPayment[y].PaymentMode = data.FGSalesPaymentList[y].PaymentMode.toString();
+                    $scope.FGSalesPayment[y].BankAccountId = data.FGSalesPaymentList[y].BankAccountId;
+                }
+
+                //$scope.totalSalesDet();
+                $scope.totalPackQuantity = data.TotalPack;
+                $scope.totalPackQuantityString = Intl.NumberFormat().format($scope.totalPackQuantity);
+
+                $scope.totalSalesQuantity = data.TotalSales;
+                $scope.totalSalesQuantityString = Intl.NumberFormat().format($scope.totalSalesQuantity);
+
+                $scope.totalSalesAmount = data.TotalAmount;
+                $scope.totalSalesAmountString = Intl.NumberFormat().format($scope.totalSalesAmount);
+
+                $scope.totalAdjustmentAmount = data.TotalAdjustment;
+                $scope.totalAdjustmentAmountString = Intl.NumberFormat().format($scope.totalAdjustmentAmount);
+
+                $scope.totalDueAdvancedAdjustmentAmount = data.TotalDueOrAdvanceAdjustment;
+                $scope.totalDueAdvancedAdjustmentAmountString = Intl.NumberFormat().format($scope.totalDueAdvancedAdjustmentAmount);
+
+                $scope.TotalPayable = data.TotalPriceAfterAdjustment;
+                $scope.TotalPayableString = Intl.NumberFormat().format($scope.TotalPayable);
+
+                $scope.totalPayment = data.TotalPaidAmount;
+                $scope.totalPaymentString = Intl.NumberFormat().format($scope.totalPayment);
+
+                $scope.totalDueAdvancedAmount = data.TotalDueAdvancedAmount;
+                $scope.totalDueAdvancedAmountString = Intl.NumberFormat().format($scope.totalDueAdvancedAmount);
+
+                $scope.TotalPayableAfterDiscount = data.TotalPayableAfterDiscount;
+                $scope.TotalPayableAfterDiscountString = Intl.NumberFormat().format($scope.TotalPayableAfterDiscount);
+
+            }
+
+            $scope.deleteFGSale = function () {
+                var fgSale = {};
+                fgSale["InvoiceNo"] = $scope.InvoiceNo;
+
+                fgSaleService.deleteFGSale(fgSale)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadAllFGSaleList();
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+                    });
+            }
+
+            // For Irregular Customer......
+            $scope.irregularType = function () {
+                $scope.regularType = false;
+                $scope.selectedDealerId = null;
+                $scope.DeliveryZoneId = null;
+                $scope.Name = "";
+                $scope.ContactPersonName = "";
+                $scope.AvailableCreditLimit = "";
+                $scope.ContactPhone = "";
+                $scope.Address = "";
+                $scope.DefaultDeliverySite = "";
+                return;
+            }
+
+            $scope.regularTypeOk = function () {
+                $scope.regularType = true;
+            }
+
+            //Dealer select ng-change..........
+            $scope.selectDealer = function (dealer) {
+                if (dealer == null || dealer == undefined || dealer === "") {
+                    $scope.DeliveryZoneId = null;
+                    $scope.selectedDealerId = null;
+                    $scope.Name = "";
+                    $scope.ContactPersonName = "";
+                    $scope.AvailableCreditLimit = "";
+                    $scope.ContactPhone = "";
+                    $scope.Address = "";
+                    $scope.DefaultDeliverySite = "";
+                    $scope.dueAdvancedInvoiceList = [];
+                    return;
+                }
+
+                fgSaleService.getFGDealerWithInvoice(dealer)
+                    .then(function onSuccess(response) {
+                        $scope.DeliveryZoneId = response.data.DealersZoneId;
+                        $scope.Name = response.data.Name;
+                        $scope.ContactPersonName = response.data.ContactPersonName;
+                        $scope.AvailableCreditLimit = response.data.AvailableCreditLimit;
+                        $scope.ContactPhone = response.data.ContactPhone;
+                        $scope.Address = response.data.Address;
+                        //if ($scope.DefaultDeliverySite == null || $scope.DefaultDeliverySite == undefined || $scope.DefaultDeliverySite === "")
+                        $scope.DefaultDeliverySite = response.data.DefaultDeliverySite;
+                        $scope.selectedDealerId = dealer;//parseInt(dealer);
+                        //$scope.selectedDealerId = dealer.toString();
+                        $scope.dueAdvancedInvoiceList = response.data.FgSales;
+
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            $scope.selectDealerWhenPopulate = function (dealer) {
+                if (dealer == null || dealer == undefined || dealer === "") {
+                    $scope.DeliveryZoneId = null;
+                    $scope.selectedDealerId = null;
+                    $scope.Name = "";
+                    $scope.ContactPersonName = "";
+                    $scope.AvailableCreditLimit = "";
+                    $scope.ContactPhone = "";
+                    $scope.Address = "";
+                    $scope.DefaultDeliverySite = "";
+                    $scope.dueAdvancedInvoiceList = [];
+                    return;
+                }
+
+                fgSaleService.getFGDealerWithInvoice(dealer)
+                    .then(function onSuccess(response) {
+                        $scope.AvailableCreditLimit = response.data.AvailableCreditLimit;
+                        $scope.dueAdvancedInvoiceList = response.data.FgSales;
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            $scope.selectGrade = function (index, gradeId) {
+                $scope.FGSalesDetail[index].allLotFromInv = [];
+                $scope.FGSalesDetail[index].Lot = null;
+                $scope.FGSalesDetail[index].StockQuantity = 0.00;
+                $scope.FGSalesDetail[index].HandStockQuantity = 0.00;
+                $scope.FGSalesDetail[index].UnitRateAfterDiscount = '';
+                $scope.FGSalesDetail[index].UnitPrice = '';
+                $scope.FGSalesDetail[index].SalesQuantity = '';
+                //$scope.FGSalesDetail[index].SalesUnit = '';
+                $scope.FGSalesDetail[index].Amount = '';
+                $scope.FGSalesDetail[index].DiscountPerUnit = '';
+                $scope.FGSalesDetail[index].PackQuantity = '';
+                //$scope.FGSalesDetail[index].PackUnit = '';
+                if (gradeId != null)
+                    fgSaleService.getItemFrmInventoryByItemAndGrade($scope.FGSalesDetail[index].FGItemId, gradeId)
+                        .then(function onSuccess(response) {
+                            $scope.FGSalesDetail[index].StockQuantity = response.data.stockQty;
+                            $scope.FGSalesDetail[index].StockQuantity =
+                                $scope.FGSalesDetail[index].StockQuantity.toFixed(2);
+                            $scope.FGSalesDetail[index].StockQuantity = parseFloat($scope.FGSalesDetail[index]
+                                .StockQuantity);
+                            $scope.FGSalesDetail[index].HandStockQuantity = $scope.FGSalesDetail[index].StockQuantity;
+
+                            //$scope.FGSalesDetail[index].HandStockQuantity = response.data.stockQty;
+                            $scope.FGSalesDetail[index].UnitPrice = response.data.unitPrice;
+                            $scope.FGSalesDetail[index].DiscountPerUnit = response.data.discountPerUnit;
+
+                            $scope.FGSalesDetail[index].UnitRateAfterDiscount = response.data.unitPriceRate - response.data.discountPerUnit;
+                            $scope.FGSalesDetail[index].UnitRateAfterDiscount =
+                                $scope.FGSalesDetail[index].UnitRateAfterDiscount.toFixed(2);
+                            $scope.FGSalesDetail[index].UnitRateAfterDiscount = parseFloat($scope.FGSalesDetail[index]
+                                .UnitRateAfterDiscount);
+
+                            $scope.FGSalesDetail[index].allLotFromInv = response.data.lotList;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+            $scope.selectGradeWhenPopulate = function (index, gradeId) {
+                if (gradeId != null)
+                    fgSaleService.getItemFrmInventoryByItemAndGradeWhenPopulate($scope.FGSalesDetail[index].FGItemId, gradeId)
+                        .then(function onSuccess(response) {
+                            $scope.FGSalesDetail[index].allLotFromInv = response.data.lotList;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+
+            $scope.selectLot = function (index, lot) {
+                if (lot == null) {
+                    $scope.FGSalesDetail[index].PackQuantity = '';
+                    $scope.FGSalesDetail[index].SalesQuantity = '';
+                    $scope.FGSalesDetail[index].Lot = null;
+                    $scope.FGSalesDetail[index].StockQuantity = $scope.FGSalesDetail[index].HandStockQuantity;
+                } else {
+                    for (var i = 0; i < $scope.FGSalesDetail.length; i++) {
+                        if (i.toString() !== index.toString()) {
+                            if ($scope.FGSalesDetail[i].FGItemId === $scope.FGSalesDetail[index].FGItemId && $scope.FGSalesDetail[i].FGGradeId === $scope.FGSalesDetail[index].FGGradeId && $scope.FGSalesDetail[i].Lot === $scope.FGSalesDetail[index].Lot) {
+                                $scope.FGSalesDetail[index].Lot = null;
+                                $ngBootbox.alert('@Resources.ResourceFGSale.DuplicateData');
+                                return;
+                            }
+                        }
+                    }
+
+                    fgSaleService.getItemFrmInventoryByItemGradeAndLot($scope.FGSalesDetail[index].FGItemId,
+                            $scope.FGSalesDetail[index].FGGradeId, lot)
+                        .then(function onSuccess(response) {
+                            $scope.FGSalesDetail[index].StockQuantity = response.data; //.stockQty;
+                            $scope.FGSalesDetail[index].StockQuantity = $scope.FGSalesDetail[index].StockQuantity.toFixed(2);
+                            $scope.FGSalesDetail[index].StockQuantity = parseFloat($scope.FGSalesDetail[index].StockQuantity);
+
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+                }
+            }
+            $scope.selectLotWhenPopulate = function (index, lot) {
+                fgSaleService.getItemFrmInventoryByItemGradeAndLot($scope.FGSalesDetail[index].FGItemId,
+                        $scope.FGSalesDetail[index].FGGradeId, lot)
+                    .then(function onSuccess(response) {
+                        $scope.FGSalesDetail[index].StockQuantity = response.data; //.stockQty;
+                        $scope.FGSalesDetail[index].StockQuantity = $scope.FGSalesDetail[index].StockQuantity.toFixed(2);
+                        $scope.FGSalesDetail[index].StockQuantity = parseFloat($scope.FGSalesDetail[index].StockQuantity);
+
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            $scope.getSalesQty = function (index, pckQty, hndPackQty) {
+                if (hndPackQty == undefined || hndPackQty === "") {
+                    hndPackQty = 0;
+                }
+                if ($scope.FGSalesDetail[index].StockQuantity + hndPackQty < pckQty) {
+                    $scope.FGSalesDetail[index].PackQuantity = 0.00;
+                    $scope.FGSalesDetail[index].SalesQuantity = 0.00;
+                    $scope.FGSalesDetail[index].Amount = 0.00;
+                    $scope.FGSalesDetail[index].QuantityInPCs = 0;
+                    $scope.FGSalesDetail[index].QuantityInCTN = 0;
+                    $scope.FGSalesDetail[index].QuantityInSFT = 0.00;
+                    $scope.FGSalesDetail[index].QuantityInSMT = 0.00;
+                    $scope.totalSalesDet();
+                    return $ngBootbox.alert('@Resources.ResourceFGSale.BalanceExceed');
+                }
+
+                $scope.FGSalesDetail[index].SalesQuantity = ($scope.FGSalesDetail[index].PackageToSalesRatio * pckQty);
+                $scope.FGSalesDetail[index].SalesQuantity = $scope.FGSalesDetail[index].SalesQuantity.toFixed(2);
+                $scope.FGSalesDetail[index].SalesQuantity = parseFloat($scope.FGSalesDetail[index].SalesQuantity);
+
+                $scope.FGSalesDetail[index].UnitRateAfterDiscount = $scope.FGSalesDetail[index].UnitRateAfterDiscount.toFixed(2);
+                $scope.FGSalesDetail[index].UnitRateAfterDiscount = parseFloat($scope.FGSalesDetail[index].UnitRateAfterDiscount);
+
+                $scope.FGSalesDetail[index].Amount = $scope.FGSalesDetail[index].UnitRateAfterDiscount * $scope.FGSalesDetail[index].SalesQuantity;
+                //$scope.FGSalesDetail[index].Amount = ($scope.FGSalesDetail[index].Amount);//.toFixed(4);
+
+                if ($scope.FGSalesDetail[index].SalesQuantity >= 0) {
+                    var unitid = $scope.FGSalesDetail[index].SalesFGUnitId;
+                    var qty = $scope.FGSalesDetail[index].SalesQuantity;
+                    var tmpPcs = 0;
+                    if (unitid === 1) {// CTN
+                        tmpPcs = qty * $scope.FGSalesDetail[index].PcsPerCartoon;
+                    }
+                    else if (unitid === 2) {// Pcs
+                        tmpPcs = qty;
+                    }
+                    else if (unitid === 3 && $scope.FGSalesDetail[index].SftPerPiece != null) {// SFT
+                        tmpPcs = (qty / $scope.FGSalesDetail[index].SftPerPiece);
+                    }
+                    else if (unitid === 4 && $scope.FGSalesDetail[index].SmtPerPiece != null) {// SMT
+                        tmpPcs = (qty / $scope.FGSalesDetail[index].SmtPerPiece);
+                    }
+
+                    tmpPcs = tmpPcs.toFixed(0);
+                    tmpPcs = parseFloat(tmpPcs);
+
+                    $scope.FGSalesDetail[index].QuantityInPCs = tmpPcs;
+                    $scope.FGSalesDetail[index].QuantityInCTN = tmpPcs / $scope.FGSalesDetail[index].PcsPerCartoon;
+                    $scope.FGSalesDetail[index].QuantityInSFT = $scope.FGSalesDetail[index].SftPerPiece != null || $scope.FGSalesDetail[index].SftPerPiece !== "" || $scope.FGSalesDetail[index].SftPerPiece != undefined ?
+                        tmpPcs * $scope.FGSalesDetail[index].SftPerPiece : 0.00;
+                    $scope.FGSalesDetail[index].QuantityInSMT = $scope.FGSalesDetail[index].SmtPerPiece != null || $scope.FGSalesDetail[index].SmtPerPiece !== "" || $scope.FGSalesDetail[index].SmtPerPiece != undefined ?
+                        tmpPcs * $scope.FGSalesDetail[index].SmtPerPiece : 0.00;
+                }
+
+                $scope.totalSalesDet();
+            }
+
+            $scope.getAmountAfterDiscount = function (index, discount) {
+                var dis = $scope.FGSalesDetail[index].UnitPrice - discount;
+                if (dis < 0) {
+                    $scope.FGSalesDetail[index].DiscountPerUnit = '';
+                    return $ngBootbox.alert('@Resources.ResourceFGSale.LargeDiscount');
+                }
+                if ($scope.FGSalesDetail[index].SalesQuantity >= 0) {
+                    $scope.FGSalesDetail[index].UnitRateAfterDiscount = dis;
+
+                    $scope.FGSalesDetail[index].UnitRateAfterDiscount = $scope.FGSalesDetail[index].UnitRateAfterDiscount.toFixed(2);
+                    $scope.FGSalesDetail[index].UnitRateAfterDiscount = parseFloat($scope.FGSalesDetail[index].UnitRateAfterDiscount);
+
+                    $scope.FGSalesDetail[index].Amount = $scope.FGSalesDetail[index].UnitRateAfterDiscount *
+                        $scope.FGSalesDetail[index].SalesQuantity;
+                    $scope.FGSalesDetail[index].Amount = ($scope.FGSalesDetail[index].Amount);//.toFixed(4);
+
+                    $scope.totalSalesDet();
+                }
+            }
+
+            $scope.FGSalesDetailReset = function (index) {
+                $scope.FGSalesDetail[index].FGSize = '';
+                $scope.FGSalesDetail[index].FGSizeId = '';
+                $scope.FGSalesDetail[index].allFGGradeFromDb = [];
+                $scope.FGSalesDetail[index].allLotFromInv = [];
+                $scope.FGSalesDetail[index].Lot = null;
+                $scope.FGSalesDetail[index].StockQuantity = '';
+                $scope.FGSalesDetail[index].HandStockQuantity = '';
+                $scope.FGSalesDetail[index].PackQuantity = '';
+                $scope.FGSalesDetail[index].PackUnit = '';
+                $scope.FGSalesDetail[index].PackFGUnitId = '';
+                $scope.FGSalesDetail[index].SalesQuantity = '';
+                $scope.FGSalesDetail[index].SalesUnit = '';
+                $scope.FGSalesDetail[index].SalesFGUnitId = '';
+                $scope.FGSalesDetail[index].UnitPrice = '';
+                $scope.FGSalesDetail[index].DiscountPerUnit = '';
+                $scope.FGSalesDetail[index].UnitRateAfterDiscount = '';
+                $scope.FGSalesDetail[index].Amount = '';
+
+                $scope.FGSalesDetail[index].PcsPerCartoon = '';
+                $scope.FGSalesDetail[index].SftPerPiece = '';
+                $scope.FGSalesDetail[index].SmtPerPiece = '';
+                $scope.FGSalesDetail[index].QuantityInPCs = '';
+                $scope.FGSalesDetail[index].QuantityInCTN = '';
+                $scope.FGSalesDetail[index].QuantityInSFT = '';
+                $scope.FGSalesDetail[index].QuantityInSMT = '';
+            }
+
+            // Logic: if any item need Approval for Item Demand, Then in creating fgItemIn(without demand), this item not come
+            $scope.getAllFGItemByTypeId = function (index, typeId) {
+                $scope.FGSalesDetail[index].allItemFromDb = [];
+                $scope.FGSalesDetailReset(index);
+                if (typeId != null)
+                    fgSaleService.getAllFGItemByTypeId(typeId)
+                        .then(function onSuccess(response) {
+                            $scope.FGSalesDetail[index].allItemFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+            // Normally for populate, when select demand dropdown or edit/approve/delete/reject fgItemIn
+            $scope.getAllFGItemByTypeIdwhenPopulate = function (index, typeId) {
+                $scope.FGSalesDetail[index].allItemFromDb = [];
+                if (typeId != null)
+                    fgSaleService.getAllFGItemByTypeId(typeId)
+                        .then(function onSuccess(response) {
+                            $scope.FGSalesDetail[index].allItemFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }//............................................
+            $scope.getItemInfo = function (index, itemId) {
+                if (itemId != null) {
+                    $scope.FGSalesDetailReset(index);
+
+                    fgSaleService.getFgItemGradeListFromFGInventory($scope.FGSalesDetail[index].FGItemId)
+                        .then(function onSuccess(response) {
+                            $scope.FGSalesDetail[index].allFGGradeFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+
+                    angular.forEach($scope.FGSalesDetail[index].allItemFromDb,
+                        function (value, key) {
+                            if (value.Id === itemId) {
+                                $scope.FGSalesDetail[index].FGSizeId = value.SizeId;
+                                $scope.FGSalesDetail[index].FGSize = value.Size;
+                                $scope.FGSalesDetail[index].PackUnit = value.PackUnit;
+                                $scope.FGSalesDetail[index].PackFGUnitId = value.PackUnitId;
+                                $scope.FGSalesDetail[index].SalesUnit = value.SalesUnit;
+                                $scope.FGSalesDetail[index].SalesFGUnitId = value.SalesUnitId;
+                                $scope.FGSalesDetail[index].PackageToSalesRatio = value.PackageToSalesRatio;
+                                $scope.FGSalesDetail[index].HandQtyForIssueUpdate = 0;
+
+                                $scope.FGSalesDetail[index].PcsPerCartoon = value.PcsPerCartoon;;
+                                $scope.FGSalesDetail[index].SftPerPiece = value.SftPerPiece;;
+                                $scope.FGSalesDetail[index].SmtPerPiece = value.SmtPerPiece;;
+                            }
+                        });
+                }
+            }
+            $scope.getItemInfoWhenPopulate = function (index, itemId) {
+                if (itemId != null) {
+                    fgSaleService.getFgItemGradeListFromFGInventory($scope.FGSalesDetail[index].FGItemId)
+                        .then(function onSuccess(response) {
+                            $scope.FGSalesDetail[index].allFGGradeFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+                }
+            }//...........................................................
+
+            //.....For Adjustment Tabel..........
+
+            $scope.commonFunction = function (index, value, defVal) {
+                if (value.ApplyMode === "Input") {             //if (value.CalculationOn === input)
+                    //$scope.commissionHeaderHide = true;
+                    //$scope.breakageHeaderHide = true;
+                    $scope.FGSalesAdjustment[index].AdjustmentAmountDisable = false;
+                    $scope.FGSalesAdjustment[index].AdjustmentAmount = 0.0000;
+                    $scope.FGSalesAdjustment[index].Note = "";
+                    $scope.FGSalesAdjustment[index].commissionPeriods = null;
+                    $scope.FGSalesAdjustment[index].breakagePeriods = null;
+                    $scope.FGSalesAdjustment[index].CommissionCalculatorId = "";
+                    $scope.FGSalesAdjustment[index].BreakageCalculatorId = "";
+                    $scope.FGSalesAdjustment[index].percentageDisable = true;
+                    $scope.FGSalesAdjustment[index].commissionCalculator = true;
+                    $scope.FGSalesAdjustment[index].breakageCalculator = true;
+                } else if (value.ApplyMode === "Percentage" || value.ApplyMode === "Fixed") {
+                    //$scope.commissionHeaderHide = true;
+                    //$scope.breakageHeaderHide = true;
+                    $scope.FGSalesAdjustment[index].commissionPeriods = null;
+                    $scope.FGSalesAdjustment[index].AdjustmentAmountDisable = true;
+                    $scope.FGSalesAdjustment[index].breakagePeriods = null;
+                    $scope.FGSalesAdjustment[index].CommissionCalculatorId = "";
+                    $scope.FGSalesAdjustment[index].BreakageCalculatorId = "";
+                    $scope.FGSalesAdjustment[index].commissionCalculator = true;
+                    $scope.FGSalesAdjustment[index].breakageCalculator = true;
+                    $scope.FGSalesAdjustment[index].percentageDisable = false;
+                    $scope.FGSalesAdjustment[index].Percentage = defVal;
+                    $scope.FGSalesAdjustment[index].ApplyMode = value.ApplyMode;
+
+                    if (defVal != null) {
+                        if (value.CalculationOn === "Amount") {
+                            if (value.ApplyMode === "Percentage") {
+                                $scope.FGSalesAdjustment[index].AdjustmentAmount =
+                                    $scope.totalSalesAmount * defVal / 100;
+                            }
+                            //else if (value.ApplyMode === "Fixed") {
+                            //    $scope.FGSalesAdjustment[index].AdjustmentAmount = defVal;
+                            //}
+
+                        } else if (value.CalculationOn === "Quantity") {
+                            $scope.totalQty = 0.0000;
+                            if (value.UOM != null) {
+                                $scope.FGSalesAdjustment[index].UOM = value.UOM;
+                                angular.forEach($scope.FGSalesDetail,
+                                    function (va, ke) {
+                                        if (value.UOM === 1) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInCTN;
+                                        } else if (value.UOM === 2) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInPCs;
+                                        } else if (value.UOM === 3) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInSFT;
+                                        } else if (value.UOM === 4) {
+                                            $scope.totalQty += $scope.FGSalesDetail[ke].QuantityInSMT;
+                                        }
+                                    });
+                            }
+                            $scope.FGSalesAdjustment[index].AdjustmentAmount = $scope.totalQty * defVal;
+                        }
+                    }
+                } else if (value.ApplyMode === "CommissionSetup") {
+                    //$scope.commissionHeaderHide = false;
+                    //$scope.breakageHeaderHide = true;
+                    $scope.FGSalesAdjustment[index].Note = "";
+                    $scope.FGSalesAdjustment[index].BreakageCalculatorId = "";
+                    $scope.FGSalesAdjustment[index].AdjustmentAmountDisable = true;
+                    $scope.FGSalesAdjustment[index].commissionCalculator = false;
+                    $scope.FGSalesAdjustment[index].breakageCalculator = true;
+                    $scope.FGSalesAdjustment[index].percentageDisable = true;
+                    $scope.FGSalesAdjustment[index].breakagePeriods = null;
+                    $scope.FGSalesAdjustment[index].Percentage = "";
+                    if ($scope.selectedDealerId != null &&
+                        $scope.selectedDealerId != undefined &&
+                        $scope.selectedDealerId !== "") {
+                        fgSaleService.getdealerCommission($scope.selectedDealerId, defVal)
+                            .then(function onSuccess(response) {
+                                $scope.FGSalesAdjustment[index].commissionPeriods = response.data;
+                                $scope.FGSalesAdjustment[index].AdjustmentAmount = 0.0000;
+                            })
+                            .catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                            });
+                    } else {
+                        $scope.FGSalesAdjustment[index].AdjustmentAmount = 0.0000;
+                    }
+                } else if (value.ApplyMode === "BreakageSetup") {
+                    //$scope.commissionHeaderHide = true;
+                    //$scope.breakageHeaderHide = false;
+                    $scope.FGSalesAdjustment[index].CommissionCalculatorId = "";
+                    $scope.FGSalesAdjustment[index].Note = "";
+                    $scope.FGSalesAdjustment[index].AdjustmentAmountDisable = true;
+                    $scope.FGSalesAdjustment[index].commissionCalculator = true;
+                    $scope.FGSalesAdjustment[index].breakageCalculator = false;
+                    $scope.FGSalesAdjustment[index].percentageDisable = true;
+                    $scope.FGSalesAdjustment[index].commissionPeriods = null;
+                    $scope.FGSalesAdjustment[index].Percentage = "";
+                    if ($scope.selectedDealerId != null &&
+                        $scope.selectedDealerId != undefined &&
+                        $scope.selectedDealerId !== "") {
+                        fgSaleService.getdealerBreakage($scope.selectedDealerId, defVal)
+                            .then(function onSuccess(response) {
+                                $scope.FGSalesAdjustment[index].breakagePeriods = response.data;
+                                $scope.FGSalesAdjustment[index].AdjustmentAmount = 0.0000;
+                            })
+                            .catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                            });
+                    } else {
+                        $scope.FGSalesAdjustment[index].AdjustmentAmount = 0.0000;
+                    }
+                }
+            }
+
+            $scope.getAdjustmentInfo = function (index, adjustmentId) {
+                if (adjustmentId == null || adjustmentId === undefined || adjustmentId === "") {
+                    $scope.FGSalesAdjustment[index].FGAdjustmentSetupId = null;
+                    $scope.FGSalesAdjustment[index].CalculationOn = "";
+                    $scope.FGSalesAdjustment[index].Percentage = "";
+                    $scope.FGSalesAdjustment[index].UOM = "";
+                    $scope.FGSalesAdjustment[index].ApplyMode = "";
+                    $scope.FGSalesAdjustment[index].Note = "";
+                    $scope.FGSalesAdjustment[index].AdjustmentAmount = "";
+
+                } else {
+                    angular.forEach($scope.allAdjustmentSetupFromDb,
+                        function (value, key) {
+                            if (value.Id === adjustmentId) {
+                                $scope.FGSalesAdjustment[index].CalculationOn = value.CalculationOn;
+                                $scope.FGSalesAdjustment[index].Percentage = value.DefaultValue;
+                                $scope.FGSalesAdjustment[index].UOM = value.UOM;
+                                $scope.FGSalesAdjustment[index].ApplyMode = value.ApplyMode;
+                                $scope.commonFunction(index, value, value.DefaultValue);
+                            }
+                        });
+                }
+                $scope.calculation();
+            }
+
+            $scope.getAdjustmentInfoByCommissionPeriodSelect = function (index, commissionCalculatorId) {
+                if (commissionCalculatorId == null || commissionCalculatorId === undefined || commissionCalculatorId === "") {
+                    $scope.FGSalesAdjustment[index].CalculationOn = "";
+                    $scope.FGSalesAdjustment[index].Percentage = "";
+                    $scope.FGSalesAdjustment[index].UOM = "";
+                    $scope.FGSalesAdjustment[index].CommissionCalculatorId = null;
+                    $scope.FGSalesAdjustment[index].BreakageCalculatorId = null;
+                    $scope.FGSalesAdjustment[index].Note = "";
+                    $scope.FGSalesAdjustment[index].AdjustmentAmount = 0.0000;
+
+                } else {
+                    angular.forEach($scope.FGSalesAdjustment[index].commissionPeriods,
+                        function (value, key) {
+                            if (value.Id === commissionCalculatorId) {
+                                $scope.FGSalesAdjustment[index].AdjustmentAmount = value.Total;
+                            }
+                        });
+                }
+                $scope.calculation();
+            }
+
+            $scope.getAdjustmentInfoByBreakagePeriodSelect = function (index, breakageCalculatorId) {
+                if (breakageCalculatorId == null || breakageCalculatorId === undefined || breakageCalculatorId === "") {
+                    $scope.FGSalesAdjustment[index].CalculationOn = "";
+                    $scope.FGSalesAdjustment[index].Percentage = "";
+                    $scope.FGSalesAdjustment[index].UOM = "";
+                    $scope.FGSalesAdjustment[index].CommissionCalculatorId = null;
+                    $scope.FGSalesAdjustment[index].BreakageCalculatorId = null;
+                    $scope.FGSalesAdjustment[index].Note = "";
+                    $scope.FGSalesAdjustment[index].AdjustmentAmount = 0.0000;
+
+                } else {
+                    angular.forEach($scope.FGSalesAdjustment[index].breakagePeriods,
+                        function (value, key) {
+                            if (value.Id === breakageCalculatorId) {
+                                $scope.FGSalesAdjustment[index].AdjustmentAmount = value.BreakageAmount;
+                            }
+                        });
+                }
+                $scope.calculation();
+            }
+
+            $scope.changePercentageAmount = function (index, percentageAmount) {
+                $scope.FGSalesAdjustment[index].Percentage = percentageAmount;
+                $scope.commonFunction(index, $scope.FGSalesAdjustment[index], $scope.FGSalesAdjustment[index].Percentage);
+                $scope.calculation();
+            }
+
+            //....Due/Advanced Adjustment Table..........
+
+            $scope.getInvoiceDet = function (index, invoice) {
+                if ($scope.editmode === false) {
+                    if (invoice == null || invoice === undefined || invoice === "") {
+                        $scope.FGSalesDueAdvancedAdjustment[index].InvoiceNo = null;
+                        $scope.FGSalesDueAdvancedAdjustment[index].InvoiceDate = "";
+                        $scope.FGSalesDueAdvancedAdjustment[index].InvoiceDateString = "";
+                        $scope.FGSalesDueAdvancedAdjustment[index].DueAdvancedAmount = "";
+
+                    } else {
+                        var isFirefox = typeof InstallTrigger !== 'undefined';
+                        angular.forEach($scope.dueAdvancedInvoiceList, function (value, key) {
+                            if (value.InvoiceNo === invoice) {
+                                $scope.FGSalesDueAdvancedAdjustment[index].InvoiceNo = value.InvoiceNo;
+                                $scope.FGSalesDueAdvancedAdjustment[index].InvoiceDate = value.InvoiceDateString;
+                                if (isFirefox) {
+                                    $scope.FGSalesDueAdvancedAdjustment[index].InvoiceDateString = value.InvoiceDateStringForFireFox;
+                                } else {
+                                    $scope.FGSalesDueAdvancedAdjustment[index].InvoiceDateString = value.InvoiceDateString;
+                                }
+                                $scope.FGSalesDueAdvancedAdjustment[index].DueAdvancedAmount = value.DueAdvancedAmount;
+                                //$scope.totalDueAdvancedAdjustmentDet();
+                            }
+                        });
+                    }
+                    $scope.calculation();
+                }
+            }
+
+            // Payment...........
+
+            $scope.getBankAccount = function (index, id) {
+                fgSaleService.getBankAccountByBankId(id)
+                    .then(function onSuccess(response) {
+                        $scope.FGSalesPayment[index].allBankAccountFromDb = response.data;
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            $scope.showDueAmount = function (index) {
+                if ($scope.FGSalesPayment[index].PaymentMode == null ||
+                    $scope.FGSalesPayment[index].PaymentMode == undefined ||
+                    $scope.FGSalesPayment[index].PaymentMode === "") {
+                    $scope.FGSalesPayment[index].PaymentAmount = "";
+                    $scope.FGSalesPayment[index].BankId = null;
+                    $scope.FGSalesPayment[index].BankAccountId = null;
+                    $scope.FGSalesPayment[index].ChequeNo = null;
+                    $scope.FGSalesPayment[index].PaymentDate = "";
+                } else {
+                    if ($scope.FGSalesPayment[index].PaymentAmount == null || $scope.FGSalesPayment[index].PaymentAmount == undefined || $scope.FGSalesPayment[index].PaymentAmount === "")
+                        $scope.FGSalesPayment[index].PaymentAmount = $scope.totalDueAdvancedAmount;
+                    $scope.FGSalesPayment[index].PaymentDate = new Date().toISOString();
+                }
+                $scope.calculation();
+            }
+
+
+            //...Load Data Value.................
+
+            $scope.loadAllFGDealer = function () {
+                $scope.allFGDealerFromDb = [];
+                fgSaleService.getAllFGDealer()
+                    .then(function onSuccess(response) {
+                        $scope.allFGDealerFromDb = response.data;
+                    })
+                    .catch(function (xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+            $scope.loadAllFGDealer();
+
+            loadAllFgDealerZone();
+            function loadAllFgDealerZone() {
+                $scope.allFGDealerZone = [];
+                fgSaleService.getAllFGDealerZone()
+                    .then(function onSuccess(response) {
+                        $scope.allFGDealerZone = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            loadAllFgType();
+            function loadAllFgType() {
+                $scope.allFGTypeFromDb = [];
+                fgSaleService.getAllFGType()
+                    .then(function onSuccess(response) {
+                        $scope.allFGTypeFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            loadAllAdjustmentSetup();
+            function loadAllAdjustmentSetup() {
+                $scope.allAdjustmentSetupFromDb = [];
+                fgSaleService.getAllAdjustmentSetup()
+                    .then(function onSuccess(response) {
+                        $scope.allAdjustmentSetupFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            loadAllBank();
+            function loadAllBank() {
+                $scope.allBankFromDb = [];
+                fgSaleService.getAllBank()
+                    .then(function onSuccess(response) {
+                        $scope.allBankFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+
+            @*loadAllFgGrade();
+            function loadAllFgGrade() {
+                $scope.allFGGradeFromDb = [];
+                fgSaleService.getAllFGGrade()
+                    .then(function onSuccess(response1) {
+                        $scope.allFGGradeFromDb = response1.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }*@
+
+            @*loadAllBinCard();
+            function loadAllBinCard() {
+                $scope.allBinCardFromDb = [];
+                fgSaleService.getAllBinCard()
+                    .then(function onSuccess(response) {
+                        $scope.allBinCardFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }*@
+
+            $scope.loadAllFGSaleList = function () {
+                var selectedDate = new Date($scope.selectedYear.getFullYear(), $scope.selectedYear.getMonth(), $scope.selectedYear.getDate());
+                $scope.allFGSaleListByDate = [];
+                fgSaleService.getFGSaleListByDate(selectedDate).then(function onSuccess(response) {
+                    $scope.allFGSaleListByDate = response.data;
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+            $scope.loadAllFGSaleList();
+            $scope.getFGSaleBYInvoice = function (invoice) {
+                if (invoice == null || invoice.length === 0) {
+                    $scope.reset();
+                    return null;
+                }
+                var inv = invoice[0];
+                fgSaleService.getFGSale(inv).then(function onSuccess(response) {
+                    $scope.populateFGSale(response.data);
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+        });
+</script>

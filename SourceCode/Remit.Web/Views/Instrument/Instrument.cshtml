@@ -1,0 +1,680 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceInstrument.LblInstrument;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+
+<div class="col-xs-12 col-sm-12" ng-controller="instrumentCtrl">
+
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceInstrument.LblInstrument</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblInstrumentMaster
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="InstrumentMasterId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allInstrumentMasterFromDb | orderBy: 'Name'" name="InstrumentMasterId" ng-required="true">
+                                        <option value="">@Resources.ResourceInstrument.LblSelectInstrumentMaster</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.InstrumentMasterId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblInstrumentMaster)
+                                    </b>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblModelNo
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="ModelNo" ng-model="ModelNo" required ng-maxlength="50" focus-on="focusMe" />
+                                    <b class="help-block" ng-if="form.ModelNo.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblModelNo)
+                                    </b>
+                                    <b class="help-block" ng-if="form.ModelNo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblBrand
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="Brand" ng-model="Brand" required ng-maxlength="50"  />
+                                    <b class="help-block" ng-if="form.Brand.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblBrand)
+                                    </b>
+                                    <b class="help-block" ng-if="form.Brand.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblUSTCCode
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="USTCCode" ng-model="USTCCode" required ng-maxlength="50" />
+                                    <b class="help-block" ng-if="form.USTCCode.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblUSTCCode)
+                                    </b>
+                                    <b class="help-block" ng-if="form.USTCCode.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblCountry
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="CountryOriginId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allCountryFromDb | orderBy: 'Name'" name="CountryOriginId" ng-required="true">
+                                        <option value="">@Resources.ResourceInstrument.LblSelectCountry</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.CountryId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblCountry)
+                                    </b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblManufacturer
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="ManufacturerId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allManufacturerFromDb | orderBy: 'Name'" name="ManufacturerId" ng-required="true">
+                                        <option value="">@Resources.ResourceInstrument.LblSelectManufacturer</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.ManufacturerId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblManufacturer)
+                                    </b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblInstrumentStatus
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="InstrumentStatusId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allInstrumentStatusFromDb | orderBy: 'Name'" name="InstrumentStatusId" ng-required="true">
+                                        <option value="">@Resources.ResourceInstrument.LblSelectInstrumentStatus</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.InstrumentStatusId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblInstrumentStatus)
+                                    </b>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblPurchaseDate
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input type="text" class="form-control" datepicker-append-to-body="true" ng-model="PurchaseDate" ng-data-model="PurchaseDate" datepicker-popup="@System.Configuration.ConfigurationManager.AppSettings["dateFormat"]" name="PurchaseDate" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblInstallDate
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input type="text" class="form-control" datepicker-append-to-body="true" ng-model="InstallDate" ng-data-model="InstallDate" datepicker-popup="@System.Configuration.ConfigurationManager.AppSettings["dateFormat"]" name="InstallDate" />
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblLifeInUse
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="number" name="LifeInUse" ng-model="LifeInUse" ng-data-model="LifeInUse" required ng-maxlength="50" />
+                                    <b class="help-block" ng-if="form.LifeInUse.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblLifeInUse)
+                                    </b>
+                                    <b class="help-block" ng-if="form.LifeInUse.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrument.LblServiceInterval
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="number" name="ServiceInterval" ng-model="ServiceInterval" ng-data-model="ServiceInterval"  ng-maxlength="50" />
+                                    <b class="help-block" ng-if="form.LifeInUse.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrument.LblServiceInterval)
+                                    </b>
+                                    <b class="help-block" ng-if="form.ServiceInterval.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                         @Resources.ResourceInstrument.LblServiceDate
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input type="text" class="form-control" datepicker-append-to-body="true" ng-model="ServiceDate" ng-data-model="ServiceDate" datepicker-popup="@System.Configuration.ConfigurationManager.AppSettings["dateFormat"]" name="ServiceDate" />
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                <div class="padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceInstrument.LblSelectDepartment
+                                    </label>
+                                </div>
+                                <div class="col-xs-3 col-sm-9 col-md-9 padding-left-zero">
+                                    <div class="col-xs-12 col-sm-4 col-md-6">
+                                        <select data-ng-model="DepartmentId" class="form-control"
+                                                data-ng-options="c.Id as c.Name for c in allDepartmentFromDb | orderBy: 'Name'" ng-change="getLocation(DepartmentId)" name="DepartmentId">
+                                            <option value="">@Resources.ResourceInstrument.LblSelectDepartment</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceInstrument.LblSelectLocation
+                                    </label>
+                                </div>
+                                <div class="col-xs-3 col-sm-9 col-md-9 padding-left-zero">
+                                    <div class="col-xs-12 col-sm-4 col-md-6">
+                                        <select data-ng-model="InstrumentLocationId" class="form-control" ng-disable="!InstrumentLocationId"
+                                                data-ng-options="c.Id as c.Location for c in locationListFromDb | orderBy: 'Location'">
+                                            <option value="">@Resources.ResourceInstrument.LblSelectLocation</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
+                           
+                            <div class="form-group">
+                                <div class="padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceInstrument.LblIsActive
+                                    </label>
+                                </div>
+                                <div class="col-xs-3 col-sm-9 col-md-9 padding-left-zero">
+                                    <div class="col-xs-12 col-sm-2 col-md-2">
+                                        <input class="form-control" type="checkbox" ng-model="IsActive" checked />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                           
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addInstrument()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSubmit />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+
+
+    @* ************ TABLE - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceInstrument.LblInstrument @Resources.ResourceCommon.lblList</div>
+        <div class="panel-body border-green  pt pb">
+            <div class="row mb">
+                <div class="col-sm-8 padding-left-zero">
+                    <div class="col-sm-4">
+                        <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                    </div>
+                    <div class="col-sm-8 text-center-vertical">
+                        @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{ allInstrumentFromDb.length}}</b> @Resources.ResourceInstrument.LblTotalInstrument
+                    </div>
+                </div>
+                <div class="col-sm-4 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical text-right">
+                        <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select ng-model="entryLimit" class="form-control">
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.ResourceInstrument.LblInstrumentMaster <a ng-click="sort_by('InstrumentMasterName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblModelNo <a ng-click="sort_by('ModelNo');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblBrand <a ng-click="sort_by('Brand');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblUSTCCode <a ng-click="sort_by('USTCCode');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblCountry <a ng-click="sort_by('CountryName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblManufacturer <a ng-click="sort_by('ManufacturerName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblInstrumentStatus <a ng-click="sort_by('CountryName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblPurchaseDate <a ng-click="sort_by('PurchaseDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblInstallDate <a ng-click="sort_by('InstallDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblLifeInUse <a ng-click="sort_by('LifeInUse');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblServiceInterval <a ng-click="sort_by('ServiceInterval');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblServiceDate <a ng-click="sort_by('ServiceDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    @*<th>@Resources.ResourceInstrument.LblDepartment <a ng-click="sort_by('DepartmentName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblInstrumentLocation <a ng-click="sort_by('InstrumentLocationName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>*@
+
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>@Resources.ResourceInstrument.LblInstrumentMaster <a ng-click="sort_by('InstrumentMasterName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblModelNo <a ng-click="sort_by('ModelNo');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblBrand <a ng-click="sort_by('Brand');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblUSTCCode <a ng-click="sort_by('USTCCode');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblCountry <a ng-click="sort_by('CountryName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblManufacturer <a ng-click="sort_by('ManufacturerName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblInstrumentStatus <a ng-click="sort_by('CountryName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblPurchaseDate <a ng-click="sort_by('PurchaseDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblInstallDate <a ng-click="sort_by('InstallDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblLifeInUse <a ng-click="sort_by('LifeInUse');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblServiceInterval <a ng-click="sort_by('ServiceInterval');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblServiceDate <a ng-click="sort_by('ServiceDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    @*<th>@Resources.ResourceInstrument.LblDepartment <a ng-click="sort_by('DepartmentName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrument.LblInstrumentLocation <a ng-click="sort_by('InstrumentLocationName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>*@
+
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr ng-class="{'selected':data == selectedRow}" ng-repeat="data in filtered = (allInstrumentFromDb  | filter:SearchText | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+
+                                    <td>{{data.InstrumentMasterName }}</td>
+                                    <td>{{data.ModelNo }}</td>
+                                    <td>{{data.Brand }}</td>                                   
+                                    <td>{{data.USTCCode }}</td>
+                                    <td>{{data.CountryName }}</td>
+                                    <td>{{data.ManufacturerName }}</td>
+                                    <td>{{data.InstrumentStatusName }}</td>
+                                    <td>{{data.PurchaseDate }}</td>
+                                    <td>{{data.InstallDate }}</td>
+                                    <td>{{data.LifeInUse }}</td>
+                                    <td>{{data.ServiceInterval }}</td>
+                                    <td>{{data.ServiceDate }}</td>
+                                    @*<td>{{data.DepartmentName }}</td>
+                                    <td>{{data.InstrumentLocationName }}</td>*@
+                                   
+                                    <td><input type="button" value=@Resources.ResourceCommon.LblEdit class="btn btn-info btn-sm" ng-click="populateInstrument(data)" /></td>
+                                    <td>
+                                        <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger btn-sm" ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                               ng-bootbox-confirm-action="deleteInstrument(data)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @Resources.ResourceInstrument.LblNoInstrumentFound
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ TABLE - SECTION (End)*************** *@
+
+</div>
+
+
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('instrumentService', ['$http', function ($http) {
+
+        return {
+            saveInstrument: function (instrument) {
+                return $http({
+                    url: '/Instrument/CreateInstrument',
+                    method: 'POST',
+                    data: instrument
+                })
+            },
+            getInstrument: function (id) {
+                return $http.get('/Instrument/GetInstrument/' + id);
+            },
+            getAllInstrument: function () {
+                return $http.get('/Instrument/GetInstrumentList');
+            },
+            getAllBaseInstrument: function () {
+                return $http.get('/Instrument/GetBaseInstrumentList');
+            },
+            deleteInstrument: function (instrument) {
+                return $http({
+                    url: '/Instrument/DeleteInstrument',
+                    method: 'POST',
+                    data: instrument
+                })
+            },
+            getAllCountry: function () {
+                return $http.get('/Country/GetCountryList');
+            },
+            getAllInstrumentMaster: function () {
+                return $http.get('/instrumentMaster/GetActiveInstrumentMasterList');
+            },
+            getAllInstrumentStatus: function () {
+                return $http.get('/instrumentStatus/GetActiveInstrumentStatusList');
+            },
+            getAllManufacturer: function () {
+                return $http.get('/Manufacturer/GetManufacturerList');
+            },
+            getAllDepartment: function () {
+                return $http.get('/Department/GetDepartmentList');
+            },
+            getAllLocationByDept: function (id) {
+                return $http.get('/InstrumentLocation/GetInstrumentLocationListByDepartmentId/' + id);
+            },
+        };
+    }]);
+
+    app.controller('instrumentCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, instrumentService, $log, $ngBootbox) {
+
+        loadAllInstrumentMaster();       
+        function loadAllInstrumentMaster() {
+            $scope.allInstrumentMasterFromDb = [];
+            instrumentService.getAllInstrumentMaster()
+                .then(function onSuccess(response) {
+                    $scope.allInstrumentMasterFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+                
+        loadAllCountry();
+        function loadAllCountry() {
+            $scope.allCountryFromDb = [];
+            instrumentService.getAllCountry()
+                .then(function onSuccess(response) {
+                    $scope.allCountryFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllManufacturer();
+        function loadAllManufacturer() {
+            $scope.allManufacturerFromDb = [];
+            instrumentService.getAllManufacturer()
+                .then(function onSuccess(response) {
+                    $scope.allManufacturerFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllInstrumentStatus();
+        function loadAllInstrumentStatus() {
+            $scope.allInstrumentStatusFromDb = [];
+            instrumentService.getAllInstrumentStatus()
+                .then(function onSuccess(response) {
+                    $scope.allInstrumentStatusFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllDepartment();
+        function loadAllDepartment() {
+            $scope.InstrumentLocationId = undefined;
+            $scope.locationListFromDb = [];
+            $scope.allDepartmentFromDb = [];
+
+            instrumentService.getAllDepartment()
+                .then(function onSuccess(response) {
+                    $scope.allDepartmentFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.getLocation = function (departmentId) {
+           $scope.locationListFromDb = [];
+            if (departmentId != undefined && departmentId != '' && departmentId != null) {
+                instrumentService.getAllLocationByDept(departmentId)
+                    .then(function onSuccess(response) {
+                        $scope.locationListFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+        }
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        loadAllInstrument();
+        $scope.showModalforSearch = false;
+        // Add a new instrument
+        $scope.addInstrument = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var instrument = {};
+                instrument["Id"] = $scope.Id;
+                instrument["InstrumentMasterId"] = $scope.InstrumentMasterId;
+                instrument["ModelNo"] = $scope.ModelNo;
+                instrument["Brand"] = $scope.Brand;
+                instrument["USTCCode"] = $scope.USTCCode;
+                instrument["CountryOriginId"] = $scope.CountryOriginId;
+                instrument["ManufacturerId"] = $scope.ManufacturerId;
+                instrument["InstrumentStatusId"] = $scope.InstrumentStatusId;
+                instrument["PurchaseDate"] = $scope.PurchaseDate;
+                instrument["InstallDate"] = $scope.InstallDate;
+                instrument["LifeInUse"] = $scope.LifeInUse;
+                instrument["IsActive"] = $scope.IsActive;
+                instrument["ServiceDate"] = $scope.ServiceDate;
+                instrument["ServiceInterval"] = $scope.ServiceInterval;
+                //instrument["InstrumentLocationId"] = $scope.InstrumentLocationId;
+
+                instrumentService.saveInstrument(instrument)
+                .then(function onSuccess(response) {
+                    loadAllInstrument();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+
+        // Populate instrument
+        $scope.selectedRow = null;
+        $scope.populateInstrument = function (instrument) {
+            $scope.selectedRow = instrument;
+            $scope.Id = instrument.Id;
+            $scope.InstrumentMasterId = instrument.InstrumentMasterId;
+            $scope.ModelNo = instrument.ModelNo;
+            $scope.Brand = instrument.Brand;
+            $scope.USTCCode = instrument.USTCCode;
+            $scope.CountryOriginId = instrument.CountryOriginId;
+            $scope.ManufacturerId = instrument.ManufacturerId;
+            $scope.InstrumentStatusId = instrument.InstrumentStatusId;
+            $scope.PurchaseDate = instrument.PurchaseDate;
+            $scope.InstallDate = instrument.InstallDate;
+            $scope.LifeInUse = instrument.LifeInUse;
+            $scope.IsActive = instrument.IsActive;
+            $scope.ServiceDate = instrument.ServiceDate;
+            $scope.ServiceInterval = instrument.ServiceInterval;
+            //$scope.DepartmentId = instrument.DepartmentId;
+            //$scope.DepartmentName = instrument.DepartmentName;
+            //$scope.InstrumentLocationId = instrument.InstrumentLocationId;
+            //$scope.InstrumentLocationName = instrument.InstrumentLocationName;
+           
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.InstrumentMasterId = '';
+            $scope.ModelNo = '';
+            $scope.Brand = '';          
+            $scope.USTCCode = '';
+            $scope.CountryOriginId = '';
+            $scope.ManufacturerId = '';
+            $scope.InstrumentStatusId = '';
+            $scope.PurchaseDate = '';
+            $scope.InstallDate = '';
+            $scope.LifeInUse = '';
+            $scope.IsActive = '';
+            $scope.ServiceDate = '';
+            $scope.ServiceInterval = '';
+            //$scope.InstrumentLocationId = '';
+            //$scope.InstrumentLocationName = '';
+            //$scope.DepartmentId = '';
+            //$scope.DepartmentName = '';
+        }
+
+        $scope.deleteInstrument = function (instrument) {
+            instrumentService.deleteInstrument(instrument)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                loadAllInstrument();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+        function loadAllInstrument() {
+            $scope.allInstrumentFromDb = [];
+            instrumentService.getAllInstrument()
+                .then(function onSuccess(response) {
+                    $scope.allInstrumentFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allInstrumentFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allInstrumentFromDb.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });
+
+</script>

@@ -1,0 +1,805 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceEmployee.LblTitle;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="employeeCtrl">
+
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceEmployee.LblTitle</div>
+        <div class="panel-body border-green pt pb">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                    <div class="form-group" show-errors id="searchdivid">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                <b class="starStyle">*</b>  @Resources.ResourceEmployee.LblCode
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="Code" required name="Code" focus-on="focusMe" />
+                                            <b class="help-block" ng-if="form.Code.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceEmployee.LblCode)
+                                            </b>
+                                            <b class="help-block" ng-if="form.Code.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                <b class="starStyle">*</b>  @Resources.ResourceEmployee.LblFullName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="100" ng-model="FullName" required name="FullName" />
+                                            <b class="help-block" ng-if="form.FullName.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceEmployee.LblFullName)
+                                            </b>
+                                            <b class="help-block" ng-if="form.FullName.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                <b class="starStyle">*</b>  @Resources.ResourceEmployee.LblPresentAddress
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <textarea class="form-control" ng-maxlength="200" ng-model="PresentAddress" required name="PresentAddress"></textarea>
+                                            <b class="help-block" ng-if="form.PresentAddress.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceEmployee.LblPresentAddress)
+                                            </b>
+                                            <b class="help-block" ng-if="form.PresentAddress.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblFatherName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="100" ng-model="FatherName" name="FatherName" />
+                                            <b class="help-block" ng-if="form.FatherName.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblMotherName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="100" ng-model="MotherName" name="MotherName" />
+                                            <b class="help-block" ng-if="form.MotherName.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblNationalId
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="NationalId" name="NationalId" />
+                                            <b class="help-block" ng-if="form.NationalId.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblPassport
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="PassportNo" name="PassportNo" />
+                                            <b class="help-block" ng-if="form.PassportNo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.ActivationCode
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="AuthenticationCode" name="AuthenticationCode" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblEmail
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="100" ng-model="Email" name="Email" />
+                                            <b class="help-block" ng-if="form.Email.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblOfficePhone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="OfficePhone" name="OfficePhone" />
+                                            <b class="help-block" ng-if="form.OfficePhone.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblOfficeMobile
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="OfficeMobile" name="OfficeMobile" />
+                                            <b class="help-block" ng-if="form.OfficeMobile.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblPermanentAddress
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <textarea class="form-control" ng-maxlength="200" ng-model="PermanentAddress" name="PermanentAddress"></textarea>
+                                            <b class="help-block" ng-if="form.PermanentAddress.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblResidentPhone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="ResidentPhone" name="ResidentPhone" />
+                                            <b class="help-block" ng-if="form.ResidentPhone.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblResidentMobile
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" ng-maxlength="50" ng-model="ResidentMobile" name="ResidentMobile" />
+                                            <b class="help-block" ng-if="form.ResidentMobile.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceEmployee.LblBloodGroup
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <select data-ng-model="BloodGroup" class="form-control"
+                                                    data-ng-options="c.name as c.name for c in bloodGroups | orderBy: 'name'" name="BloodGroup">
+                                                <option value="">@Resources.ResourceEmployee.SelectBloodGroup</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceEmployee.EmployeeImage
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+
+                                            <input type="file" file-model="myFile" class="form-control" onchange="angular.element(this).scope().uploadImage(this.files)" name="file" data-autoclose="true"> 
+                                            <div ng-hide="IsHidden"> <a class=" link-text-style" href="/Files/EmployeeImage/{{PhotoPath}}" download target="_blank">Download File</a></div>
+                                        </div>
+                                    </div>
+
+                                    @*<input type="file" ng-model="image" onchange="angular.element(this).scope().uploadImage(this.files)" />*@
+
+
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceEmploymentHistory.LblEmploymentHistory</h3>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 text-center text-primary default-font-size-10 padding-left-zero">
+                                    <div class="col-xs-12 col-sm-3 col-md-3 padding-left-zero">@Resources.ResourceEmploymentHistory.LblDepartment </div>
+                                    <div class="col-xs-12 col-sm-3 col-md-3 padding-left-zero">@Resources.ResourceEmploymentHistory.LblDesignation </div>
+                                    <div class="col-xs-12 col-sm-2 col-md-2 padding-left-zero">@Resources.ResourceEmploymentHistory.LblDateFrom </div>
+                                    <div class="col-xs-12 col-sm-2 col-md-2 padding-left-zero">@Resources.ResourceEmploymentHistory.LblDateTo </div>
+                                    <div class="col-xs-12 col-sm-2 col-md-2 padding-left-zero">@Resources.ResourceEmployee.Remove </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12" ng-repeat="aEmployee in EmploymentHistories">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <select data-ng-model="aEmployee.DepartmentId" class="form-control"
+                                                        data-ng-options="c.Id as c.Name for c in allDepartmentFromDb | orderBy: 'Name'" ng-change="getDesignation(aEmployee.DepartmentId,$index)" name="DepartmentId">
+                                                    <option value="">@Resources.ResourceEmploymentHistory.LblSelDep</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <select data-ng-model="aEmployee.DesignationId" class="form-control" ng-disable="!aEmployee.DepartmentId"
+                                                        data-ng-options="c.Id as c.Name for c in aEmployee.DesignationList | orderBy: 'Name'">
+                                                    <option value="">@Resources.ResourceEmploymentHistory.LblSelDesg</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" ng-model="aEmployee.DateFrom" name="DateFrom" data-date-format="dd-MMM-yyyy" bs-datepicker @*data-placement='auto'*@ data-container='body'
+                                                       data-min-view="0" data-autoclose="true">
+                                                @*<input type="text" class="form-control" datepicker-append-to-body="true" ng-model="aEmployee.DateFrom" datepicker-popup="dd-MMM-yyyy" name='DateFrom' />*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" ng-model="aEmployee.DateTo" name="DateTo" data-date-format="dd-MMM-yyyy" bs-datepicker @*data-placement='auto'*@ data-container='body'
+                                                       data-min-view="0" data-autoclose="true">
+                                                @*<input type="text" class="form-control" datepicker-append-to-body="true" ng-model="aEmployee.DateTo" datepicker-popup="dd-MMM-yyyy" name='DateTo' />*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <button class="btn  btn-default btn-block gridButton" ng-bootbox-confirm="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails " ng-bootbox-confirm-action="EmploymentHistories.splice($index, 1)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails"><i class="text-danger glyphicon glyphicon-remove"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <button class="btn btn-block btn-sm btn-info" ng-click="addNewDetail($event)">@Resources.ResourceCommon.LblAddDetailItem</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addEmployee()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+
+
+    @* ************ TABLE - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceEmployee.LblTitle @Resources.ResourceCommon.lblList</div>
+        <div class="panel-body border-green  pt pb">
+            <div class="row mb">
+                <div class="col-sm-8 padding-left-zero">
+                    <div class="col-sm-4">
+                        <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                    </div>
+                    <div class="col-sm-8 text-center-vertical">
+                        @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{ allEmployeeFromDb.length}}</b> @Resources.ResourceEmployee.LblTotalEmployee
+                    </div>
+                </div>
+                <div class="col-sm-4 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical text-right">
+                        <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select ng-model="entryLimit" class="form-control">
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.ResourceEmployee.LblCode@* <a ng-click="sort_by('QSIPartCode');" title="Sort by QSIPartCode"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>*@
+                                    <th>@Resources.ResourceEmployee.LblFullName</th>
+                                    <th>@Resources.ResourceEmployee.LatestDepartmentName</th>
+                                    <th>@Resources.ResourceEmployee.LatestDesignationName</th>
+                                    <th>@Resources.ResourceEmployee.LblEmail</th>
+                                    <th>@Resources.ResourceEmployee.LblOfficePhone</th>
+                                    <th>@Resources.ResourceEmployee.LblPresentAddress</th>
+                                     <th>@Resources.ResourceCommon.LblEdit</th>
+                                    <th>@Resources.ResourceCommon.LblDelete</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>@Resources.ResourceEmployee.LblCode@* <a ng-click="sort_by('QSIPartCode');" title="Sort by QSIPartCode"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>*@
+                                    <th>@Resources.ResourceEmployee.LblFullName</th>
+                                    <th>@Resources.ResourceEmployee.LatestDepartmentName</th>
+                                    <th>@Resources.ResourceEmployee.LatestDesignationName</th>
+                                   
+                                    <th>@Resources.ResourceEmployee.LblEmail</th>
+                                    
+                                    <th>@Resources.ResourceEmployee.LblOfficePhone</th>
+                                    <th>@Resources.ResourceEmployee.LblPresentAddress</th>
+
+                                    <th>@Resources.ResourceCommon.LblEdit</th>
+                                    <th>@Resources.ResourceCommon.LblDelete</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr ng-class="{'selected':data == selectedRow}" ng-repeat="data in filtered = (allEmployeeFromDb  | filter:SearchText | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                                    @*| filter:{'Name':SearchText}:false|filter:{'CountryId':CountryId||undefined}:true| filter:{'DistrictId':DistrictId||undefined}:true|filter:{'AreaId':AreaId||undefined}:true | filter:{'Specializations':SpecializationId||undefined}:true*@
+                                    <td>{{data.Code }}</td>
+                                    <td>{{data.FullName }}</td>
+                                    <td>{{data.LatestDepartmentName}}</td>
+                                    <td>{{data.LatestDesignationName}}</td>
+                                  
+                                    <td>{{data.Email}}</td>
+                                    
+                                    <td>{{data.OfficePhone}}</td>
+                                    <td>{{data.PresentAddress }}</td>
+                                
+
+                                    <td><input type="button" value=@Resources.ResourceCommon.LblEdit class="btn btn-info btn-sm" ng-click="populateEmployee(data);ShowHide()" /></td>
+                                    <td>
+                                        <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger btn-sm" ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                               ng-bootbox-confirm-action="deleteEmployee(data)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    </td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @Resources.ResourceEmployee.LblNoEmployee
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ TABLE - SECTION (End) *************** *@
+
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('employeeService', ['$http', function ($http) {
+
+        return {
+            saveEmployee: function (employee,  fileName) {
+                var param = {employee: employee, fileName: fileName};
+                return $http({
+                    url: '/Employee/CreateEmployee',
+                    method: 'POST',
+                    datatype: JSON,
+                    data: JSON.stringify(param)
+                })
+            },
+            getEmployee: function (id) {
+                return $http.get('/Employee/GetEmployee/' + id);
+            },
+            getAllEmployeeFromDb: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getOperationEmployeeFromDb: function () {
+                return $http.get('/Employee/GetEmployeeListOperation');
+            },
+            getAllDepartment: function () {
+                return $http.get('/Department/GetDepartmentList');
+            },
+            getOperationDepartment: function () {
+                return $http.get('/Department/GetDepartmentListOperation');
+            },
+            getAllDesignationByDept: function (id) {// But Here All Designation are geted
+                return $http.get('/Designation/GetDesignationListByDepartmentId/' + id);
+            },
+            deleteEmployee: function (employee) {
+                return $http({
+                    url: '/Employee/DeleteEmployee',
+                    method: 'POST',
+                    data: employee
+                });
+            },
+            uploadFile: function (name, code, file) {
+                var fdata = new FormData();
+                var url = '/Employee/UpoladFile';
+                fdata.append('name', name);
+                fdata.append('code', code);
+                fdata.append('file', file);
+
+                return $http.post(url, fdata, {
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
+                });
+
+            },
+
+            getEmployeeListForAutocomplete: function (id) {
+                return $http.get('/Employee/GetHddModelListListForAutoCompleteSerchKey/' + id);
+            }
+        };
+    }]);app.controller('employeeCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, employeeService, $log, $ngBootbox) {
+
+        $scope.bloodGroups = [{ name: "A+" }, { name: "A-" }, { name: "B+" }, { name: "B-" }, { name: "O+" },
+                            { name: "O-" }, { name: "AB+" }, { name: "AB-" }];
+
+        $scope.myFile = null;
+        $scope.EmploymentHistories = [];
+        $scope.EmploymentHistories.push({ Id: '', EmployeeId: '', DepartmentId: '', DesignationId: '', DesignationList: [], DateFrom: '', DateTo: '' });
+
+        $scope.addNewDetail = function ($event) {
+            $scope.EmploymentHistories.push({ Id: '', EmployeeId: '', DepartmentId: '', DesignationId: '', DesignationList: [], DateFrom: '', DateTo: '' });
+        }
+
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+
+        $scope.operationdept = false;
+
+        if ('@ViewBag.Operation' == 1) {
+            $scope.operationdept = true;
+        }
+
+        $scope.showModalforSearch = false;
+
+        loadAllEmployee();
+        
+        // Add a new employee
+        $scope.addEmployee = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var employee = {};
+                employee["Id"] = $scope.Id;
+                employee["Code"] = $scope.Code;
+                employee["FullName"] = $scope.FullName;
+                employee["PresentAddress"] = $scope.PresentAddress;
+                employee["PermanentAddress"] = $scope.PermanentAddress;
+
+                employee["FatherName"] = $scope.FatherName;
+                employee["MotherName"] = $scope.MotherName;
+                employee["NationalId"] = $scope.NationalId;
+                employee["PassportNo"] = $scope.PassportNo;
+                employee["AuthenticationCode"] = $scope.AuthenticationCode;
+
+                employee["Email"] = $scope.Email;
+                employee["OfficeMobile"] = $scope.OfficeMobile;
+                employee["OfficePhone"] = $scope.OfficePhone;
+                employee["ResidentMobile"] = $scope.ResidentMobile;
+
+                employee["ResidentPhone"] = $scope.ResidentPhone;
+                employee["BloodGroup"] = $scope.BloodGroup;
+
+                if ($scope.EmploymentHistories.length > 0)
+                    for (var i = 0; i < $scope.EmploymentHistories.length; i++) {
+                        //alert($scope.EmploymentHistories[i].DepartmentId)
+                        if ($scope.EmploymentHistories[i].DepartmentId == null) {
+                            $scope.EmploymentHistories[i].DesignationId = null;
+                        }
+                    }
+
+
+                //resolving dateTime issue of employee list
+                var employmentHistories = $scope.EmploymentHistories;
+                angular.forEach(employmentHistories, function (item, key) {
+                    item.DateFrom = new Date(item.DateFrom).toDateString();
+                    item.DateTo = new Date(item.DateTo).toDateString();
+                })
+
+                employee["EmploymentHistories"] = employmentHistories;
+
+                var fileName = "";
+                if ($scope.myFile != null) {
+                    fileName = $scope.myFile.name;
+                }
+                
+                employeeService.saveEmployee(employee,fileName)
+                .then(function onSuccess(response) {
+                        if ($scope.myFile != null) {
+                            $scope.UploadFile();
+                        }
+                    loadAllEmployee();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+        // Populate employee
+        $scope.selectedRow = null;
+        $scope.populateEmployee = function (employee) {
+            $scope.selectedRow = employee;
+
+            $scope.Id = employee.Id;
+            $scope.Code = employee.Code;
+            $scope.FullName = employee.FullName;
+            $scope.PresentAddress = employee.PresentAddress;
+            $scope.PermanentAddress = employee.PermanentAddress;
+            $scope.MotherName = employee.MotherName;
+            $scope.NationalId = employee.NationalId;
+            $scope.FatherName = employee.FatherName;
+            $scope.PassportNo = employee.PassportNo;
+            $scope.PhotoPath = employee.PhotoPath;
+            $scope.AuthenticationCode = employee.AuthenticationCode;
+
+            $scope.Email = employee.Email;
+            $scope.OfficeMobile = employee.OfficeMobile;
+            $scope.OfficePhone = employee.OfficePhone;
+            $scope.ResidentMobile = employee.ResidentMobile;
+            $scope.ResidentPhone = employee.ResidentPhone;
+            $scope.BloodGroup = employee.BloodGroup;
+            $scope.LatestDepartmentName = employee.LatestDepartmentName;
+            $scope.LatestDesignationName = employee.LatestDesignationName;
+            $scope.EmploymentHistories = employee.EmploymentHistories;
+            if (employee.EmploymentHistories.length > 0)
+                for (var i = 0; i < $scope.EmploymentHistories.length; i++) {
+                    //alert($scope.EmploymentHistories[i].DepartmentId)
+                    if ($scope.EmploymentHistories[i].DepartmentId != null) {
+                        $scope.getDesignation($scope.EmploymentHistories[i].DepartmentId, i);
+                    }
+                }
+
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+        }
+
+        $scope.reset = function () {
+            $scope.selectedRow = null;
+            $scope.$broadcast('show-errors-reset');
+            $scope.myFile = null;
+            $scope.Id = '';
+            $scope.Code = '';
+            $scope.FullName = '';
+            $scope.PermanentAddress = '';
+            $scope.PresentAddress = '';
+            $scope.MotherName = '';
+            $scope.NationalId = '';
+            $scope.FatherName = '';
+            $scope.Email = '';
+            $scope.OfficeMobile = '';
+            $scope.OfficePhone = '';
+            $scope.ResidentMobile = '';
+            $scope.PassportNo = '';
+            $scope.PhotoPath = '';
+            $scope.ResidentPhone = '';
+            $scope.BloodGroup = '';
+            $scope.AuthenticationCode = '';
+            $scope.disableProject = false;
+            $scope.IsHidden = true;
+            angular.element("input[type='file']").val(null);
+            $scope.EmploymentHistories = [];
+            $scope.EmploymentHistories.push({ Id: '', EmployeeId: '', DepartmentId: '', DesignationId: '', DesignationList: [], DateFrom: '', DateTo: '' });
+        }
+
+        $scope.deleteEmployee = function (employee) {
+            employeeService.deleteEmployee(employee)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                loadAllEmployee();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+        //file upload..................
+        $scope.UploadFile = function () {
+
+            employeeService.uploadFile($scope.myFile.name, $scope.Code, $scope.myFile)
+                .then(function onSuccess(response) {
+                    $scope.allEmployeeFileFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+
+        }
+
+        // Load employee
+        function loadAllEmployee() {
+
+            $scope.allEmployeeFromDb = [];
+            if ($scope.operationdept) {
+                employeeService.getOperationEmployeeFromDb()
+                    .then(function onSuccess(response) {
+                        $scope.allEmployeeFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+            else {
+                employeeService.getAllEmployeeFromDb()
+                    .then(function onSuccess(response) {
+                        $scope.allEmployeeFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+        }
+
+        loadAllDepartment();
+        function loadAllDepartment() {
+            $scope.DesignationId = undefined;
+            $scope.allDesignationByDepartment = [];
+            if ($scope.operationdept) {
+                employeeService.getOperationDepartment()
+                    .then(function onSuccess(response) {
+                        $scope.allDepartmentFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+            else {
+                employeeService.getAllDepartment()
+                    .then(function onSuccess(response) {
+                        $scope.allDepartmentFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+        }
+
+        $scope.getDesignation = function (departmentId, selectedHistoryIndex) {
+            $scope.EmploymentHistories[selectedHistoryIndex].DesignationList = [];
+            $scope.allDesignationByDepartment = [];
+            if (departmentId != undefined && departmentId != '' && departmentId != null) {
+                employeeService.getAllDesignationByDept(departmentId)
+                    .then(function onSuccess(response) {
+                        $scope.EmploymentHistories[selectedHistoryIndex].DesignationList = response.data;
+                        $scope.allDesignationByDepartment = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+        }
+
+
+
+        $scope.uploadImage = function (files) {
+           // var ext = files[0].name.match(/\.(.+)$/)[1];
+            var ext = files[0].name.substr(files[0].name.lastIndexOf('.') + 1);
+            if (angular.lowercase(ext) === 'jpg' || angular.lowercase(ext) === 'jpeg' || angular.lowercase(ext) === 'png') {}
+            else {
+                $ngBootbox.alert("Invalid File Format");
+                angular.element("input[type='file']").val(null);
+            }
+        }
+
+
+
+        $scope.IsHidden = true;
+        $scope.ShowHide = function () {
+            //If DIV is hidden it will be visible 
+            $scope.IsHidden = $scope.IsHidden ? false : true;
+        }
+
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allEmployeeFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allEmployeeFromDb.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });</script>

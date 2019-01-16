@@ -1,0 +1,302 @@
+﻿
+@{
+    ViewBag.Title = "BinCard";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="binCardCtrl">
+    <div class="panel panel">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceBinCard.LblbinCard</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceBinCard.LblWarehouse
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="WarehouseId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allWarehouseFromDb | orderBy: 'Name'" name="WarehouseId" ng-required="true">
+                                        <option value="">@Resources.ResourceBinCard.SelectWarehouse</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.WarehouseId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceBinCard.LblWarehouse)
+                                    </b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceBinCard.LblbinCardNo
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="CardNo" ng-model="CardNo" required />
+                                    <b class="help-block" ng-if="form.CardNo.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceBinCard.LblbinCardNo)
+                                    </b>
+                                
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addbinCard()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave /> 
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceBinCard.LblbinCard @Resources.ResourceCommon.lblList</div>
+        <div class="panel-body border-green pt pb">
+            <div class="row mb">
+                <div class="col-sm-9 padding-left-zero">
+                    <div class="col-sm-4">
+                        <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                    </div>
+                    <div class="col-sm-8 text-center-vertical">
+                        @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{ allbinCardFromDb.length}}</b> @Resources.ResourceBinCard.LblbinCard
+                    </div>
+                </div>
+                <div class="col-sm-3 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical">
+                        <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select ng-model="entryLimit" class="form-control">
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>@Resources.ResourceBinCard.LblWarehouse <a ng-click="sort_by('WarehouseId');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceBinCard.LblbinCardNo <a ng-click="sort_by('CardNo');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceCommon.LblEdit </th>
+                                <th>@Resources.ResourceCommon.LblDelete </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>@Resources.ResourceBinCard.LblWarehouse <a ng-click="sort_by('WarehouseId');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceBinCard.LblbinCardNo <a ng-click="sort_by('CardNo');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceCommon.LblEdit </th>
+                                <th>@Resources.ResourceCommon.LblDelete </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr ng-class="{'selected':data == selectedRow}" ng-repeat="data in filtered = (allbinCardFromDb  | filter:SearchText | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                                @*| filter:{'Name':SearchText}:false|filter:{'CountryId':CountryId||undefined}:true| filter:{'DistrictId':DistrictId||undefined}:true|filter:{'AreaId':AreaId||undefined}:true | filter:{'Specializations':SpecializationId||undefined}:true*@
+
+                                <td>{{data.WarhouseName }}</td>
+                                <td>{{data.CardNo }}</td>
+
+                                <td><input type="button" value=@Resources.ResourceCommon.LblEdit class="btn btn-info btn-sm" ng-click="populatebinCard(data)" /></td>
+                                <td>
+                                    <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger btn-sm" ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deletebinCard(data)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @Resources.ResourceCountry.LblNoCountryFound
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('binCardService', ['$http', function ($http) {
+
+        return {
+            savebinCard: function (binCard) {
+                return $http({
+                    url: '/binCard/CreateBinCard',
+                    method: 'POST',
+                    data: binCard
+                })
+            },
+            getbinCard: function (id) {
+                return $http.get('/binCard/GetBinCard/' + id);
+            },
+            getAllbinCard: function () {
+                return $http.get('/binCard/GetBinCardList');
+            },
+            getAllWarehouse: function () {
+                return $http.get('/Warehouse/GetWarehouseList');
+            },
+            deletebinCard: function (binCard) {
+                return $http({
+                    url: '/binCard/DeletebinCard',
+                    method: 'POST',
+                    data: binCard
+                })
+            }
+        };
+    }]);app.controller('binCardCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, binCardService, $log, $ngBootbox) {
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        loadAllbinCard();
+        $scope.showModalforSearch = false;
+        // Add a new binCard
+        $scope.addbinCard = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var binCard = {};
+                binCard["Id"] = $scope.Id;
+                binCard["WarehouseId"] = $scope.WarehouseId;
+                binCard["CardNo"] = $scope.CardNo;
+
+                binCardService.savebinCard(binCard)
+                .then(function onSuccess(response) {
+                    loadAllbinCard();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+        // Populate binCard
+        $scope.selectedRow = null;
+        $scope.populatebinCard = function (binCard) {
+            $scope.selectedRow = binCard;
+            $scope.Id = binCard.Id;
+            $scope.WarehouseId = binCard.WarehouseId;
+            $scope.CardNo = binCard.CardNo;
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+        }
+
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.WarehouseId = '';
+            $scope.CardNo = '';
+            $scope.selectedRow = null;
+        }
+
+        $scope.deletebinCard = function (binCard) {
+            binCardService.deletebinCard(binCard)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                loadAllbinCard();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+        // Load all Bin Card
+        function loadAllbinCard() {
+            $scope.allbinCardFromDb = [];
+            binCardService.getAllbinCard()
+                .then(function onSuccess(response) {
+                    $scope.allbinCardFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllWarehouse();
+
+        function loadAllWarehouse() {
+            $scope.allWarehouseFromDb = [];
+            binCardService.getAllWarehouse()
+                .then(function onSuccess(response) {
+                    $scope.allWarehouseFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allbinCardFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allbinCardFromDb.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });</script>

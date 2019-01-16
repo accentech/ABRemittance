@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ProductStock" targetNamespace="http://tempuri.org/ProductStock.xsd" xmlns:mstns="http://tempuri.org/ProductStock.xsd" xmlns="http://tempuri.org/ProductStock.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="DBConnection" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="DBConnection (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.DBConnection.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ProductStockTableAdapter" GeneratorDataComponentClassName="ProductStockTableAdapter" Name="ProductStock" UserDataComponentName="ProductStockTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="DBConnection (Web.config)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>select FGType.TypeName,FGItem.Code,FGItem.PackageToSalesRatio,FGGrade.Grade,Inventory.Lot, (ISNULL(OpeningQuantity,0) + ISNULL(InQuantity,0) - ISNULL(SalesQuantity,0) - ISNULL(DisposeQuantity,0)) as BookQuantity, (ISNULL(OpeningQuantity,0) + ISNULL(InQuantity,0) - ISNULL(DeliveryQuantity,0) - ISNULL(DisposeQuantity,0)) as StockQuantity, ISNULL(SalesQuantity,0) - ISNULL(DeliveryQuantity,0) as NotDeliveredQuantity from FGItemInventoryWithoutBin as Inventory inner join FGItem on Inventory.FGItemId = FGItem.Id inner join FGGrade on Inventory.FGGradeId = FGGrade.Id inner join FGType on FGItem.TypeId = FGType.Id left join ( Select a.FGItemId,a.FGGradeId,a.Lot,ISNULL(SUM(a.Quantity),0) as OpeningQuantity from FGItemOpening a where a.OpeningDate &lt;= '2018-04-26' group by a.FGItemId,a.FGGradeId,a.Lot ) as Opening on Inventory.FGItemId = Opening.FGItemId and Inventory.FGGradeId = Opening.FGGradeId and Inventory.Lot = Opening.Lot left join ( Select a.FGItemId,a.FGGradeId,a.Lot,ISNULL(SUM(InQuantity),0) as InQuantity from FGItemInDetail a inner join FGItemIn b on a.FGItemInId = b.Id where b.ReceivedDate &lt;= '2018-04-26' group by a.FGItemId,a.FGGradeId,a.Lot ) as Production on Inventory.FGItemId = Production.FGItemId and Inventory.FGGradeId = Production.FGGradeId and Inventory.Lot = Production.Lot left join ( Select a.FGItemId,a.FGGradeId,a.Lot,ISNULL(SUM(a.PackQuantity),0) as SalesQuantity from FGSalesDetail a inner join FGSales b on a.FGSalesInvoiceNo = b.InvoiceNo where b.InvoiceDate &lt;= '2018-04-26' group by a.FGItemId,a.FGGradeId,a.Lot ) as Sales on Inventory.FGItemId = Sales.FGItemId and Inventory.FGGradeId = Sales.FGGradeId and Inventory.Lot = Sales.Lot left join ( Select a.FGItemId,a.FGGradeId,a.Lot,ISNULL(SUM(DeliveryQuantity),0) as DeliveryQuantity from FGSalesDeliveryDetail a inner join FGSalesDelivery b on a.DeliveryChallanNo = b.DeliveryChallanNo where b.DeliveryDate &lt;= '2018-04-26' group by a.FGItemId,a.FGGradeId,a.Lot ) as Delivery on Inventory.FGItemId = Delivery.FGItemId and Inventory.FGGradeId = Delivery.FGGradeId and Inventory.Lot = Delivery.Lot left join ( Select a.FGItemId,a.FGGradeId,a.Lot,ISNULL(SUM(DisposeQuantity),0) as DisposeQuantity from FGItemDisposeDetail a inner join FGItemDispose b on a.FGItemDisposeId = b.Id where b.Date &lt;= '2018-04-26' group by a.FGItemId,a.FGGradeId,a.Lot ) as Dispose on Inventory.FGItemId = Dispose.FGItemId and Inventory.FGGradeId = Dispose.FGGradeId and Inventory.Lot = Dispose.Lot where OpeningQuantity != 0 or InQuantity != 0 order by FGItem.Code,FGGrade.Grade,Inventory.Lot</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="TypeName" DataSetColumn="TypeName" />
+              <Mapping SourceColumn="Code" DataSetColumn="Code" />
+              <Mapping SourceColumn="PackageToSalesRatio" DataSetColumn="PackageToSalesRatio" />
+              <Mapping SourceColumn="Grade" DataSetColumn="Grade" />
+              <Mapping SourceColumn="Lot" DataSetColumn="Lot" />
+              <Mapping SourceColumn="BookQuantity" DataSetColumn="BookQuantity" />
+              <Mapping SourceColumn="StockQuantity" DataSetColumn="StockQuantity" />
+              <Mapping SourceColumn="NotDeliveredQuantity" DataSetColumn="NotDeliveredQuantity" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ProductStock" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ProductStock" msprop:Generator_UserDSName="ProductStock">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ProductStock" msprop:Generator_TableClassName="ProductStockDataTable" msprop:Generator_TableVarName="tableProductStock" msprop:Generator_TablePropName="_ProductStock" msprop:Generator_RowDeletingName="ProductStockRowDeleting" msprop:Generator_RowChangingName="ProductStockRowChanging" msprop:Generator_RowEvHandlerName="ProductStockRowChangeEventHandler" msprop:Generator_RowDeletedName="ProductStockRowDeleted" msprop:Generator_UserTableName="ProductStock" msprop:Generator_RowChangedName="ProductStockRowChanged" msprop:Generator_RowEvArgName="ProductStockRowChangeEvent" msprop:Generator_RowClassName="ProductStockRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TypeName" msprop:Generator_ColumnVarNameInTable="columnTypeName" msprop:Generator_ColumnPropNameInRow="TypeName" msprop:Generator_ColumnPropNameInTable="TypeNameColumn" msprop:Generator_UserColumnName="TypeName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Code" msprop:Generator_ColumnVarNameInTable="columnCode" msprop:Generator_ColumnPropNameInRow="Code" msprop:Generator_ColumnPropNameInTable="CodeColumn" msprop:Generator_UserColumnName="Code">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PackageToSalesRatio" msprop:Generator_ColumnVarNameInTable="columnPackageToSalesRatio" msprop:Generator_ColumnPropNameInRow="PackageToSalesRatio" msprop:Generator_ColumnPropNameInTable="PackageToSalesRatioColumn" msprop:Generator_UserColumnName="PackageToSalesRatio" type="xs:double" />
+              <xs:element name="Grade" msprop:Generator_ColumnVarNameInTable="columnGrade" msprop:Generator_ColumnPropNameInRow="Grade" msprop:Generator_ColumnPropNameInTable="GradeColumn" msprop:Generator_UserColumnName="Grade">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="5" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Lot" msprop:Generator_ColumnVarNameInTable="columnLot" msprop:Generator_ColumnPropNameInRow="Lot" msprop:Generator_ColumnPropNameInTable="LotColumn" msprop:Generator_UserColumnName="Lot" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="10" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="BookQuantity" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnBookQuantity" msprop:Generator_ColumnPropNameInRow="BookQuantity" msprop:Generator_ColumnPropNameInTable="BookQuantityColumn" msprop:Generator_UserColumnName="BookQuantity" type="xs:double" minOccurs="0" />
+              <xs:element name="StockQuantity" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnStockQuantity" msprop:Generator_ColumnPropNameInRow="StockQuantity" msprop:Generator_ColumnPropNameInTable="StockQuantityColumn" msprop:Generator_UserColumnName="StockQuantity" type="xs:double" minOccurs="0" />
+              <xs:element name="NotDeliveredQuantity" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnNotDeliveredQuantity" msprop:Generator_ColumnPropNameInRow="NotDeliveredQuantity" msprop:Generator_ColumnPropNameInTable="NotDeliveredQuantityColumn" msprop:Generator_UserColumnName="NotDeliveredQuantity" type="xs:double" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

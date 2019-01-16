@@ -1,0 +1,585 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceItemDemand.LblItemDemand;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="internalDemandCtrl">
+
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceItemDemand.LblItemDemand
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="MMM-yyyy" bs-datepicker
+                                       data-min-view="1" data-autoclose="true" ng-change="loadAllDemandListByYearMonth()" data-trigger="click">
+                            </div>
+                            <select data-ng-model="selectedStatus" class="form-control" name="selectedStatus" @*ng-change="loadStatusedItem(selectedStatus)"*@>
+                                <option value="">@Resources.ResourceItemDemand.All</option>
+                                <option value="@((int)Remit.Service.Enums.CommonEnum.Pending)">@Remit.Service.Enums.CommonEnum.Pending</option>
+                                <option value="@((int)Remit.Service.Enums.CommonEnum.Approved)">@Remit.Service.Enums.CommonEnum.Approved</option>
+                                <option value="@((int)Remit.Service.Enums.CommonEnum.Rejected)">@Remit.Service.Enums.CommonEnum.Rejected</option>
+                            </select>
+                            
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceItemDemand.DemandList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="DemandId" class="form-control listSelect" focus-on="focusMe"
+                                            data-ng-options="c.Id as c.DemandNo for c in alldemandListByYear | filter:{'Status':selectedStatus}:false" name="DemandId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="loadDemandDetailsByDemandId(DemandId)">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceItemDemand.LblDemandNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="DemandNo" ng-model="DemandNo" ng-disabled="true" required ng-maxlength="50" />
+                                            <b class="help-block" ng-if="form.DemandNo.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItemDemand.LblDemandNo)
+                                            </b>
+                                            <b class="help-block" ng-if="form.DemandNo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceItemDemand.LblDemandOn
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" ng-required="true" class="form-control" ng-model="DemandOn" name="DemandOn" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                            <b class="help-block" ng-if="form.DemandOn.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItemDemand.LblDemandOn)
+                                            </b>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="DemandOn" name="DemandOn" bs-timepicker>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceItemDemand.LblDemandedBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="DemandedBy" class="form-control" 
+                                                    ng-required="true" data-ng-options="c.Id as c.FullName for c in allEmployeeFromDb | orderBy: 'FullName'" name="DemandedBy">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.DemandedBy.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItemDemand.LblDemandedBy)
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                 @Resources.ResourceItemDemand.LblDemandUsage
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <textarea class="form-control" ng-model="DemandUsage" name='DemandUsage'></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="row" ng-show="editmode">
+                                        <div class="form-group">
+                                            <div class=" padding-right-zero">
+                                                <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                     @Resources.ResourceItemDemand.LblApprovedBy
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-8 col-md-8">
+                                               <input type="text" ng-model="ApprovedByName" class="form-control" ng-disabled="true"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class=" padding-right-zero">
+                                                <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                    @Resources.ResourceItemDemand.LblApprovedOn
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <input type="text" ng-disabled="true" class="form-control" ng-model="ApprovedOn" name="ApprovedOn" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true" />
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <input type="text" class="form-control" ng-model="ApprovedOn" name="ApprovedOn" bs-timepicker>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class=" padding-right-zero">
+                                                <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                    @Resources.ResourceItemDemand.Remarks
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-8 col-md-8">
+                                                <textarea class="form-control" ng-model="ApproveRemarks" name='ApproveRemarks'></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceItemDemand.LblItemDemandDetail</h3>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-3">
+                                            @Resources.ResourceItemDemand.ItemCat
+                                        </th>
+                                        <th class="col-md-3">
+                                            @Resources.ResourceItemDemand.Item
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceItemDemand.LblQuantityRequested
+                                        </th>
+                                        <th class="col-md-3">
+                                            @Resources.ResourceItemDemand.LblUnitOfMeasurement
+                                        </th>
+                                        <th class="col-md-1" ng-show="notApprovemode">
+                                            @Resources.ResourceCommon.LblAction
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="aItemDemandDet in ItemDemandDetails">
+                                        <td>
+                                            <select data-ng-model="aItemDemandDet.ItemCategoryId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allItemCategoryFromDb | orderBy: 'Name'" name="ItemCategoryId" ng-change="getAllItemByCategoryId($index,aItemDemandDet.ItemCategoryId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblItemCategory</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="aItemDemandDet.ItemId" class="form-control" ng-change="getItemInfo($index,aItemDemandDet.ItemId)"
+                                                    data-ng-options="c.Id as c.Name for c in aItemDemandDet.allItemFromDb | orderBy: 'Name'" name="ItemId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" style="text-align: right" type="number" class="form-control" ng-model="aItemDemandDet.Quantity" name="Quantity" min="0">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-disabled="true"
+                                                   ng-model="aItemDemandDet.UnitIdName" name="UnitIdName">
+                                        </td>
+                                        <td ng-show="notApprovemode">
+                                            <input type="button" class=" btn btn-danger" ng-click="ItemDemandDetails.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="-" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="col-md-2 padding-left-zero">
+                                <input type="button" ng-show="notApprovemode" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                    <input type="button" ng-click="addItemDemand()" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="addItemDemand()" ng-show="editmode && notApprovemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-show="editmode" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="Delete()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset /> 
+                                    <input type="button" ng-click="ApproveReject('approve')" ng-show="editmode && notApprovemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblApprove />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+</div>
+
+@* ************ SCRIPT - SECTION (Start) *************** *@
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('demandService', ['$http', function ($http) {
+        return {
+            saveItemDemand: function (itemDemand) {
+                return $http({
+                    url: '/ItemDemand/CreateItemDemand',
+                    method: 'POST',
+                    data: itemDemand
+                });
+            },
+            getItemDemand: function (id) {
+                return $http.get('/ItemDemand/GetItemDemand?id=' + id);
+            },
+            getAllItemByCategoryId: function (id) {
+                return $http.get('/Item/GetItemListByCategoryId?id=' + id);
+            },
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            //approve prepared demand
+            approveRejectPreparedItem: function (itemDemand, name) {
+                var params = { itemDemand: itemDemand, name: name }
+                return $http({
+                    url: '/ItemDemand/UpdateItemDemandStatus',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+
+                });
+            },
+            genDemandNo1: function () {
+                var id = "Demand";
+                return $http.get('/AutoGeneratedNo/GenNo?id=' + id);
+            },
+            getAllItemCategory: function (groupType) {
+                if (groupType === "" || groupType === undefined || groupType === null) {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithoutGroupType');
+                } else {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithGroupType?groupType=' + groupType);
+                }
+            },
+            getDemandListByYear: function (year, month) {
+                return $http.get('/ItemDemand/GetDemandListByYear', { params: { year: year, month: month+1 } });
+            },
+            deleteItemDemand: function (itemDemand) {
+                return $http({
+                    url: '/ItemDemand/DeleteItemDemand',
+                    method: 'POST',
+                    data: itemDemand
+                });
+            }
+
+        };
+    }]);
+
+    app.controller('internalDemandCtrl',
+        function($scope, $timeout, $http, focus, $location, $anchorScroll, demandService, $log, $ngBootbox) {
+            $scope.selectedYear = new Date();
+            $scope.editmode = false;
+            $scope.DemandOn = new Date();
+            $scope.notApprovemode = true;
+            $scope.ApprovedByName = "@Remit.Web.Helpers.UserSession.GetUserFromSession().Employee.FullName";
+
+            $scope.genDemandNo = function() {
+                demandService.genDemandNo1().then(function onSuccess(response) {
+                    $scope.DemandNo = response.data;
+                });
+            }
+            $scope.genDemandNo();
+
+            $scope.ApproveReject = function(typeStatus) {
+                var itemDemand = {};
+                itemDemand["Id"] = $scope.Id;
+                itemDemand["DemandNo"] = $scope.DemandNo;
+                itemDemand["DemandOn"] = $scope.DemandOn;
+                itemDemand["DemandedBy"] = $scope.DemandedBy;
+                itemDemand["DemandUsage"] = $scope.DemandUsage;
+                itemDemand["ItemDemandDetails"] = $scope.ItemDemandDetails;
+
+                if ($scope.ItemDemandDetails != null &&
+                    $scope.ItemDemandDetails !== "" &&
+                    $scope.ItemDemandDetails != undefined) {
+                    if ($scope.ItemDemandDetails.length > 0) {
+                        for (var i = 0; i < $scope.ItemDemandDetails.length; i++) {
+                            if ($scope.ItemDemandDetails[i].Quantity !== 0 &&
+                                $scope.ItemDemandDetails[i].Quantity !== null &&
+                                $scope.ItemDemandDetails[i].Quantity !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceItemDemand.QtyRequired');
+                                return;
+                            }
+
+                            if ($scope.ItemDemandDetails[i].ItemId !== undefined &&
+                                $scope.ItemDemandDetails[i].ItemId !== null &&
+                                $scope.ItemDemandDetails[i].ItemId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceItemDemand.ItemRequired');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceItemDemand.NeedDemandDetails');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.NeedDemandDetails');
+                    return;
+                }
+                itemDemand["ApprovedOn"] = $scope.ApprovedOn;
+                itemDemand["ApproveRemarks"] = $scope.ApproveRemarks;
+                demandService.approveRejectPreparedItem(itemDemand, typeStatus).then(function onSuccess(data) {
+                    if (data.data.isSuccess === true) {
+                        $ngBootbox.alert(data.data.message);
+                        $scope.reset();
+                    } else {
+                        $ngBootbox.alert(data.data.message);
+                    }
+                });
+            }
+
+            $scope.ItemDemandDetails = [];
+            $scope.ItemDemandDetails.push({ Id: '', DemandNo: '', ItemId: '', Quantity: '', UnitId: '' });
+            $scope.addNewDetail = function($event) {
+                $scope.ItemDemandDetails.push({ Id: '', DemandNo: '', ItemId: '', Quantity: '', UnitId: '' });
+            }
+            $scope.messageModalObj = {};
+            $scope.messageModalObj.message = '';
+            $scope.showModalforSearch = false;
+
+            // Add a new itemDemand
+            $scope.addItemDemand = function() {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+                    var itemDemand = {};
+                    itemDemand["Id"] = $scope.Id;
+                    itemDemand["DemandNo"] = $scope.DemandNo;
+                    itemDemand["DemandOn"] = $scope.DemandOn;
+                    itemDemand["DemandedBy"] = $scope.DemandedBy;
+                    itemDemand["DemandUsage"] = $scope.DemandUsage;
+                    itemDemand["ItemDemandDetails"] = $scope.ItemDemandDetails;
+
+                    if ($scope.ItemDemandDetails != null &&
+                        $scope.ItemDemandDetails !== "" &&
+                        $scope.ItemDemandDetails != undefined) {
+                        if ($scope.ItemDemandDetails.length > 0) {
+                            for (var i = 0; i < $scope.ItemDemandDetails.length; i++) {
+                                if ($scope.ItemDemandDetails[i].Quantity !== 0 &&
+                                    $scope.ItemDemandDetails[i].Quantity !== null &&
+                                    $scope.ItemDemandDetails[i].Quantity !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceItemDemand.QtyRequired');
+                                    return;
+                                }
+
+                                if ($scope.ItemDemandDetails[i].ItemId !== undefined &&
+                                    $scope.ItemDemandDetails[i].ItemId !== null &&
+                                    $scope.ItemDemandDetails[i].ItemId !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceItemDemand.ItemRequired');
+                                    return;
+                                }
+                            }
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceItemDemand.NeedDemandDetails');
+                            return;
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceItemDemand.NeedDemandDetails');
+                        return;
+                    }
+
+                    demandService.saveItemDemand(itemDemand).then(function onSuccess(response) {
+                        if (response.data.isSuccess === true) {
+                            $ngBootbox.alert(response.data.message);
+                            $scope.loadAllDemandListByYearMonth();
+                            $scope.reset();
+                        } else {
+                            $ngBootbox.alert(response.data.message);
+                        }
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.AllRequired');
+                }
+            };
+            $scope.Delete = function() {
+                if ($scope.Id !== undefined && $scope.Id !== null && $scope.Id !== "") {
+                    var itemDemand = {};
+                    itemDemand["Id"] = $scope.Id;
+                    demandService.deleteItemDemand(itemDemand).then(function onSuccess(response) {
+                        if (response.data.isSuccess === true) {
+                            $ngBootbox.alert(response.data.message);
+                            $scope.loadAllDemandListByYearMonth();
+                            $scope.reset();
+                        } else {
+                            $ngBootbox.alert(response.data.message);
+                        }
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.Delete');
+                    return;
+                }
+            }
+            $scope.selectedRow = null;
+            $scope.populateItemDemand = function(rowvalue) {
+                $scope.selectedRow = rowvalue;
+                $scope.Id = rowvalue.Id;
+                $scope.ApproveRemarks = rowvalue.ApproveRemarks;
+                $scope.DemandNo = rowvalue.DemandNo;
+                $scope.DemandOn = new Date(rowvalue.DemandOn);
+                $scope.DemandedBy = rowvalue.DemandedBy;
+                $scope.ApprovedBy = rowvalue.ApprovedBy;
+                $scope.editmode = true;
+                if (rowvalue.ApprovedBy != null) {
+                    $scope.notApprovemode = false;
+                    $scope.ApprovedOn = new Date(rowvalue.ApprovedOn);
+                } else {
+                    $scope.notApprovemode = true;
+                    $scope.ApprovedOn = new Date();
+                }
+                $scope.DemandUsage = rowvalue.DemandUsage;
+                $scope.Status = rowvalue.Status;
+                $scope.IsThisDemandAlreadyIssued = rowvalue.IsThisDemandAlreadyIssued;
+                $scope.ItemDemandDetails = rowvalue.ItemDemandDetails;
+                for (x in rowvalue.ItemDemandDetails) {
+                    $scope.getAllItemByCategoryIdwhenPopulate(x, rowvalue.ItemDemandDetails[x].ItemCategoryId);
+                }
+                if ($scope.ItemDemandDetails.length < 1) {
+                    $scope.ItemDemandDetails = [];
+                    $scope.ItemDemandDetails.push({ Id: '', DemandNo: '', ItemId: '', Quantity: '', UnitId: '' });
+                }
+            }
+
+            $scope.reset = function() {
+                $scope.$broadcast('show-errors-reset');
+                $scope.editmode = false;
+                $scope.notApprovemode = true;
+                $scope.isCreateNewMode = true;
+                $scope.Id = '';
+                $scope.DemandNo = '';
+                $scope.DemandId = '';
+                $scope.genDemandNo();
+                $scope.DemandOn = new Date();
+                $scope.DemandedBy = '';
+                $scope.DemandUsage = '';
+                $scope.ApprovedBy = '';
+                $scope.ApprovedOn = '';
+                $scope.ApproveRemarks = "";
+                $scope.ItemDemandDetails = [];
+                $scope.ItemDemandDetails.push({ Id: '', DemandNo: '', ItemId: '', Quantity: '', UnitId: '' });
+            }
+
+            $scope.loadAllEmployee = function() {
+                $scope.allEmployeeFromDb = [];
+                demandService.getAllEmployee()
+                    .then(function onSuccess(response) {
+                        $scope.allEmployeeFromDb = response.data;
+                    })
+                    .catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+            $scope.loadAllEmployee();
+
+            $scope.loadDemandDetailsByDemandId = function(demandId) {
+                demandService.getItemDemand(demandId)
+                    .then(function onSuccess(response) {
+                        $scope.populateItemDemand(response.data);
+                    })
+                    .catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            $scope.loadAllDemandListByYearMonth = function() {
+                var year = $scope.selectedYear;
+                var month = year.getMonth();
+                $scope.alldemandListByYear = [];
+                year = year.getFullYear();
+
+                demandService.getDemandListByYear(year, month).then(function onSuccess(response) {
+                    $scope.alldemandListByYear = response.data;
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+            $scope.loadAllDemandListByYearMonth();
+
+
+            $scope.getAllItemByCategoryId = function(index, categoryId) {
+                $scope.ItemDemandDetails[index].allItemFromDb = [];
+                $scope.ItemDemandDetails[index].UnitId = '';
+                $scope.ItemDemandDetails[index].UnitIdName = '';
+                if (categoryId != null)
+                    demandService.getAllItemByCategoryId(categoryId)
+                        .then(function onSuccess(response) {
+                            $scope.ItemDemandDetails[index].allItemFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+            $scope.getAllItemByCategoryIdwhenPopulate = function(index, categoryId) {
+                $scope.ItemDemandDetails[index].allItemFromDb = [];
+                if (categoryId != null)
+                    demandService.getAllItemByCategoryId(categoryId)
+                        .then(function onSuccess(response) {
+                            $scope.ItemDemandDetails[index].allItemFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+            $scope.getItemInfo = function(index, itemId) {
+                $scope.ItemDemandDetails[index].UnitId = '';
+                if (itemId != null)
+                    angular.forEach($scope.ItemDemandDetails[index].allItemFromDb,
+                        function(value, key) {
+                            if (value.Id === itemId) {
+                                $scope.ItemDemandDetails[index].UnitIdName = value.UsageUnit;
+                                $scope.ItemDemandDetails[index].UnitId = value.UsageUnitId;
+                            }
+                        });
+            }
+
+            loadAllItemCategory();
+            function loadAllItemCategory() {
+                $scope.allItemCategoryFromDb = [];
+                demandService.getAllItemCategory(@ViewBag.GroupType)
+                    .then(function onSuccess(response) {
+                        $scope.allItemCategoryFromDb = response.data;
+                    })
+                    .catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+        });
+</script>

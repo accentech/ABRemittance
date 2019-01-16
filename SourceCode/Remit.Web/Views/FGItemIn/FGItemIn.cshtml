@@ -1,0 +1,576 @@
+﻿@using Remit.Web.Helpers
+
+@{
+    ViewBag.Title = @Resources.ResourceFGItemIn.Title;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+</style>
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgItemInCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceFGItemIn.Title
+        </div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblMonthYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="MMM-yyyy" bs-datepicker
+                                       data-min-view="1" data-autoclose="true" data-trigger="click" ng-change="loadAllFGItemInList()" data-trigger="click">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGItemIn.FGSavedItemIn</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="ReceivedDateTime" class="form-control listSelect" focus-on="focusMe"
+                                            data-ng-options="c as c.ReceivedDateString for c in allFGItemInListByYearMonth" name="ReceivedDateTime"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="populateFGItemIn(ReceivedDateTime[0])">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommon.LblDate</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGItemIn.RecvBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="ReceivedBy" class="form-control" ng-required="true" ng-disabled="true"
+                                                    data-ng-options="c.Id as c.FullName for c in allEmployeeFromDb | orderBy: 'FullName'" name="ReceivedBy">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.ReceivedBy.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGItemIn.RecvBy)
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6" show-errors>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGItemIn.RecvDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <div class="col-xs-12 col-sm-6 col-md-6" style="padding: 0">
+                                                <input type="text" class="form-control" ng-required="true" ng-model="ReceivedDate" name="ReceivedDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6" style="padding: 0">
+                                                <input type="text" class="form-control" size="8" ng-model="ReceivedDate" name="ReceivedDate" bs-timepicker>
+                                            </div>
+                                            
+                                            <b class="help-block" ng-if="form.ReceivedDate.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGItemIn.RecvDate)
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceFGItemIn.FGItemInDetails</h3>
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>@Resources.ResourceFGItemIn.Type</th>
+                                        <th>@Resources.ResourceFGItemIn.ProductCode</th>
+                                        <th>@Resources.ResourceFGItemIn.FGGrade</th>
+                                        <th>@Resources.ResourceFGItemIn.FGLot</th>
+                                        <th>@Resources.ResourceFGItemIn.InQty</th>
+                                        <th>@Resources.ResourceFGItemIn.Unit</th>
+                                        <th>@Resources.ResourceFGItemIn.BinCard</th>
+                                        <th>@Resources.ResourceCommon.LblAction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="itemInDet in FGItemInDetails">
+                                        <td>
+                                            <select data-ng-model="itemInDet.FGTypeId" class="form-control" style="width: 100px"
+                                                    data-ng-options="c.Id as c.TypeName for c in allFGTypeFromDb | orderBy: 'Name'" name="FGTypeId" ng-change="getAllFGItemByTypeId($index,itemInDet.FGTypeId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="itemInDet.FGItemId" class="form-control" ng-change="getItemInfo($index,itemInDet.FGItemId)"
+                                                    data-ng-options="c.Id as c.Code for c in itemInDet.allItemFromDb | orderBy: 'Code'" name="FGItemId" style="width: 170px">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="itemInDet.FGGradeId" class="form-control" style="width: 80px"
+                                                    data-ng-options="c.Id as c.Grade for c in allFGGradeFromDb " name="FGGradeId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="itemInDet.Lot" name="Lot" style="width: 80px">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" style="text-align: right" type="number" class="form-control" ng-model="itemInDet.InQuantity" name="InQuantity" min="0" style="width: 100px">
+                                        </td>
+                                        <td>
+                                            @*<input data-ng-class="form-control" type="text" class="form-control" ng-model="itemInDet.UnitName" readonly name="UnitName">*@
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-disabled="true" style="width: 50px"
+                                                   ng-model="itemInDet.PackUnit" name="PackUnit">
+                                        </td>
+                                        <td>
+                                            <select ng-model="itemInDet.BinCardId" class="form-control" style="width: 120px"
+                                                    data-ng-options="c.Id as c.WarhouseName+'-'+c.CardNo for c in allBinCardFromDb | orderBy: ['WarhouseName', 'CardNo']" name="BinCardId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblBinCard</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="FGItemInDetails.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <input type="button" ng-click="addFGItemIn()" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="update()" ng-show="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" @*ng-click="Delete()"*@ ng-show="editmode" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="Delete()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgItemInService', ['$http', function ($http) {
+        return {
+            saveFGItemIn: function (fgItemIn) {
+                var params = { itemIn: fgItemIn }
+                return $http({
+                    url: '/FGItemIn/CreateFGItemIn',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+
+            updateFGItemIn: function (fgItemIn, fgItemInList) {
+                var params = { itemIn: fgItemIn, fgItemInDetails: fgItemInList, status: status }
+                return $http({
+                    url: '/FGItemIn/UpdateFGItemIn',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+
+                });
+            },
+
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getAllFGItemByTypeId: function (id) {
+                return $http.get('/FGItem/GetFGItemListByTypeId?id=' + id);
+            },
+            getAllFGType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getAllFGGrade: function () {
+                return $http.get('/FGGrade/GetFGGradeList');
+            },
+            getAllBinCard: function () {
+                return $http.get('/BinCard/GetBinCardList');
+            },
+            getFGItemInListByYearMonth: function (year, month) {
+                return $http.get('/FGItemIn/GetReceiveListByYear', { params: { year: year, month: month + 1 } });
+            },
+
+            getFGItemIn: function (id) {
+                return $http.get('/FGItemIn/GetFGItemIn?id=' + id);
+            },
+            deleteFGItemIn: function (id) {
+                return $http.get('/FGItemIn/DeleteFGItemIn?id=' + id);
+                //return $http({
+                //    url: '/FGItemIn/DeleteFGItemIn?id=' +id,
+                //    method: 'POST',
+                //    data: fgItemIn
+                //});
+            },
+
+
+
+        };
+    }]);
+
+    app.controller('fgItemInCtrl',
+        function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgItemInService, $log, $ngBootbox, $filter) {
+            //$scope.DemandNoURL = "/ItemDemand/GetItemDemandListForAutoCompleteSerchKey/";
+            $scope.selectedYear = new Date();
+            $scope.ReceivedDate = new Date().toISOString();
+            $scope.editmode = false;
+            $scope.notApprovemode = true;
+            $scope.ReceivedBy = @UserSession.GetUserFromSession().Employee.Id
+
+            $scope.messageModalObj = {};
+            $scope.messageModalObj.message = '';
+            $scope.showModalforSearch = false;
+            $scope.selectedRow = null;
+
+            $scope.FGItemInDetails = [];
+            $scope.FGItemInDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', InQuantity: '', PackUnitId: '', BinCardId: null });
+            $scope.addNewDetail = function ($event) {
+                $scope.FGItemInDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', InQuantity: '', PackUnitId: '', BinCardId: null });
+            }
+
+            $scope.update = function () {
+                // Use moment to convert time object to date string
+                // moment($scope.LCIssueDate).format('DD/MM/YYYY'); result: "27/03/2018"
+                var fgItemIn = {};
+                fgItemIn["Id"] = $scope.Id;
+
+
+                //fgItemIn["ReceivedDate"] = new Date($scope.ReceivedDate).toISOString();
+                //fgItemIn["ReceivedDate"] = $scope.ReceivedDate.toISOString();
+                fgItemIn["ReceivedDate"] = $scope.ReceivedDate;
+
+
+
+                fgItemIn["ReceivedBy"] = $scope.ReceivedBy;
+                fgItemIn["FGItemInDetails"] = $scope.FGItemInDetails;
+                var FGItemInDetails = $scope.FGItemInDetails;
+
+                if ($scope.FGItemInDetails != null && $scope.FGItemInDetails !== "") {
+                    if ($scope.FGItemInDetails.length > 0) {
+                        for (var i = 0; i < $scope.FGItemInDetails.length; i++) {
+                            if ($scope.FGItemInDetails[i].FGItemId !== undefined && $scope.FGItemInDetails[i].FGItemId !== null && $scope.FGItemInDetails[i].FGItemId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceItemDemand.ItemRequired');
+                                return;
+                            }
+                            if ($scope.FGItemInDetails[i].FGGradeId !== undefined && $scope.FGItemInDetails[i].FGGradeId !== null && $scope.FGItemInDetails[i].FGGradeId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemIn.GradeReq');
+                                return;
+                            }
+                            if ($scope.FGItemInDetails[i].InQuantity !== undefined && $scope.FGItemInDetails[i].InQuantity !== null && $scope.FGItemInDetails[i].InQuantity !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemIn.QtyReq');
+                                return;
+                            }
+                            if ($scope.FGItemInDetails[i].PackUnitId !== undefined && $scope.FGItemInDetails[i].PackUnitId !== null && $scope.FGItemInDetails[i].PackUnitId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemIn.UnitReq');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceFGItemIn.NeedFGItemInDetails');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceFGItemIn.NeedFGItemInDetails');
+                    return;
+                }
+
+                fgItemInService.updateFGItemIn(fgItemIn, FGItemInDetails).then(function onSuccess(response) {
+                    if (response.data.isSuccess === true) {
+                        $ngBootbox.alert(response.data.message);
+                        $scope.reset();
+                        $scope.loadAllFGItemInList();
+                    }
+                    else {
+                        $ngBootbox.alert(response.data.message);
+                    }
+                });
+            }
+            $scope.addFGItemIn = function () {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+                    var fgItemIn = {};
+                    fgItemIn["Id"] = $scope.Id;
+                    fgItemIn["ReceivedDate"] = $scope.ReceivedDate;
+                    fgItemIn["ReceivedBy"] = $scope.ReceivedBy;
+                    fgItemIn["FGItemInDetails"] = $scope.FGItemInDetails;
+
+                    if ($scope.FGItemInDetails != null && $scope.FGItemInDetails !== "") {
+                        if ($scope.FGItemInDetails.length > 0) {
+                            for (var i = 0; i < $scope.FGItemInDetails.length; i++) {
+                                if ($scope.FGItemInDetails[i].FGItemId !== undefined && $scope.FGItemInDetails[i].FGItemId !== null && $scope.FGItemInDetails[i].FGItemId !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceItemDemand.ItemRequired');
+                                    return;
+                                }
+                                if ($scope.FGItemInDetails[i].FGGradeId !== undefined && $scope.FGItemInDetails[i].FGGradeId !== null && $scope.FGItemInDetails[i].FGGradeId !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceFGItemIn.GradeReq');
+                                    return;
+                                }
+                                if ($scope.FGItemInDetails[i].InQuantity !== undefined && $scope.FGItemInDetails[i].InQuantity !== null && $scope.FGItemInDetails[i].InQuantity !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceFGItemIn.QtyReq');
+                                    return;
+                                }
+                                if ($scope.FGItemInDetails[i].PackUnitId !== undefined && $scope.FGItemInDetails[i].PackUnitId !== null && $scope.FGItemInDetails[i].PackUnitId !== "") {
+                                } else {
+                                    $ngBootbox.alert('@Resources.ResourceFGItemIn.UnitReq');
+                                    return;
+                                }
+                            }
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceFGItemIn.NeedFGItemInDetails');
+                            return;
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceFGItemIn.NeedFGItemInDetails');
+                        return;
+                    }
+
+                    fgItemInService.saveFGItemIn(fgItemIn).then(
+                        function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadAllFGItemInList();
+
+                        }).catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceLCShipment.FillRequiredData');
+                }
+            }
+
+            $scope.Delete = function () {
+                if ($scope.Id !== undefined && $scope.Id !== null && $scope.Id !== "") {
+                    //var fgItemIn = {};
+                    //fgItemIn["Id"] = $scope.Id;
+                    fgItemInService.deleteFGItemIn($scope.Id).then(function onSuccess(response) {
+                        if (response.data.isSuccess === true) {
+                            $ngBootbox.alert(response.data.message);
+                            $scope.reset();
+                            $scope.loadAllFGItemInList();
+                        } else {
+                            $ngBootbox.alert(response.data.message);
+                        }
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+                    return;
+                }
+            }
+            $scope.populateFGItemIn = function (rowvalue) {
+                $scope.selectedRow = rowvalue;
+                $scope.editmode = true;
+                $scope.Id = rowvalue.Id;
+
+                //$scope.ReceivedDate = rowvalue.ReceivedDateStringShowed;
+                $scope.ReceivedDate = new Date(rowvalue.ReceivedDateString);
+                //$scope.ReceivedDate = rowvalue.ReceivedDate;
+
+                $scope.ReceivedBy = rowvalue.ReceivedBy;
+
+                $scope.FGItemInDetails = rowvalue.FGItemInDetails;
+                for (x in rowvalue.FGItemInDetails) {
+                    $scope.getAllFGItemByTypeIdwhenPopulate(x, rowvalue.FGItemInDetails[x].FGTypeId);
+                }
+                if ($scope.FGItemInDetails.length < 1) {
+                    $scope.FGItemInDetails = [];
+                    $scope.FGItemInDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', InQuantity: '', PackUnitId: '', BinCardId: null });
+                }
+            }
+            $scope.reset = function () {
+                $scope.$broadcast('show-errors-reset');
+                $scope.selectedRow = null;
+                $scope.editmode = false;
+                //$scope.notApprovemode = true;
+                //$scope.isCreateNewMode = true;
+                $scope.Id = '';
+                $scope.ReceivedBy = '';
+                $scope.ReceivedDate = new Date().toISOString();
+                $scope.ReceivedDateTime = "";
+                $scope.FGItemInDetails = [];
+                $scope.FGItemInDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', InQuantity: '', PackUnitId: '', BinCardId: null });
+                $scope.ReceivedBy = @UserSession.GetUserFromSession().Employee.Id
+            }
+
+
+            $scope.loadAllFGItemInList = function () {
+                var year = $scope.selectedYear;
+                var month = year.getMonth();
+                $scope.allFGItemInListByYearMonth = [];
+                year = year.getFullYear();
+
+                fgItemInService.getFGItemInListByYearMonth(year, month).then(function onSuccess(response) {
+                    $scope.allFGItemInListByYearMonth = response.data;
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+            $scope.loadAllFGItemInList();
+
+            // Logic: if any item need Approval for Item Demand, Then in creating fgItemIn(without demand), this item not come
+            $scope.getAllFGItemByTypeId = function (index, typeId) {
+                $scope.FGItemInDetails[index].allItemFromDb = [];
+                $scope.FGItemInDetails[index].PackUnit = '';
+                $scope.FGItemInDetails[index].PackUnitId = '';
+                if (typeId != null)
+                    fgItemInService.getAllFGItemByTypeId(typeId)
+                        .then(function onSuccess(response) {
+                            $scope.FGItemInDetails[index].allItemFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+            // Normally for populate, when select demand dropdown or edit/approve/delete/reject fgItemIn
+            $scope.getAllFGItemByTypeIdwhenPopulate = function (index, typeId) {
+                $scope.FGItemInDetails[index].allItemFromDb = [];
+                if (typeId != null)
+                    fgItemInService.getAllFGItemByTypeId(typeId)
+                        .then(function onSuccess(response) {
+                            $scope.FGItemInDetails[index].allItemFromDb = response.data;
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+            $scope.getItemInfo = function (index, itemId) {
+                $scope.FGItemInDetails[index].PackUnitId = '';
+                $scope.FGItemInDetails[index].PackUnit = '';
+                if (itemId != null)
+                    angular.forEach($scope.FGItemInDetails[index].allItemFromDb,
+                        function (value, key) {
+                            if (value.Id === itemId) {
+                                $scope.FGItemInDetails[index].PackUnit = value.PackUnit;
+                                $scope.FGItemInDetails[index].PackUnitId = value.PackUnitId;
+                                $scope.FGItemInDetails[index].HandQtyForIssueUpdate = 0;
+                            }
+                        });
+            }
+
+            loadAllFgType();
+            function loadAllFgType() {
+                $scope.allFGTypeFromDb = [];
+                fgItemInService.getAllFGType()
+                    .then(function onSuccess(response) {
+                        $scope.allFGTypeFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            loadAllFgGrade();
+            function loadAllFgGrade() {
+                $scope.allFGGradeFromDb = [];
+                fgItemInService.getAllFGGrade()
+                    .then(function onSuccess(response1) {
+                        $scope.allFGGradeFromDb = response1.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            loadAllBinCard();
+            function loadAllBinCard() {
+                $scope.allBinCardFromDb = [];
+                fgItemInService.getAllBinCard()
+                    .then(function onSuccess(response) {
+                        $scope.allBinCardFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+            $scope.loadAllEmployee = function () {
+                $scope.allEmployeeFromDb = [];
+                fgItemInService.getAllEmployee()
+                    .then(function onSuccess(response) {
+                        $scope.allEmployeeFromDb = response.data;
+                    })
+                    .catch(function (xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+            $scope.loadAllEmployee();
+        });
+</script>

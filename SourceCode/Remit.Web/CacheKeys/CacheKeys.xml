@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CacheKeys>
+	<CacheKeyPrefix name="permission:country" />
+	<CacheKeyPrefix name="permission:module" />
+	<CacheKeyPrefix name="permission:subModule" />
+	<CacheKeyPrefix name="permission:subModuleItem" />
+	<CacheKeyPrefix name="permission:role" />
+	<CacheKeyPrefix name="permission:roleSubModuleItem" />
+	<CacheKeyPrefix name="permission:user" />
+
+	<CacheKeyPrefix name="permission:aircraftComponent" />
+	<CacheKeyPrefix name="permission:aircraftFlightData" />
+	<CacheKeyPrefix name="permissionMaintenanceOrder:aircraftMaintenanceOrder" />
+	<CacheKeyPrefix name="permission:aircraftMajorComponent" />
+	<CacheKeyPrefix name="permission:aircraftModelFamily" />
+	<CacheKeyPrefix name="permission:aircraftOverview" />
+	<CacheKeyPrefix name="permissionTask:ampTask" />
+	<CacheKeyPrefix name="permission:city" />
+	<CacheKeyPrefix name="permission:company" />
+	<CacheKeyPrefix name="permission:comparativeStatement" />
+	<CacheKeyPrefix name="permission:currency" />
+	<CacheKeyPrefix name="permission:department" />
+	<CacheKeyPrefix name="permission:designation" />
+	<CacheKeyPrefix name="permission:employee" />
+	<CacheKeyPrefix name="permission:flightLocation" />
+	<CacheKeyPrefix name="permission:goodsReceive" />
+
+	<CacheKeyPrefix name="permission:fileRead-AircraftComponent" />
+	<CacheKeyPrefix name="permission:fileRead-ProcurementRequisition" />
+	<CacheKeyPrefix name="permission:fileRead-PurchaseOrder" />
+	<CacheKeyPrefix name="permission:fileRead-InventoryOpening" />
+	
+	<CacheKeyPrefix name="permission:inventoryHistory" />
+	<CacheKeyPrefix name="permission:inventoryOpening" />
+	<CacheKeyPrefix name="permission:itemBalance" />
+
+	<CacheKeyPrefix name="permission:itemDemand" />
+	<CacheKeyPrefix name="permission:itemScrapExpireOutDetail" />
+	<CacheKeyPrefix name="permission:itemIssue" />
+	<CacheKeyPrefix name="permission:itemIssueDetail" />
+	<CacheKeyPrefix name="permission:itemReceiptVoucher" />
+	<CacheKeyPrefix name="permission:itemScrapExpireOut" />
+	<CacheKeyPrefix name="permission:lcEntry" />
+	<CacheKeyPrefix name="permission:loanItem" />
+	<CacheKeyPrefix name="permission:location" />
+	<CacheKeyPrefix name="permission:manufacturer" />
+	<CacheKeyPrefix name="permission:nrc" />
+
+	<CacheKeyPrefix name="permission:procurementQuoteFile" />
+	<CacheKeyPrefix name="permission:procurementQuoteRequest" />
+	<CacheKeyPrefix name="permission:procurementQuoteRequestItem" />
+	<CacheKeyPrefix name="permission:procurementRequisition" />
+	<CacheKeyPrefix name="permission:procurementRequisitionDetail" />
+	<CacheKeyPrefix name="permission:purchaseOrder" />
+	<CacheKeyPrefix name="permission:purchaseOrderDetail" />
+	<CacheKeyPrefix name="permission:purchaseOrderInvoiceRelatedDoc" />
+	<CacheKeyPrefix name="permission:purchaseOrderLCRelatedDoc" />
+	<CacheKeyPrefix name="permission:quoteCollection" />
+	<CacheKeyPrefix name="permission:quoteCollectionDetail" />
+
+	<CacheKeyPrefix name="permission:quoteDetailCondition" />
+	<CacheKeyPrefix name="permission:rack" />
+	<CacheKeyPrefix name="permission:rackRowBin" />
+	<CacheKeyPrefix name="permission:rackRow" />
+	<CacheKeyPrefix name="permission:RecieptVoucher" />
+	<CacheKeyPrefix name="permission:room" />
+	<CacheKeyPrefix name="permission:serialInitializer" />
+	<CacheKeyPrefix name="permission:stockInward" />
+	<CacheKeyPrefix name="permission:store" />
+	<CacheKeyPrefix name="permission:StoreStatus" />
+	<CacheKeyPrefix name="permission:supplementaryWorkSheet" />
+
+	<CacheKeyPrefix name="permission:supplier" />
+	<CacheKeyPrefix name="permission:taskType" />
+	<CacheKeyPrefix name="permission:unitOfMeasurement" />
+	<CacheKeyPrefix name="permission:unserviceableItem" />
+	<CacheKeyPrefix name="permission:unUsableItemReturn" />
+	<CacheKeyPrefix name="permission:workflowaction" />
+	<CacheKeyPrefix name="permission:workflowactionSetting" />
+	<CacheKeyPrefix name="permission:workshop" />
+	
+</CacheKeys>

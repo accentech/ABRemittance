@@ -1,0 +1,819 @@
+﻿@{
+    ViewBag.Title = "LC";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="lcCtrl">
+    @* ************ FORM - SECTION (Start)************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceLC.LblLC
+        </div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker
+                                       data-min-view="2" data-autoclose="true" ng-change="loadLCListBySupplierAndYear()" data-trigger="click">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceProformaInvoice.LblSupplier</label>
+                                <select data-ng-model="selectedSupplierId" class="form-control" focus-on="focusMe"
+                                        required data-ng-options="c.Id as c.Name for c in allSupplierFromDb | orderBy: 'Name'" name="selectedSupplierId" ng-change="loadLCListBySupplierAndYear()">
+                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblSupplier</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceLC.LblLCList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="LCId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.LCNo for c in allLCListBySupplierAndYearFromDb" name="LCId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="loadLCDetailsById(LCId)">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblSupplier</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <h3 class="heading">@Resources.ResourceLC.LblLCDetails</h3>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceLC.LblLCNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" ng-model="LCNo" name="LCNo" ng-required="true">
+                                            <b class="help-block" ng-if="form.LCNo.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, @Resources.ResourceLC.LblLCNo)
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b>@Resources.ResourceLC.LblLCIssueDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="LCIssueDate" name="LCIssueDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLC.LblOpeningBank
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="OpeningBankId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allOpeningBankFromDb | orderBy: 'Name'" name="OpeningBankId" ng-change="getAllBranchByBankId(OpeningBankId);">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceLC.LblOpeningBank</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLC.LblOpeningBranch
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="OpeningBranchId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allOpeningBranchFromDb | orderBy: 'Name'" name="OpeningBranchId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceLC.LblOpeningBranch</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b>@Resources.ResourceLC.LblPaymentTerms
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="PaymentTerms" name="PaymentTerms">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b>@Resources.ResourceProformaInvoice.LblSupplier
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="SupplierName" name="SupplierName" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLC.LblStatus
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="Status" class="form-control" name="Status">
+                                                <option value="@((int)Remit.Service.Enums.StatusEnum.Running)">@Resources.ResourceCommon.LblSelect @Resources.ResourceLC.LblStatus</option>
+                                                <option value="@((int)Remit.Service.Enums.StatusEnum.Complete)">@Resources.ResourceCommon.LblComplete</option>
+                                                <option value="@((int)Remit.Service.Enums.StatusEnum.Cancelled)">@Resources.ResourceCommon.LblCancelled</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <h3 class="heading">@Resources.ResourceLC.LblLCDocuments</h3>
+                                    <table class="table table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resources.ResourceLC.LblDocumentName</th>
+                                                <th>@Resources.ResourceCommon.LblAction</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="LCDocument in LCDocuments">
+                                                <td>
+                                                    <input class="form-control" type="text" name="DocumentName" ng-model="LCDocument.DocumentName" />
+                                                </td>
+                                                <td>
+                                                    <input type="button" class=" btn btn-danger" ng-click="LCDocuments.splice($index,1);" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="Delete" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button class="btn btn-block btn-sm btn-info buttonAddItem" ng-click="addRow();">@Resources.ResourceCommon.LblAddDetailItem</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <h3 class="heading">@Resources.ResourceLC.LblLCPIInformation</h3>
+                                </div>
+                            </div>
+
+                            <div class="row" data-ng-form="subForm" ng-repeat="LCAmendment in LCAmendments | orderBy:'AmendmentNo'" ng-show="$first">
+                                <div class="col-xs-12 col-sm-12 col-md-12" style="border: 1px solid; padding-top: 15px; padding-bottom: 15px;">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                        <b class="starStyle">*</b> @Resources.ResourceProformaInvoice.LblPINo
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                                    <select ng-disabled="Id && LCAmendmentCount > 1" data-ng-model="LCAmendment.ProformaInvoiceId" class="form-control" focus-on="focusMe"
+                                                            required data-ng-options="c.Id as c.PINo for c in allParentProformaInvoiceFromDb | orderBy: 'Name'" name="ProformaInvoiceId" ng-change="loadPiDetailsById($index,LCAmendment.ProformaInvoiceId);loadChildProformaInvoice(LCAmendment.ProformaInvoiceId);">
+                                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblPINo</option>
+                                                    </select>
+                                                    <br />
+                                                    <button ng-show="!Id" class="btn btn-block btn-sm btn-info buttonAddPI" ng-click="addPI();">@Resources.ResourceCommon.LblAddDetailItem</button>
+                                                    <b class="help-block" ng-if="subForm.ProformaInvoiceId.$error.required">
+                                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceProformaInvoice.LblPINo)
+                                                    </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        <b class="starStyle"></b> @Resources.ResourceProformaInvoice.FreightCost
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align:right" class="form-control" type="number" name="FreightCost" ng-model="LCAmendment.FreightCost" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblTotalAmount ({{LCAmendment.CurrencyName}})
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align:right" class="form-control" type="number" name="TotalAmount" ng-model="LCAmendment.TotalAmount" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                      
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        @Resources.ResourceLC.LblConversionRate (BDT)
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align:right" class="form-control" type="number" step="any"  name="ConversionRateInLocalCurrency" ng-model="LCAmendment.ConversionRateInLocalCurrency" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        <b class="starStyle"></b> @Resources.ResourceProformaInvoice.TotalAmountWithFreightCost ({{LCAmendment.CurrencyName}})
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align:right" class="form-control" type="number" name="TotalAmountWithFreightCost" ng-model="LCAmendment.TotalAmountWithFreightCost" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <h3 class="heading">@Resources.ResourceProformaInvoice.LblItemDetails</h3>
+                                            <table class="table table-responsive table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>@Resources.ResourceProformaInvoice.LblItem</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblQuantity</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblUnit</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblUnitPrice ({{LCAmendment.CurrencyName}})</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblAmount ({{LCAmendment.CurrencyName}})</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="aProformaInvoiceDet in  LCAmendment.ProformaInvoiceDetails">
+                                                        <td>
+                                                            {{aProformaInvoiceDet.ItemName}}
+                                                        </td>
+                                                        <td style="text-align:right">
+                                                            {{aProformaInvoiceDet.Quantity}}
+                                                        </td>
+                                                        <td>
+                                                            {{aProformaInvoiceDet.UnitName}}
+                                                        </td>
+                                                        <td style="text-align:right">
+                                                            {{aProformaInvoiceDet.UnitPrice}}
+                                                        </td>
+                                                        <td style="text-align:right">
+                                                            {{aProformaInvoiceDet.Amount}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="Id">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <h3 class="heading">@Resources.ResourceLC.LblLCAmendments &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-info" ng-click="addRow2();">@Resources.ResourceCommon.LblAddDetailItem</button></h3>
+                                </div>
+                            </div>
+                            <div class="row" data-ng-form="subForm" ng-repeat="LCAmendment in LCAmendments | orderBy:'-AmendmentNo'" ng-show="!$last">
+                                <div class="col-xs-12 col-sm-12 col-md-12" style="border: 1px solid; padding-top: 15px; padding-bottom: 15px; margin-bottom:20px;">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <h3 class="heading">@Resources.ResourceLC.LblAmendmentNo: <span ng-bind="LCAmendment.AmendmentNo"></span>&nbsp;&nbsp;&nbsp;<input type="button" class=" btn btn-danger" ng-show="LCAmendment.AmendmentNo == LCAmendmentCount-1" ng-click="deleteRow2();" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="Delete" /></h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                        <b class="starStyle">*</b> @Resources.ResourceProformaInvoice.LblPINo
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                                    <select data-ng-model="LCAmendment.ProformaInvoiceId" class="form-control" focus-on="focusMe"
+                                                            required data-ng-options="c.Id as c.PINo for c in allChildProformaInvoiceFromDb | orderBy: 'Name'" name="ProformaInvoiceId" ng-change="loadPiDetailsById(LCAmendmentCount-1-$index,LCAmendment.ProformaInvoiceId)">
+                                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblPINo</option>
+                                                    </select>
+                                                    <b class="help-block" ng-if="subForm.ProformaInvoiceId.$error.required">
+                                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceProformaInvoice.LblPINo)
+                                                    </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        
+
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        <b class="starStyle"></b> @Resources.ResourceProformaInvoice.FreightCost
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align:right" class="form-control" type="number" name="FreightCost" ng-model="LCAmendment.FreightCost" readonly />
+                                                </div>
+                                            </div>
+
+                                           
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblTotalAmount ({{LCAmendment.CurrencyName}})
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align: right" class="form-control" type="number" name="TotalAmount" ng-model="LCAmendment.TotalAmount" readonly />
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                        @Resources.ResourceLC.LblAmendmentDate
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                                    <input class="form-control" type="text" name="AmendmentDate" ng-model="LCAmendment.AmendmentDate"
+                                                           data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        @Resources.ResourceLC.LblConversionRate (BDT)
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align: right" class="form-control" type="number" step="any" name="ConversionRateInLocalCurrency" ng-model="LCAmendment.ConversionRateInLocalCurrency" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="form-group" show-errors="true">
+                                                <div class=" padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-6 col-md-6 control-label default-color">
+                                                        <b class="starStyle"></b> @Resources.ResourceProformaInvoice.TotalAmountWithFreightCost ({{LCAmendment.CurrencyName}})
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <input style="text-align:right" class="form-control" type="number" name="TotalAmountWithFreightCost" ng-model="LCAmendment.TotalAmountWithFreightCost" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+
+                                    </div>
+                                    
+                                    
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            
+
+                                        </div>
+
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+
+                                                <div class="form-group" show-errors="true">
+                                                    <div class=" padding-right-zero">
+                                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                            @Resources.ResourceLC.LblAmendmentNote
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-9 col-md-9">
+                                                        <input class="form-control" type="text" name="AmendmentNote" ng-model="LCAmendment.AmendmentNote" />
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                    
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <h3 class="heading">@Resources.ResourceProformaInvoice.LblItemDetails</h3>
+                                            <table class="table table-responsive table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>@Resources.ResourceProformaInvoice.LblItem</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblQuantity</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblUnit</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblUnitPrice ({{LCAmendment.CurrencyName}})</th>
+                                                        <th>@Resources.ResourceProformaInvoice.LblAmount ({{LCAmendment.CurrencyName}})</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="aProformaInvoiceDet in  LCAmendment.ProformaInvoiceDetails">
+                                                        <td>
+                                                            {{aProformaInvoiceDet.ItemName}}
+                                                        </td>
+                                                        <td style="text-align:right">
+                                                            {{aProformaInvoiceDet.Quantity}}
+                                                        </td>
+                                                        <td>
+                                                            {{aProformaInvoiceDet.UnitName}}
+                                                        </td>
+                                                        <td style="text-align:right">
+                                                            {{aProformaInvoiceDet.UnitPrice}}
+                                                        </td>
+                                                        <td style="text-align:right">
+                                                            {{aProformaInvoiceDet.Amount}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <input type="button" ng-click="addLC()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+</div>
+
+
+@* ************ SCRIPT - SECTION (Start) *************** *@
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('lcService', ['$http', function ($http) {
+        return {
+            saveLC: function (lc) {
+                return $http({
+                    url: '/LC/CreateLC',
+                    method: 'POST',
+                    data: { lc: lc },
+                });
+            },
+            getLC: function (id) {
+                return $http.get('/LC/GetLC?id=' + id);
+            },
+            getIsEditAllowed: function () {
+                return $http.get('/LC/IsEditAllowed/');
+            },
+            getProformaInvoice: function (id) {
+                return $http.get('/ProformaInvoice/GetProformaInvoice/?id=' + id);
+            },
+            getAllParentProformaInvoice: function () {
+                return $http.get('/ProformaInvoice/GetParentProformaInvoiceListWithoutLC');
+            },
+            getAllChildProformaInvoice: function (id) {
+                return $http.get('/ProformaInvoice/GetChildProformaInvoiceList?id=' + id);
+            },
+            getAllProformaInvoice: function () {
+                return $http.get('/ProformaInvoice/GetProformaInvoiceList');
+            },
+            getAllSupplier: function () {
+                return $http.get('/Supplier/GetSupplierList');
+            },
+            getLCListBySupplierAndYear: function (year, supplier) {
+                return $http.get('/LC/GetLCListBySupplierAndYear',
+                {
+                    params: { year: year, supplierId: supplier, incomplete:false }
+                });
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+            getAllBank: function () {
+                return $http.get('/Bank/GetBankList');
+            },
+            getAllBranchByBankId: function (id) {
+                return $http.get('/Branch/GetBranchListByBankId?id=' + id);
+            },
+            getAllBranch: function () {
+                return $http.get('/Branch/GetBranchList');
+            }
+        };
+    }]);
+
+    app.controller('lcCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, lcService, $log, $ngBootbox) {
+
+        $scope.selectedYear = new Date();
+        $scope.LCIssueDate = new Date();
+        $scope.SupplierName = '';
+        $scope.Status = @((int) Remit.Service.Enums.StatusEnum.Running)
+
+        $scope.LCDocuments = [];
+        $scope.LCAmendments = [];
+        $scope.LCAmendments.push({ Id: '', LCId: '', ProformaInvoiceId: '',FreightCost:'', TotalAmount: '', CurrencyId: '', CurrencyName:'', ConversionRateInLocalCurrency: '', AmendmentNo: 0, AmendmentDate: new Date(), AmendmentNote: '' });
+        $scope.LCAmendmentCount = 1;
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+
+        $scope.addPI = function () {
+            var popup = window.open('/ProformaInvoice/Index', '', "width=1000, height=800, left=" + (screen.width - 1000) / 2 + ", top=" + (screen.height - 800) / 2 + "");
+
+            popup.onbeforeunload = function () {
+                loadAllProformaInvoice();
+            }
+            return false;
+        }
+
+        $scope.addRow = function () {
+            $scope.LCDocuments.push({ Id: '', LCId: '', DocumentName: '' });
+        }
+        $scope.addRow2 = function () {
+            $scope.LCAmendments.push({ Id: '', LCId: '', ProformaInvoiceId: '',FreightCost:'', TotalAmount: '', CurrencyId: '', CurrencyName: '', ConversionRateInLocalCurrency: '', AmendmentNo: $scope.LCAmendmentCount, AmendmentDate: new Date(), AmendmentNote: '' });
+            $scope.LCAmendmentCount++;
+        }
+
+        $scope.deleteRow2 = function () {
+            $scope.LCAmendments.pop();
+            $scope.LCAmendmentCount--;
+        }
+
+        // Add a new lc
+        $scope.addLC = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var lc = {};
+                lc["Id"] = $scope.Id;
+                lc["LCNo"] = $scope.LCNo;
+                lc["LCIssueDate"] = new Date($scope.LCIssueDate).toDateString();
+                lc["OpeningBankId"] = $scope.OpeningBankId;
+                lc["OpeningBranchId"] = $scope.OpeningBranchId;
+                lc["PaymentTerms"] = $scope.PaymentTerms;
+                lc["Status"] = $scope.Status;
+                lc["LCDocuments"] = $scope.LCDocuments;
+                lc["LCAmendments"] = $scope.LCAmendments;
+
+                for (i in lc["LCAmendments"]) {
+                    lc["LCAmendments"][i].AmendmentDate = new Date(lc["LCAmendments"][i].AmendmentDate).toDateString();
+                }
+
+                lcService.saveLC(lc)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadLCListBySupplierAndYear();
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgFillAll');
+                }
+        }
+
+        $scope.populateLC = function (rowvalue) {
+            $scope.Id = rowvalue.Id;
+            $scope.LCNo = rowvalue.LCNo;
+            $scope.LCIssueDate = new Date(rowvalue.LCIssueDate);
+            $scope.OpeningBankId = rowvalue.OpeningBankId;
+            $scope.getAllBranchByBankId(rowvalue.OpeningBankId);
+            $scope.OpeningBranchId = rowvalue.OpeningBranchId;
+            $scope.PaymentTerms = rowvalue.PaymentTerms;
+            $scope.Status = rowvalue.Status.toString();
+
+            $scope.LCDocuments = rowvalue.LCDocuments;
+            $scope.LCAmendments = rowvalue.LCAmendments;
+            $scope.LCAmendmentCount = rowvalue.LCAmendments.length;
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.LCNo = '';
+            $scope.LCIssueDate = new Date();
+            $scope.OpeningBankId = '';
+            $scope.allOpeningBranchFromDb = [];
+            $scope.OpeningBranchId = '';
+            $scope.PaymentTerms = '';
+            $scope.Status = "@((int) Remit.Service.Enums.StatusEnum.Running)";
+
+            $scope.LCDocuments = [];
+
+            $scope.LCAmendments = [];
+            $scope.LCAmendments.push({ Id: '', LCId: '', ProformaInvoiceId: '',FreightCost:'', TotalAmount: '', CurrencyId: '', CurrencyName: '', ConversionRateInLocalCurrency: '', AmendmentNo: 0, AmendmentDate: new Date(), AmendmentNote: '' });
+            $scope.LCAmendmentCount = 1;
+            $scope.allChildProformaInvoiceFromDb = [];
+
+            $scope.ProformaInvoiceDetails = [];
+            $scope.SupplierName = '';
+
+            $scope.LCId = '';
+        }
+
+        loadAllParentProformaInvoice();
+        function loadAllParentProformaInvoice() {
+            $scope.allParentProformaInvoiceFromDb = [];
+            lcService.getAllParentProformaInvoice()
+                .then(function onSuccess(response) {
+                    $scope.allParentProformaInvoiceFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadChildProformaInvoice = function (piId) {
+            $scope.allChildProformaInvoiceFromDb = [];
+            /*if(){
+            }*/
+            lcService.getAllChildProformaInvoice(piId)
+                .then(function onSuccess(response) {
+                    $scope.allChildProformaInvoiceFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllSupplier();
+        function loadAllSupplier() {
+            $scope.allSupplierFromDb = [];
+            lcService.getAllSupplier()
+                .then(function onSuccess(response) {
+                    $scope.allSupplierFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllBank();
+        function loadAllBank() {
+            $scope.allOpeningBankFromDb = [];
+            lcService.getAllBank()
+                .then(function onSuccess(response) {
+                    $scope.allOpeningBankFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.getAllBranchByBankId = function (bankId) {
+            $scope.allOpeningBranchFromDb = [];
+            if (bankId != null)
+                lcService.getAllBranchByBankId(bankId)
+                    .then(function onSuccess(response) {
+                        $scope.allOpeningBranchFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        loadAllCurrency();
+        function loadAllCurrency() {
+            $scope.allCurrencyFromDb = [];
+            lcService.getAllCurrency()
+                .then(function onSuccess(response) {
+                    $scope.allCurrencyFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadPiDetailsById = function (index, piId) {
+            $scope.LCAmendments[index].ProformaInvoiceDetails = [];
+            lcService.getProformaInvoice(piId)
+                .then(function onSuccess(response) {
+                    $scope.SupplierName = response.data.SupplierName;
+                    $scope.LCAmendments[index].CurrencyName = response.data.CurrencyName;
+                    $scope.LCAmendments[index].FreightCost = response.data.FreightCost;
+                    $scope.LCAmendments[index].TotalAmount = response.data.TotalAmount;
+                    $scope.LCAmendments[index].TotalAmountWithFreightCost = response.data.TotalAmountWithFreightCost;
+                    $scope.LCAmendments[index].ProformaInvoiceDetails = response.data.ProformaInvoiceDetails;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadLCDetailsById = function (lcId) {
+            lcService.getLC(lcId)
+                .then(function onSuccess(response) {
+                    $scope.populateLC(response.data);
+
+                    for (var i = 0; i < response.data.LCAmendments.length ; i++) {
+                        if (response.data.LCAmendments[i].AmendmentNo == 0)
+                            $scope.loadChildProformaInvoice(response.data.LCAmendments[i].ProformaInvoiceId);
+                        $scope.loadPiDetailsById(i, response.data.LCAmendments[i].ProformaInvoiceId);
+                    }
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadLCListBySupplierAndYear = function () {
+            year = $scope.selectedYear;
+            supplier = $scope.selectedSupplierId;
+
+            if (!supplier)
+                supplier = 0;
+            if (!year)
+                year = 0;
+            else
+                year = year.getFullYear();
+
+            $scope.allLCListBySupplierAndYearFromDb = [];
+            lcService.getLCListBySupplierAndYear(year, supplier)
+                .then(function onSuccess(response) {
+                    $scope.allLCListBySupplierAndYearFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadLCListBySupplierAndYear();
+    });</script>

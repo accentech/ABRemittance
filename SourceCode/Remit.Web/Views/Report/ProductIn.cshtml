@@ -1,0 +1,140 @@
+﻿@using Remit.Web.Helpers
+
+@{
+    ViewBag.Title = Resources.ResourceCommon.LblWarehouseStockReport;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="row" ng-controller="rctrl">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Resources.ResourceCommon.LblWarehouseStockReport
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceCommon.LblMonthYear
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <input type="text" class="form-control" ng-model="YearMonth" name="YearMonth" data-date-format="MMM-yyyy" data-container="body" bs-datepicker data-min-view="1" data-autoclose="true" ng-change="changevalue()">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceFGItem.Type
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <select data-ng-model="FGTypeId" class="form-control"
+                                                data-ng-options="c.Id as c.TypeName for c in allFGTypeFromDb | orderBy: 'TypeName'" name="FGTypeId"
+                                                ng-change="getAllFGItemByTypeId(FGTypeId)">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemOpening.LblType</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceFGItem.LblFGItem
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <select data-ng-model="FGItemId" class="form-control"
+                                                data-ng-options="c.Id as c.Code for c in allFGItemFromDb | orderBy: 'Code'" name="FGItemId">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItem.LblFGItem</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                        <a class="btn btn-primary" target="_blank" href="~/RDLCReport/ProductInReport.aspx?Year={{Year}}&Month={{Month+1}}&FGItemId={{FGItemId}}">@Resources.ResourceCommon.LblViewReport</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('rService', ['$http', function ($http) {
+        return {
+            getAllFGType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getAllFGItemByTypeId: function (id) {
+                return $http.get('/FGItem/GetFGItemListByTypeId?id=' + id);
+            }
+        };
+    }]);
+
+    app.controller('rctrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, rService, $log, $ngBootbox) {
+        $scope.YearMonth = new Date();
+        $scope.ReceivedDate = new Date();
+        $scope.Year = $scope.YearMonth.getFullYear();
+        $scope.Month = $scope.YearMonth.getMonth();
+        $scope.Date = $scope.ReceivedDate.getFullYear() + '-' + ($scope.ReceivedDate.getMonth() + 1) + '-' + $scope.ReceivedDate.getDate();
+        $scope.toDate = new Date().toLocaleString();
+        $scope.fromDate = new Date().toLocaleString();
+        $scope.dwstoDate = new Date().toLocaleString();
+        $scope.dwsfromDate = new Date().toLocaleString();
+
+        $scope.changevalue = function () {
+            $scope.Year = $scope.YearMonth.getFullYear();
+            $scope.Month = $scope.YearMonth.getMonth();
+            $scope.Date = $scope.ReceivedDate.getFullYear() + '-' + ($scope.ReceivedDate.getMonth() + 1) + '-' + $scope.ReceivedDate.getDate();
+        }
+
+        loadAllFGType();
+        function loadAllFGType() {
+            $scope.allFGTypeFromDb = [];
+            rService.getAllFGType()
+                .then(function onSuccess(response) {
+                    $scope.allFGTypeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.getAllFGItemByTypeId = function (fgTypeId) {
+            $scope.allFGItemFromDb = [];
+            if (fgTypeId != null)
+                rService.getAllFGItemByTypeId(fgTypeId)
+                .then(function onSuccess(response) {
+                    $scope.allFGItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+    });
+</script>
+

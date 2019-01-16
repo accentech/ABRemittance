@@ -1,0 +1,338 @@
+﻿
+@{
+    ViewBag.Title = "FGSize";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgsizeCtrl">
+
+    @* ************ FORM - SECTION (Start) *************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceFGSize.LblFGSize</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class=" control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceFGItem.Type
+                                    </label>
+                                </div>
+                                <div class="">
+                                    <select data-ng-model="Type" class="form-control"
+                                            data-ng-options="c.Id as c.TypeName for c in allTypeFromDb | orderBy: 'TypeName'" name="Type" ng-required="false">
+                                        <option value="">@Resources.ResourceFGItem.Select</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGSize.ResourceFGSizeList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="sizeId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.Size for c in allFGSizeFromDb |filter:{'TypeId':Type}:false" name="sizeId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-click="loadSizeById(sizeId);"></select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceFGSize.LblFGType
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="TypeId" class="form-control"
+                                            data-ng-options="c.Id as c.TypeName for c in allTypeFromDb | orderBy: 'TypeName'" name="TypeId" ng-required="true">
+                                        <option value="">@Resources.ResourceFGSize.Select</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.TypeId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGSize.LblFGType)
+                                    </b>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceFGSize.Size
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="Size" ng-model="Size" required ng-maxlength="20" focus-on="focusMe" />
+                                    <b class="help-block" ng-if="form.Size.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGSize.LblFGSize)
+                                    </b>
+
+                                    <b class="help-block" ng-if="form.Size.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addFGSize()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+
+                                    <input ng-if="sizeId" type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deleteFGSize()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgsizeService', ['$http', function ($http) {
+
+        return {
+            saveFGSize: function (fgsize) {
+                return $http({
+                    url: '/FGSize/CreateFGSize',
+                    method: 'POST',
+                    data: fgsize
+                });
+            },
+            getFGSize: function (id) {
+                return $http.get('/FGSize/GetFGSize/' + id);
+            },
+            getAllType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getAllFGSize: function () {
+                return $http.get('/FGSize/GetFGSizeList');
+            },
+            deleteFGSize: function (fgsize) {
+                return $http({
+                    url: '/FGSize/DeleteFGSize',
+                    method: 'POST',
+                    data: fgsize
+                });
+            }
+        };
+    }]);app.controller('fgsizeCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgsizeService, $log, $ngBootbox) {
+
+
+        if ('@ViewBag.permission' == "NO") {
+            $scope.NoPermission = true;
+        }
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        loadAllFGSize();
+        $scope.showModalforSearch = false;
+        // Add a new fgsize
+        $scope.addFGSize = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgsize = {};
+                fgsize["Id"] = $scope.Id;
+                fgsize["TypeId"] = $scope.TypeId;
+                fgsize["Size"] = $scope.Size;
+
+
+                fgsizeService.saveFGSize(fgsize)
+                .then(function onSuccess(response) {
+                    loadAllFGSize();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+        // Populate fgsize
+
+        $scope.selectedRow = null;
+        $scope.populateFGSize = function (rowvalue) {
+            $scope.selectedRow = rowvalue;
+            $scope.Id = rowvalue.Id;
+            $scope.TypeId = rowvalue.TypeId;
+            $scope.Size = rowvalue.Size;
+
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+            $scope.desableIdField = true;
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.selectedRow = null;
+            $scope.Id = '';
+            $scope.TypeId = '';
+            $scope.Size = '';
+            $scope.sizeId = '';
+
+        }
+
+        $scope.deleteFGSize = function () {
+            var fgsize = {};
+                 fgsize["Id"] = $scope.Id;
+                 fgsizeService.deleteFGSize(fgsize)
+                .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                $scope.reset();
+                loadAllFGSize();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+
+        //$scope.deleteFGSize = function () {
+        //    $scope.$broadcast('show-errors-check-validity');
+        //    if ($scope.form.$valid) {
+        //        var fgsize = {};
+        //        fgsize["Id"] = $scope.Id;
+
+        //        fgsizeService.deleteFGSize(fgsize)
+        //            .then(function onSuccess(response) {
+        //                $scope.messageModalObj.message = response.data.message;
+        //                $scope.showModalforSearch = true;
+        //                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+        //                $scope.reset();
+        //                loadAllFGSize();
+        //            });
+
+        //    }
+        //};
+
+        $scope.loadSizeById = function (sizeId) {
+
+            fgsizeService.getFGSize(sizeId)
+                .then(function onSuccess(response) {
+
+                    $scope.populateFGSize(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+
+
+
+        @*$scope.loadUOMById = function (uomId) {
+
+            fgsizeService.getFGSize(uomId)
+                .then(function onSuccess(response) {
+
+                    $scope.UnitName = response.data.UnitName;
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }*@
+
+
+
+        loadAllType();
+        function loadAllType() {
+            $scope.allTypeFromDb = [];
+            fgsizeService.getAllType()
+                .then(function onSuccess(response) {
+                    $scope.allTypeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+
+
+
+
+        // Load FGSize
+        function loadAllFGSize() {
+            $scope.allFGSizeFromDb = [];
+            fgsizeService.getAllFGSize()
+                    .then(function onSuccess(response) {
+                        $scope.allFGSizeFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allFGSizeFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allFGSizeFromDb.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });</script>

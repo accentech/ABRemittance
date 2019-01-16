@@ -1,0 +1,726 @@
+﻿@using Remit.Web.Helpers
+
+@{
+    ViewBag.Title = "FGItemDispose";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgItemDisposeCtrl">
+    
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceFGItemDispose.Title
+        </div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblMonthYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="MMM-yyyy" bs-datepicker
+                                       data-min-view="1" data-autoclose="true" ng-change="loadAllFGItemDisposeList()" data-trigger="click">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGItemDispose.DisposeList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="DateTime" class="form-control listSelect" focus-on="focusMe"
+                                            data-ng-options="c as c.DateString  for c in allFGItemDisposeListByYearMonth" name="DateTime"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="populateFGItemDispose(DateTime[0])">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommon.LblDate</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6" show-errors>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGItemDispose.Date
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-required="true" ng-model="Date" name="Date" data-date-format="dd-MMM-yyyy " bs-datepicker data-autoclose="1">
+                                            <b class="help-block" ng-if="form.Date.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGItemDispose.Date)
+                                            </b>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="Date" name="Date" bs-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors ng-show="AuthorisedDone">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceFGItemDispose.AuthorisedBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select style="-webkit-appearance: none;" data-ng-model="AuthorisedBy" class="form-control" ng-required="false" ng-disabled="true"
+                                                    data-ng-options="c.Id as c.FullName for c in allEmployeeFromDb | orderBy: 'FullName'" name="AuthorisedBy">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors ng-show="AuthorisedDone">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceFGItemDispose.AuthorisedDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-required="false" ng-model="AuthorisedDate" name="AuthorisedDate" ng-disabled="true" data-date-format="dd-MMM-yyyy" bs-datepicker data-autoclose="1">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-required="false" ng-model="AuthorisedDate" name="AuthorisedDate" ng-disabled="true" bs-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceFGItemDispose.FGItemDisposeDetails</h3>
+                            <table class="table table-bordered slidable-table">
+                                <thead>
+                                    <tr>
+                                        <th>@Resources.ResourceFGItemDispose.Type</th>
+                                        <th>@Resources.ResourceFGItemDispose.FGItem</th>
+                                        <th>@Resources.ResourceFGItemDispose.FGGrade</th>
+                                        <th>@Resources.ResourceFGItemDispose.FGLot</th>
+                                        <th>@Resources.ResourceFGItemDispose.DisposeQuantity</th>
+                                        <th>@Resources.ResourceFGItemDispose.Unit</th>
+                                        <th>@Resources.ResourceFGItemDispose.BinCard</th>
+                                        <th>@Resources.ResourceFGItemDispose.BinCardQty</th>
+                                        <th>@Resources.ResourceFGItemDispose.DisposeReason</th>
+                                        <th>@Resources.ResourceCommon.LblAction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="itemDisposeDet in FGItemDisposeDetails">
+                                        <td>
+                                            <select data-ng-model="itemDisposeDet.FGTypeId" class="form-control" style="width: 100px"
+                                                    data-ng-options="c.Id as c.TypeName for c in allFGTypeFromDb | orderBy: 'Name'" name="FGTypeId" ng-change="getAllFGItemByTypeId($index,itemDisposeDet.FGTypeId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="itemDisposeDet.FGItemId" class="form-control" ng-change="getItemInfo($index,itemDisposeDet.FGItemId)"
+                                                    data-ng-options="c.Id as c.Code for c in itemDisposeDet.allItemFromDb | orderBy: 'Name'" name="FGItemId" style="width: 140px">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="itemDisposeDet.FGGradeId" class="form-control" style="width: 80px"
+                                                    data-ng-options="c.Id as c.Grade for c in allFGGradeFromDb " name="FGGradeId" data-ng-change="getLotByGrade($index, itemDisposeDet.FGGradeId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <select data-ng-model="itemDisposeDet.Lot" class="form-control" style="width: 80px" ng-change="getBinInfo($index)"
+                                                    data-ng-options="c for c in itemDisposeDet.lotFromDB " name="Lot">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>  
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" style="text-align: right" type="number" class="form-control" ng-model="itemDisposeDet.DisposeQuantity" name="DisposeQuantity" min="0" style="width: 100px">
+                                        </td>
+
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-disabled="true" style="width: 50px"
+                                                   ng-model="itemDisposeDet.SalesUnit" name="SalesUnit">
+                                        </td>
+
+                                        <td>
+                                            <select ng-model="itemDisposeDet.BinCardId" class="form-control" style="width: 120px"
+                                                    data-ng-options="c.Id as c.WarhouseName+'-'+c.CardNo for c in itemDisposeDet.allBinCardFromDb | orderBy: ['WarhouseName', 'CardNo']" name="BinCardId" data-ng-change="setBinQty($index, itemDisposeDet.BinCardId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblBinCard</option>
+                                            </select>
+                                        </td>
+                                        <td>
+
+                                            <input data-ng-class="form-control" type="number" readonly class="form-control" ng-model="itemDisposeDet.BinCardQty" name="BinCardQty">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="itemDisposeDet.DisposeReason" name="DisposeReason" style="width: 80px">
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="FGItemDisposeDetails.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero" ng-hide="AuthorisedDone">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div ng-hide="AuthorisedDone">
+                                        <input type="button" ng-click="addFGItemDispose()" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                        <input type="button" ng-click="update()" ng-show="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                        <input type="button" ng-click="Delete()" ng-show="editmode" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+
+                                        <input ng-show="editmode" type="button" value=@Resources.ResourceCommon.LblApprove class="btn btn-success" ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Approve'
+                                               ng-bootbox-confirm-action="approveDispose()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    </div>
+                                    <input ng-show="AuthorisedDone" type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>                                
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgItemDisposeService', ['$http', function ($http) {
+        return {
+            saveFGItemDispose: function (fgItemDispose) {
+                var params = { itemDispose: fgItemDispose }
+                return $http({
+                    url: '/FGItemDispose/CreateFGItemDispose',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            updateFGItemDispose: function (fgItemDispose, fgItemDisposeList) {
+                var params = { itemDispose: fgItemDispose, fgItemDisposeDetails: fgItemDisposeList }
+                return $http({
+                    url: '/FGItemDispose/UpdateFGItemDispose',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+
+                });
+            },
+            approveDispose: function (fgItemDispose, fgItemDisposeList) {
+                var params = { itemDispose: fgItemDispose, fgItemDisposeDetails: fgItemDisposeList }
+                return $http({
+                    url: '/FGItemDispose/ApproveDispose',
+                    method: 'POST',
+                    data: JSON.stringify(params)
+                });
+            },
+            
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getAllFGItemByTypeId: function (id) {
+                return $http.get('/FGItem/GetFGItemListByTypeId?id=' + id);
+            },
+            getAllFGType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getAllFGGrade: function () {
+                return $http.get('/FGGrade/GetFGGradeList');
+            },
+            getAllBinCard: function () {
+                return $http.get('/BinCard/GetBinCardList');
+            },
+            getFGItemDisposeListByYearMonth: function (year, month) {
+                return $http.get('/FGItemDispose/GetDisposeListByYear', { params: { year: year, month: month + 1 } });
+            },
+            getBinInfo : function(itemId, gradeId, lot) {
+                return $http.get('/FGItemDispose/GetbinListByItemGradeLot?itemId=' + itemId + '&gradeId=' + gradeId + '&lot=' + lot);
+            },
+
+            getFGItemDispose: function (id) {
+                return $http.get('/FGItemDispose/GetFGItemDispose?id=' + id);
+            },
+            getBinCardQty: function (itemId, gradeId, bincardId, lot, salesUnit) {
+                return $http.get('/FGItemDispose/GetQtyFromFgInventory', { params: { itemId: itemId, gradeId: gradeId, bincardId: bincardId, lot: lot, salesUnit: salesUnit } });
+            },
+            getLotByGrade: function (itemId, gradeId) {
+                return $http.get('/FGItemDispose/GetLotFromFgInventory', { params: { itemId: itemId, gradeId: gradeId } });
+            },
+            deleteFGItemDispose: function (id) {
+                return $http({
+                    url: '/FGItemDispose/DeleteFGItemDispose?id=' + id,
+                    method: 'POST',
+                    data: id
+                });
+            },
+            
+        };
+    }]);
+
+    app.controller('fgItemDisposeCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgItemDisposeService, $log, $ngBootbox, $filter) {
+        $scope.selectedYear = new Date();
+        $scope.Date = new Date();
+       
+        $scope.AuthorisedDone = false;
+        $scope.editmode = false;
+        $scope.notApprovemode = true;
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        $scope.selectedRow = null;
+
+        $scope.FGItemDisposeDetails = [];
+        $scope.FGItemDisposeDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', DisposeQuantity: '', SalesUnitId: '', BinCardId: null, DisposeReason: '' });
+        $scope.addNewDetail = function ($event) {
+            $scope.FGItemDisposeDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', DisposeQuantity: '', SalesUnitId: '', BinCardId: null, DisposeReason: '' });
+        }
+
+        $scope.update = function () {
+            var fgItemDispose = {};
+            fgItemDispose["Id"] = $scope.Id;
+            fgItemDispose["Date"] = $scope.Date;
+            fgItemDispose["FGItemDisposeDetails"] = $scope.FGItemDisposeDetails;
+            var FGItemDisposeDetails = $scope.FGItemDisposeDetails;
+
+            if ($scope.FGItemDisposeDetails != null && $scope.FGItemDisposeDetails !== "") {
+                if ($scope.FGItemDisposeDetails.length > 0) {
+                    for (var i = 0; i < $scope.FGItemDisposeDetails.length; i++) {
+                        if ($scope.FGItemDisposeDetails[i].FGItemId !== undefined && $scope.FGItemDisposeDetails[i].FGItemId !== null && $scope.FGItemDisposeDetails[i].FGItemId !== "") {
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceItemDemand.ItemRequired');
+                            return;
+                        }
+                        if ($scope.FGItemDisposeDetails[i].FGGradeId !== undefined && $scope.FGItemDisposeDetails[i].FGGradeId !== null && $scope.FGItemDisposeDetails[i].FGGradeId !== "") {
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceFGItemDispose.GradeReq');
+                            return;
+                        }
+                        if ($scope.FGItemDisposeDetails[i].Lot !== undefined && $scope.FGItemDisposeDetails[i].Lot !== null && $scope.FGItemDisposeDetails[i].Lot !== "") {
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceFGItemDispose.LotReq');
+                            return;
+                        }
+                        if ($scope.FGItemDisposeDetails[i].DisposeQuantity !== undefined && $scope.FGItemDisposeDetails[i].DisposeQuantity !== null && $scope.FGItemDisposeDetails[i].DisposeQuantity !== "") {
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceFGItemDispose.QtyReq');
+                            return;
+                        }
+                        if ($scope.FGItemDisposeDetails[i].SalesUnitId !== undefined && $scope.FGItemDisposeDetails[i].SalesUnitId !== null && $scope.FGItemDisposeDetails[i].SalesUnitId !== "") {
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceFGItemDispose.UnitReq');
+                            return;
+                        }
+                        if ($scope.FGItemDisposeDetails[i].DisposeQuantity <= $scope.FGItemDisposeDetails[i].BinCardQty) {
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceFGItemDispose.qtyMessage');
+                            return;
+                        }
+
+                    }
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceFGItemDispose.NeedFGItemDisposeDetails');
+                    return;
+                }
+            } else {
+                $ngBootbox.alert('@Resources.ResourceFGItemDispose.NeedFGItemDisposeDetails');
+                return;
+            }
+
+            fgItemDisposeService.updateFGItemDispose(fgItemDispose, FGItemDisposeDetails).then(function onSuccess(response) {
+                if (response.data.isSuccess === true) {
+                    $ngBootbox.alert(response.data.message);
+                    $scope.reset();
+                }
+                else {
+                    $ngBootbox.alert(response.data.message);
+                }
+            });
+        }
+
+
+        //Approve dispose.....
+        $scope.approveDispose = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgItemDispose = {};
+                fgItemDispose["Id"] = $scope.Id;
+               
+                fgItemDispose["FGItemDisposeDetails"] = $scope.FGItemDisposeDetails;
+                var FGItemDisposeDetails = $scope.FGItemDisposeDetails;
+
+                if ($scope.FGItemDisposeDetails != null && $scope.FGItemDisposeDetails !== "") {
+                    if ($scope.FGItemDisposeDetails.length > 0) {
+                        for (var i = 0; i < $scope.FGItemDisposeDetails.length; i++) {
+                            if ($scope.FGItemDisposeDetails[i].FGItemId !== undefined && $scope.FGItemDisposeDetails[i].FGItemId !== null && $scope.FGItemDisposeDetails[i].FGItemId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceItemDemand.ItemRequired');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].FGGradeId !== undefined && $scope.FGItemDisposeDetails[i].FGGradeId !== null && $scope.FGItemDisposeDetails[i].FGGradeId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.GradeReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].Lot !== undefined && $scope.FGItemDisposeDetails[i].Lot !== null && $scope.FGItemDisposeDetails[i].Lot !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.LotReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].DisposeQuantity !== undefined && $scope.FGItemDisposeDetails[i].DisposeQuantity !== null && $scope.FGItemDisposeDetails[i].DisposeQuantity !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.QtyReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].SalesUnitId !== undefined && $scope.FGItemDisposeDetails[i].SalesUnitId !== null && $scope.FGItemDisposeDetails[i].SalesUnitId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.UnitReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].DisposeQuantity <= $scope.FGItemDisposeDetails[i].BinCardQty) {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.qtyMessage');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceFGItemDispose.NeedFGItemDisposeDetails');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceFGItemDispose.NeedFGItemDisposeDetails');
+                    return;
+                }
+
+                fgItemDisposeService.approveDispose(fgItemDispose, FGItemDisposeDetails)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();                        
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });;
+            }
+        };
+
+        $scope.addFGItemDispose = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgItemDispose = {};
+                fgItemDispose["Id"] = $scope.Id;
+                fgItemDispose["Date"] = $scope.Date;
+                fgItemDispose["FGItemDisposeDetails"] = $scope.FGItemDisposeDetails;
+
+                if ($scope.FGItemDisposeDetails != null && $scope.FGItemDisposeDetails !== "") {
+                    if ($scope.FGItemDisposeDetails.length > 0) {
+                        for (var i = 0; i < $scope.FGItemDisposeDetails.length; i++) {
+                            if ($scope.FGItemDisposeDetails[i].FGItemId !== undefined && $scope.FGItemDisposeDetails[i].FGItemId !== null && $scope.FGItemDisposeDetails[i].FGItemId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.ItemRequired');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].FGGradeId !== undefined && $scope.FGItemDisposeDetails[i].FGGradeId !== null && $scope.FGItemDisposeDetails[i].FGGradeId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.GradeReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].Lot !== undefined && $scope.FGItemDisposeDetails[i].Lot !== null && $scope.FGItemDisposeDetails[i].Lot !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.LotReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].DisposeQuantity !== undefined && $scope.FGItemDisposeDetails[i].DisposeQuantity !== null && $scope.FGItemDisposeDetails[i].DisposeQuantity !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.QtyReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].SalesUnitId !== undefined && $scope.FGItemDisposeDetails[i].SalesUnitId !== null && $scope.FGItemDisposeDetails[i].SalesUnitId !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.UnitReq');
+                                return;
+                            }
+                            if ($scope.FGItemDisposeDetails[i].DisposeQuantity <= $scope.FGItemDisposeDetails[i].BinCardQty) {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceFGItemDispose.qtyMessage');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceFGItemDispose.NeedFGItemDisposeDetails');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceFGItemDispose.NeedFGItemDisposeDetails');
+                    return;
+                }
+
+                fgItemDisposeService.saveFGItemDispose(fgItemDispose).then(
+                    function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                    }).catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            } else {
+                $ngBootbox.alert('@Resources.ResourceLCShipment.FillRequiredData');
+            }
+        }
+        
+        $scope.populateFGItemDispose = function (rowvalue) {
+            if (rowvalue != null && rowvalue != undefined && rowvalue != "") {
+                $scope.selectedRow = rowvalue;
+                $scope.editmode = true;
+                $scope.Id = rowvalue.Id;
+                $scope.Date = new Date(rowvalue.DateString);
+                if (rowvalue.AuthorisedDateString != null) {
+                    $scope.AuthorisedDate = rowvalue.AuthorisedDateString;
+                }
+                if (rowvalue.AuthorisedBy != null && rowvalue.AuthorisedBy !== 0) {
+                    $scope.AuthorisedBy = rowvalue.AuthorisedBy;
+                    $scope.AuthorisedDone = true;
+                } else {
+                    $scope.AuthorisedDone = false;
+                }
+
+                $scope.FGItemDisposeDetails = rowvalue.FGItemDisposeDetails;
+
+                for (x in rowvalue.FGItemDisposeDetails) {
+                    $scope.getAllFGItemByTypeIdwhenPopulate(x, rowvalue.FGItemDisposeDetails[x].FGTypeId);
+                    $scope.getLotByGrade(x, rowvalue.FGItemDisposeDetails[x].FGGradeId);
+                    $scope.getBinInfo(x); $scope.getBinInfo
+                }
+                if ($scope.FGItemDisposeDetails.length < 1) {
+                    $scope.FGItemDisposeDetails = [];
+                    $scope.FGItemDisposeDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', DisposeQuantity: '', SalesUnitId: '', BinCardId: null, DisposeReason: '' });
+                }
+            }
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.selectedYear = new Date();
+            $scope.Id = "";
+            $scope.Date = new Date();
+            $scope.AuthorisedDone = false;
+            $scope.editmode = false;
+            $scope.AuthorisedDone = false;
+            $scope.notApprovemode = true;
+            $scope.selectedRow = null;
+            $scope.FGItemDisposeDetails = [];
+            $scope.FGItemDisposeDetails.push({ Id: '', FGItemId: null, FGGradeId: null, Lot: '', DisposeQuantity: '', SalesUnitId: '', BinCardId: null, DisposeReason: '' });
+            $scope.loadAllFGItemDisposeList();
+        }
+
+        $scope.Delete = function () {
+            if ($scope.Id !== undefined && $scope.Id !== null && $scope.Id !== "") {
+                fgItemDisposeService.deleteFGItemDispose($scope.Id).then(function onSuccess(response) {
+                    if (response.data.isSuccess === true) {
+                        $ngBootbox.alert(response.data.message);
+                        $scope.reset();
+                    } else {
+                        $ngBootbox.alert(response.data.message);
+                    }
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInDeleting');
+                });
+            } else {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+                //return;
+            }
+        }
+
+        $scope.loadAllFGItemDisposeList = function () {
+            var year = $scope.selectedYear;
+            var month = year.getMonth();
+            $scope.allFGItemDisposeListByYearMonth = [];
+            year = year.getFullYear();
+
+            fgItemDisposeService.getFGItemDisposeListByYearMonth(year, month).then(function onSuccess(response) {
+                $scope.allFGItemDisposeListByYearMonth = response.data;
+            }).catch(function onError(xhr) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+        $scope.loadAllFGItemDisposeList();
+
+        $scope.getAllFGItemByTypeId = function (index, typeId) {
+            $scope.FGItemDisposeDetails[index].allItemFromDb = [];
+            $scope.FGItemDisposeDetails[index].PackUnit = '';
+            $scope.FGItemDisposeDetails[index].SalesUnitId = '';
+            if (typeId != null)
+                fgItemDisposeService.getAllFGItemByTypeId(typeId)
+                    .then(function onSuccess(response) {
+                        $scope.FGItemDisposeDetails[index].allItemFromDb = response.data;
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.getAllFGItemByTypeIdwhenPopulate = function (index, typeId) {
+            $scope.FGItemDisposeDetails[index].allItemFromDb = [];
+            if (typeId != null)
+                fgItemDisposeService.getAllFGItemByTypeId(typeId)
+                    .then(function onSuccess(response) {
+                        $scope.FGItemDisposeDetails[index].allItemFromDb = response.data;
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.getItemInfo = function (index, itemId) {
+            $scope.FGItemDisposeDetails[index].SalesUnitId = '';
+            $scope.FGItemDisposeDetails[index].PackUnit = '';
+            if (itemId != null)
+                angular.forEach($scope.FGItemDisposeDetails[index].allItemFromDb,
+                    function (value, key) {
+                        if (value.Id === itemId) {
+                            $scope.FGItemDisposeDetails[index].SalesUnit = value.PackUnit;
+                            $scope.FGItemDisposeDetails[index].SalesUnitId = value.PackUnitId;
+                        }
+                    });
+        }
+
+        $scope.getLotByGrade = function (index, gradeId) {
+            $scope.FGItemId = $scope.FGItemDisposeDetails[index].FGItemId;
+            $scope.FGGradeId = gradeId;
+            if ($scope.FGGradeId != null && $scope.FGGradeId != undefined && $scope.FGGradeId !== "") {
+                fgItemDisposeService.getLotByGrade($scope.FGItemId, $scope.FGGradeId).then(
+                    function onSuccess(response) {
+                        $scope.FGItemDisposeDetails[index].lotFromDB = response.data;
+                    });
+            } else {
+                $scope.FGItemDisposeDetails[index].lotFromDB = [];
+            }
+        }
+
+        $scope.setBinQty = function (index, binCardId) {
+            $scope.FGItemId = $scope.FGItemDisposeDetails[index].FGItemId;
+            $scope.FGGradeId = $scope.FGItemDisposeDetails[index].FGGradeId;
+            $scope.BinCardId = binCardId;
+            $scope.Lot = $scope.FGItemDisposeDetails[index].Lot;
+            $scope.SalesUnit = $scope.FGItemDisposeDetails[index].SalesUnit;
+
+            fgItemDisposeService.getBinCardQty($scope.FGItemId, $scope.FGGradeId, $scope.BinCardId, $scope.Lot, $scope.SalesUnit).then(function onSuccess(response) {
+                $scope.FGItemDisposeDetails[index].BinCardQty = response.data;
+            });
+        }
+
+        $scope.getBinInfo = function (index) {
+            $scope.fgItem = $scope.FGItemDisposeDetails[index].FGItemId;
+            $scope.fgGrade = $scope.FGItemDisposeDetails[index].FGGradeId;
+            $scope.fgLot = $scope.FGItemDisposeDetails[index].Lot;
+            if ($scope.fgItem != null && $scope.fgItem != undefined && $scope.fgItem !== "" &&
+                $scope.fgGrade != null && $scope.fgGrade != undefined && $scope.fgGrade !== "" &&
+                $scope.fgLot != null && $scope.fgLot != undefined && $scope.fgLot !== "") {
+                fgItemDisposeService.getBinInfo($scope.fgItem, $scope.fgGrade, $scope.fgLot).then(
+                    function onSuccess(response) {
+                        $scope.FGItemDisposeDetails[index].allBinCardFromDb = response.data;
+                    });
+            } else {
+                $scope.FGItemDisposeDetails[index].allBinCardFromDb = [];
+            }
+        }
+
+        loadAllFgType();
+        function loadAllFgType() {
+            $scope.allFGTypeFromDb = [];
+            fgItemDisposeService.getAllFGType()
+                .then(function onSuccess(response) {
+                    $scope.allFGTypeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllFgGrade();
+        function loadAllFgGrade() {
+            $scope.allFGGradeFromDb = [];
+            fgItemDisposeService.getAllFGGrade()
+                .then(function onSuccess(response1) {
+                    $scope.allFGGradeFromDb = response1.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        @*loadAllBinCard();
+        function loadAllBinCard() {
+            $scope.allBinCardFromDb = [];
+            fgItemDisposeService.getAllBinCard()
+                .then(function onSuccess(response) {
+                    $scope.allBinCardFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }*@
+
+        $scope.loadAllEmployee = function () {
+            $scope.allEmployeeFromDb = [];
+            fgItemDisposeService.getAllEmployee()
+                .then(function onSuccess(response) {
+                    $scope.allEmployeeFromDb = response.data;                   
+                })
+                .catch(function (xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadAllEmployee();
+    });
+</script>

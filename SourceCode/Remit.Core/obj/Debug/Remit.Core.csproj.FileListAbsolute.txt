@@ -1,0 +1,12 @@
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\Remit.Core.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\Remit.Core.pdb
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\MoreLinq.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\bin\Debug\MoreLinq.xml
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\obj\Debug\Remit.Core.csproj.CoreCompileInputs.cache
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\obj\Debug\Remit.Core.csproj.CopyComplete
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\obj\Debug\Remit.Core.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.Core\obj\Debug\Remit.Core.pdb

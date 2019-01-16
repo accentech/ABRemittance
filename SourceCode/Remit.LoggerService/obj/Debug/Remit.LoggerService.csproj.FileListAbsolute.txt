@@ -1,0 +1,10 @@
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\bin\Debug\Remit.LoggerService.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\bin\Debug\Remit.LoggerService.pdb
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\bin\Debug\log4net.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\bin\Debug\MoreLinq.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\bin\Debug\log4net.xml
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\bin\Debug\MoreLinq.xml
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\obj\Debug\Remit.LoggerService.csproj.CoreCompileInputs.cache
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\obj\Debug\Remit.LoggerService.csproj.CopyComplete
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\obj\Debug\Remit.LoggerService.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.LoggerService\obj\Debug\Remit.LoggerService.pdb

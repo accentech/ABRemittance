@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{16606571-8E5A-42E3-89B9-2AE23370F4B1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Remit.Service</RootNamespace>
+    <AssemblyName>Remit.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.1.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.1.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DivisionService.cs" />
+    <Compile Include="BankService.cs" />
+    <Compile Include="BranchService.cs" />
+    <Compile Include="ModuleService.cs" />
+    <Compile Include="ServiceUtil.cs" />
+    <Compile Include="WorkflowactionService.cs" />
+    <Compile Include="WorkflowactionSettingService.cs" />
+    <Compile Include="CompanyService.cs" />
+    <Compile Include="CityService.cs" />
+    <Compile Include="CurrencyService.cs" />
+    <Compile Include="DepartmentService.cs" />
+    <Compile Include="DesignationService.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="EmployeeService.cs" />
+    <Compile Include="RoleSubModuleItemService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CountryService.cs" />
+    <Compile Include="RoleService.cs" />
+    <Compile Include="SubModuleService.cs" />
+    <Compile Include="SubModuleItemService.cs" />
+    <Compile Include="ActionLogService.cs" />
+    <Compile Include="UserService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Remit.CachingService\Remit.CachingService.csproj">
+      <Project>{a8997781-b306-48b9-a2ba-a45efb6e7f96}</Project>
+      <Name>Remit.CachingService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.Core\Remit.Core.csproj">
+      <Project>{c620b128-6555-4f1c-82c7-87e759c948ce}</Project>
+      <Name>Remit.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.Data\Remit.Data.csproj">
+      <Project>{e5c70ac1-fe25-4ddc-b7c9-44f46349a8b0}</Project>
+      <Name>Remit.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.LoggerService\Remit.LoggerService.csproj">
+      <Project>{7b5f38e8-dd12-4d1d-9bcf-11282f0c3ad4}</Project>
+      <Name>Remit.LoggerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.Model\Remit.Model.csproj">
+      <Project>{a461c7ec-ec7a-402e-84be-eb016fc17ee5}</Project>
+      <Name>Remit.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

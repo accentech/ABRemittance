@@ -1,0 +1,316 @@
+﻿@{
+    ViewBag.Title = "Currency";
+    //Layout = "~/Views/Shared/_MenuLayout.cshtml";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="currencyCtrl">
+
+    @* ************ FORM - SECTION (Start) *************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceCurrency.LblCurrency</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceCurrency.Name
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <input class="form-control" type="text" name="Name" ng-model="Name" required ng-maxlength="50" focus-on="focusMe" />
+                                    <b class="help-block" ng-if="form.Name.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCurrency.LblCurrency)
+                                    </b>
+
+                                    <b class="help-block" ng-if="form.Name.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceCurrency.Symbol
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <input class="form-control" type="text" name="Symbol" ng-model="Symbol" focus-on="focusMe" />
+
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addCurrency()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+
+
+
+
+    @* ************ TABLE - SECTION (Start)*************** *@
+
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceCurrency.LblCurrencyList</div>
+        <div class="panel-body border-green  pt pb">
+            <div class="row mb">
+                <div class="col-sm-8 padding-left-zero">
+                    <div class="col-sm-4">
+                        <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                    </div>
+                    <div class="col-sm-8 text-center-vertical">
+                        @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{ allCurrencyFromDb.length}}</b> @Resources.ResourceCurrency.LblTotalCurrency
+                    </div>
+                </div>
+                <div class="col-sm-4 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical">
+                        <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select ng-model="entryLimit" class="form-control">
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.ResourceCurrency.Name <a ng-click="sort_by('Code');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceCurrency.Symbol <a ng-click="sort_by('Symbol');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>@Resources.ResourceCurrency.Name <a ng-click="sort_by('Code');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceCurrency.Symbol <a ng-click="sort_by('Symbol');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr ng-class="{'selected':data == selectedRow}" ng-repeat="data in filtered = (allCurrencyFromDb  | filter:SearchText | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                                    @*| filter:{'Name':SearchText}:false|filter:{'CurrencyId':CurrencyId||undefined}:true| filter:{'DistrictId':DistrictId||undefined}:true|filter:{'AreaId':AreaId||undefined}:true | filter:{'Specializations':SpecializationId||undefined}:true*@
+
+                                    <td>{{data.Name }}</td>
+                                    <td>{{data.Symbol }}</td>
+
+
+                                    <td><input type="button" value=@Resources.ResourceCommon.LblEdit class="btn btn-info btn-sm" ng-click="populateCurrency(data)" /></td>
+                                    <td>
+                                        <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger btn-sm " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                               ng-bootbox-confirm-action="deleteCurrency(data)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @*@Resources.ResourceCurrency.LblNoCurrencyFound*@LblNoCurrencyFound
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ TABLE - SECTION (End)*************** *@
+
+</div>
+
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('currencyService', ['$http', function ($http) {
+
+        return {
+            saveCurrency: function (currency) {
+                return $http({
+                    url: '/Currency/CreateCurrency',
+                    method: 'POST',
+                    data: currency
+                });
+            },
+            getCurrency: function (id) {
+                return $http.get('/Currency/GetCurrency/' + id);
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+            deleteCurrency: function (currency) {
+                return $http({
+                    url: '/Currency/DeleteCurrency',
+                    method: 'POST',
+                    data: currency
+                });
+            }
+        };
+    }]); app.controller('currencyCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, currencyService, $log, $ngBootbox) {
+
+
+        if ('@ViewBag.permission' == "NO") {
+            $scope.NoPermission = true;
+        }
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        loadAllCurrency();
+        $scope.showModalforSearch = false;
+        // Add a new currency
+        $scope.addCurrency = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var currency = {};
+                currency["Id"] = $scope.Id;
+                currency["Name"] = $scope.Name;
+                currency["Symbol"] = $scope.Symbol;
+
+                currencyService.saveCurrency(currency)
+                .then(function onSuccess(response) {
+                    loadAllCurrency();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+        // Populate currency
+
+        $scope.selectedRow = null;
+        $scope.populateCurrency = function (rowvalue) {
+            $scope.selectedRow = rowvalue;
+            $scope.Id = rowvalue.Id;
+            $scope.Name = rowvalue.Name;
+            $scope.Symbol = rowvalue.Symbol;
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+            $scope.desableIdField = true;
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.selectedRow = null;
+            $scope.Id = '';
+            $scope.Name = '';
+            $scope.Symbol = '';
+        }
+
+        $scope.deleteCurrency = function (currency) {
+            currencyService.deleteCurrency(currency)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                $scope.reset();
+                loadAllCurrency();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+        // Load Currency
+        function loadAllCurrency() {
+            $scope.allCurrencyFromDb = [];
+            currencyService.getAllCurrency()
+                    .then(function onSuccess(response) {
+                        $scope.allCurrencyFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allCurrencyFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allCurrencyFromDb.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });</script>

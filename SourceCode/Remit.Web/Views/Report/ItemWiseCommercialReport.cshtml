@@ -1,0 +1,203 @@
+﻿@{
+    ViewBag.Title = Resources.ResourceSupplierWiseCommercialReport.TitleAnother;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+<div class="row" ng-controller="rctrl">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Resources.ResourceSupplierWiseCommercialReport.TitleAnother
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-4 col-md-offset-4">
+                               
+                                @*<div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceItemCategory.LblItemGroup
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <select data-ng-model="ItemGroupId" class="form-control" required
+                                                data-ng-options="c.Id as c.Name for c in allItemGroupFromDb" name="ItemGroupId" ng-change="getCategory(ItemGroupId)">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemCategory.LblItemGroup</option>
+                                        </select>
+                                    </div>
+                                </div>*@
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceCommon.LblCategory
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="ItemCategoryId" class="form-control" required
+                                                data-ng-options="c.Id as c.Name for c in allItemCategoryFromDb | orderBy: 'Name'" name="ItemCategoryId" ng-change="getItem(ItemCategoryId)">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommon.LblCategory</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" show-errors>
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceItem.LblItem
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="ItemId" class="form-control" required
+                                                data-ng-options="c.Id as c.Name for c in allItemFromDb" name="ItemId" ng-change="setCurrency(ItemId)">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblItem</option>
+                                        </select>
+                                        <b class="help-block" ng-if="form.ItemId.$error.required">
+                                            @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItem.LblItem)
+                                        </b>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceCommon.LblFromDate
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <input type="text" class="form-control" ng-model="dwsfromDate" name="dwsfromDate" data-date-format="dd-MMM-yyyy" data-container="body"
+                                               bs-datepicker data-min-view="0" data-autoclose="true" data-placement="auto" ng-change="formatDate()">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceCommon.LblToDate
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <input type="text" class="form-control" ng-model="dwstoDate" name="dwstoDate"
+                                               data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0"
+                                               data-autoclose="true"
+                                               data-placement="auto" data-container="body"
+                                               ng-change="formatDate()">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8 ">
+                                        <a ng-href="" class="btn btn-primary" ng-click="generateReport()" role="button">
+                                            @Resources.ResourceReport.LblVIewReport
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('rService', ['$http', function ($http) {
+        return {
+            getAllItemCategory: function () {
+              //  return $http.get('/ItemCategory/GetItemCategoryList');
+                return $http.get('/ItemCategory/GetItemCategoryListWithGroupType?groupType=' + 1);
+            },
+            getAllItemByCategoryId: function (id) {
+                return $http.get('/Item/GetItemListByCategoryId?id=' + id);
+            },
+            getAllCategoryByGroupId: function (id) {
+                return $http.get('/ItemCategory/GetItemCategoryListByGroupId?id=' + id);
+            },
+        };
+    }]);
+
+    app.controller('rctrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, rService, $log, $ngBootbox,$window) {
+        $scope.dwstoDate = new Date();
+        $scope.dwsfromDate = new Date();
+        
+        $scope.formatDate = function () {
+            $scope.dwstoDate = $scope.dwstoDate;
+            $scope.dwsfromDate = $scope.dwsfromDate;
+        }
+
+        $scope.setCurrency = function (itemId) {
+            if (itemId != null) {
+                angular.forEach($scope.allItemFromDb, function (value, key) {
+                    if (value.Id === itemId) {
+                        $scope.ItemName = value.Name;
+                    }
+                });
+            }
+        }
+
+        
+        $scope.generateReport = function () {
+
+            var fromDate = $scope.dwsfromDate.toDateString("yyyy-MM-dd");
+            var toDate = $scope.dwstoDate.toDateString("yyyy-MM-dd");
+            
+            if ($scope.ItemId != undefined && $scope.ItemId != null && $scope.ItemId !== "") {
+            } else {
+                $ngBootbox.alert('Please, Select Category');
+                return;
+            }
+            var itemName = $scope.ItemName;
+            var itemId = $scope.ItemId;
+           
+            var url = "/RDLCReport/ItemWiseCommercialReport.aspx?fromDate=" + fromDate + "&toDate=" + toDate + "&ItemName=" + itemName + "&ItemId=" + itemId;
+
+            $window.open(url, '_blank');
+        };
+
+        $scope.getItem = function (categoryId) {
+            $scope.allItemFromDb = [];
+            if (categoryId != null)
+                rService.getAllItemByCategoryId(categoryId)
+                    .then(function onSuccess(response) {
+                        $scope.allItemFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+        
+        loadAllItemCategory();
+        function loadAllItemCategory() {
+            $scope.allItemCategoryFromDb = [];
+            rService.getAllItemCategory()
+                .then(function onSuccess(response) {
+                    $scope.allItemCategoryFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+    });
+</script>

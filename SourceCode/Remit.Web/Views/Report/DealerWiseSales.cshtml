@@ -1,0 +1,238 @@
+﻿@using Remit.Web.Helpers
+
+@{
+    ViewBag.Title = @Resources.ResourceReport.LblSalesStatement;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="row" ng-controller="rctrl">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Resources.ResourceReport.LblSalesStatementInDaterange
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-4 col-md-offset-4">
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceReport.Reason
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="selectedReason" class="form-control" name="selectedReason" >
+                                            <option value="1">@Resources.ResourceFGSale.Sales</option>
+                                            <option value="2">@Resources.ResourceFGSale.Sample</option>
+                                            <option value="3">@Resources.ResourceFGSale.FreeOfCost</option>
+                                            <option value="4">@Resources.ResourceFGSale.InternalUse</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceReport.DateType
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="selectedDateType" class="form-control" name="selectedDateType">
+                                            <option value="1">@Resources.ResourceReport.Daily</option>
+                                            <option value="2">@Resources.ResourceReport.DateRange</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" ng-show="selectedDateType == 1">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceCommon.LblDate
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <input type="text" class="form-control" ng-model="dwsdailyDate" name="dwsdailyDate"
+                                               data-date-format="dd-MM-yyyy" bs-datepicker data-min-view="0"
+                                               data-autoclose="true"
+                                               data-placement="auto" data-container="body">
+                                    </div>
+                                </div>
+                                
+
+                                <div class="form-group" ng-show="selectedDateType == 2">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceCommon.LblFromDate
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <input type="text" class="form-control" ng-model="dwsfromDate" name="dwsfromDate" data-date-format="dd-MMM-yyyy" data-container="body"
+                                               bs-datepicker data-min-view="0" data-autoclose="true" data-placement="auto" ng-change="formatDate()">
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-show="selectedDateType == 2">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceCommon.LblToDate
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <input type="text" class="form-control" ng-model="dwstoDate" name="dwstoDate"
+                                               data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0"
+                                               data-autoclose="true"
+                                               data-placement="auto" data-container="body"
+                                               ng-change="formatDate()">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceReport.LblSalesUnit
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="salesUnit" class="form-control"
+                                                data-ng-options="c.Id as c.UnitName for c in allItemUnitFromDb" name="salesUnit">
+                                            @*<option value="">@Resources.ResourceReport.LblSelectUnit</option>*@
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceReport.LblProductType
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="productType" class="form-control"
+                                                data-ng-options="c.Id as c.TypeName for c in allItemTypeFromDb" name="productType">
+                                            <option value="">@Resources.ResourceReport.LblSelectType</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8 ">
+                                        <a ng-href="" class="btn btn-primary" ng-click="generateReport()" role="button">
+                                            @Resources.ResourceReport.LblVIewReport
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('rService', ['$http', function ($http) {
+        return {
+            getAllUnit: function () {
+                return $http.get('/FGUOM/GetFGUOMList');
+            },
+            getAllType: function() {
+                return $http.get('/FGType/GetFGTypeList');
+            }
+        };
+    }]);
+
+    app.controller('rctrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, rService, $log, $ngBootbox,
+        $window ) {
+        $scope.selectedReason = "1";
+        $scope.YearMonth = new Date();
+        $scope.ReceivedDate = new Date();
+        $scope.Year = $scope.YearMonth.getFullYear();
+        $scope.Month = $scope.YearMonth.getMonth();
+        $scope.Date = $scope.ReceivedDate.getFullYear() + '-' + ($scope.ReceivedDate.getMonth() + 1) + '-' + $scope.ReceivedDate.getDate();
+        $scope.toDate = new Date().toLocaleString();
+        $scope.fromDate = new Date().toLocaleString();
+        $scope.dwstoDate = new Date();
+        $scope.dwsfromDate = new Date();
+        $scope.dwsdailyDate = new Date();
+        $scope.selectedDateType = "2";
+
+        $scope.formatDate = function () {
+            $scope.dwstoDate = $scope.dwstoDate;
+            $scope.dwsfromDate = $scope.dwsfromDate;
+        }
+
+        var loadAllUnit = function() {
+            $scope.allItemUnitFromDb = [];
+            rService.getAllUnit()
+                .then(function onSuccess(response) {
+                    $scope.allItemUnitFromDb = response.data;
+                    $scope.salesUnit = 3;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        };
+        loadAllUnit();
+
+        var loadAllType = function() {
+            $scope.allItemTypeFromDb = [];
+            rService.getAllType()
+                .then(function onSuccess(response) {
+                    $scope.allItemTypeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        };
+        loadAllType();
+
+        $scope.generateReport = function () {
+
+            var fromDate = $scope.dwsfromDate.toDateString("yyyy-MM-dd");
+            var toDate = $scope.dwstoDate.toDateString("yyyy-MM-dd");
+            var dailyDate = $scope.dwsdailyDate.toDateString("yyyy-MM-dd");
+
+            var salesUnit = 0;
+            var productType = 0;
+            var selectedDateType = "";
+            if ($scope.salesUnit != undefined && $scope.salesUnit != null && $scope.salesUnit !== "") {
+                salesUnit = $scope.salesUnit;
+            }
+
+            if ($scope.productType != undefined && $scope.productType != null && $scope.productType !== "") {
+                productType = $scope.productType;
+            }
+
+            if ($scope.selectedDateType != undefined && $scope.selectedDateType != null && $scope.selectedDateType !== "") {
+                selectedDateType = $scope.selectedDateType;
+            }
+            
+
+            var url = "/RDLCReport/DealerWiseSalesStatement.aspx?fromDate=" + fromDate +"&toDate=" + toDate +"&saleUnit=" + salesUnit +"&productType=" +
+                productType + "&reason=" + $scope.selectedReason + "&selectedDateType=" + selectedDateType + "&dailyDate=" + dailyDate;
+
+            $window.open(url, '_blank');
+        };
+
+    });
+</script>

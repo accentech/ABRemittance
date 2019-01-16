@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DailyRawMaterialScaleReportDataSet" targetNamespace="http://tempuri.org/DailyRawMaterialScaleReportDataSet.xsd" xmlns:mstns="http://tempuri.org/DailyRawMaterialScaleReportDataSet.xsd" xmlns="http://tempuri.org/DailyRawMaterialScaleReportDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DailyRawMaterialScaleReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DailyRawMaterialScaleReportDataSet" msprop:Generator_UserDSName="DailyRawMaterialScaleReportDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ScaleReport" msprop:Generator_TableClassName="ScaleReportDataTable" msprop:Generator_TableVarName="tableScaleReport" msprop:Generator_TablePropName="ScaleReport" msprop:Generator_RowDeletingName="ScaleReportRowDeleting" msprop:Generator_RowChangingName="ScaleReportRowChanging" msprop:Generator_RowEvHandlerName="ScaleReportRowChangeEventHandler" msprop:Generator_RowDeletedName="ScaleReportRowDeleted" msprop:Generator_UserTableName="ScaleReport" msprop:Generator_RowChangedName="ScaleReportRowChanged" msprop:Generator_RowEvArgName="ScaleReportRowChangeEvent" msprop:Generator_RowClassName="ScaleReportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SN" msprop:Generator_ColumnVarNameInTable="columnSN" msprop:Generator_ColumnPropNameInRow="SN" msprop:Generator_ColumnPropNameInTable="SNColumn" msprop:Generator_UserColumnName="SN" type="xs:string" minOccurs="0" />
+              <xs:element name="RawMaterialsName" msprop:Generator_ColumnVarNameInTable="columnRawMaterialsName" msprop:Generator_ColumnPropNameInRow="RawMaterialsName" msprop:Generator_ColumnPropNameInTable="RawMaterialsNameColumn" msprop:Generator_UserColumnName="RawMaterialsName" type="xs:string" minOccurs="0" />
+              <xs:element name="ShipName" msprop:Generator_ColumnVarNameInTable="columnShipName" msprop:Generator_ColumnPropNameInRow="ShipName" msprop:Generator_ColumnPropNameInTable="ShipNameColumn" msprop:Generator_UserColumnName="ShipName" type="xs:string" minOccurs="0" />
+              <xs:element name="InWeight" msprop:Generator_ColumnVarNameInTable="columnInWeight" msprop:Generator_ColumnPropNameInRow="InWeight" msprop:Generator_ColumnPropNameInTable="InWeightColumn" msprop:Generator_UserColumnName="InWeight" type="xs:string" minOccurs="0" />
+              <xs:element name="OutWeight" msprop:Generator_ColumnVarNameInTable="columnOutWeight" msprop:Generator_ColumnPropNameInRow="OutWeight" msprop:Generator_ColumnPropNameInTable="OutWeightColumn" msprop:Generator_UserColumnName="OutWeight" type="xs:string" minOccurs="0" />
+              <xs:element name="TotalWeight" msprop:Generator_ColumnVarNameInTable="columnTotalWeight" msprop:Generator_ColumnPropNameInRow="TotalWeight" msprop:Generator_ColumnPropNameInTable="TotalWeightColumn" msprop:Generator_UserColumnName="TotalWeight" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleNo" msprop:Generator_ColumnVarNameInTable="columnVehicleNo" msprop:Generator_ColumnPropNameInRow="VehicleNo" msprop:Generator_ColumnPropNameInTable="VehicleNoColumn" msprop:Generator_UserColumnName="VehicleNo" type="xs:string" minOccurs="0" />
+              <xs:element name="DriverName" msprop:Generator_ColumnVarNameInTable="columnDriverName" msprop:Generator_ColumnPropNameInRow="DriverName" msprop:Generator_ColumnPropNameInTable="DriverNameColumn" msprop:Generator_UserColumnName="DriverName" type="xs:string" minOccurs="0" />
+              <xs:element name="Remarks" msprop:Generator_ColumnVarNameInTable="columnRemarks" msprop:Generator_ColumnPropNameInRow="Remarks" msprop:Generator_ColumnPropNameInTable="RemarksColumn" msprop:Generator_UserColumnName="Remarks" type="xs:string" minOccurs="0" />
+              <xs:element name="Time" msprop:Generator_ColumnVarNameInTable="columnTime" msprop:Generator_ColumnPropNameInRow="Time" msprop:Generator_ColumnPropNameInTable="TimeColumn" msprop:Generator_UserColumnName="Time" type="xs:string" minOccurs="0" />
+              <xs:element name="BOE" msprop:Generator_ColumnVarNameInTable="columnBOE" msprop:Generator_ColumnPropNameInRow="BOE" msprop:Generator_ColumnPropNameInTable="BOEColumn" msprop:Generator_UserColumnName="BOE" type="xs:string" minOccurs="0" />
+              <xs:element name="Unit" msprop:Generator_ColumnVarNameInTable="columnUnit" msprop:Generator_ColumnPropNameInRow="Unit" msprop:Generator_ColumnPropNameInTable="UnitColumn" msprop:Generator_UserColumnName="Unit" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,300 @@
+﻿
+@{
+    ViewBag.Title = "FGDealerZone";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgdealerzoneCtrl">
+
+    @* ************ FORM - SECTION (Start) *************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceFGDealerZone.LblFGDealerZone</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceDivision.LblDivision</label>
+                                <div>
+                                    <select data-ng-model="selectedDivisionId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allDivisionFromDb | orderBy: 'Name'" name="selectedDivisionId" >
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceDivision.LblDivision</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGDealerZone.ResourceFGDealerZoneList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="dealerzoneId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.ZoneName for c in allFGDealerZoneFromDb| filter:{'DivisionId':selectedDivisionId}:false" name="dealerzoneId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-click="loadDealerZoneById(dealerzoneId);"></select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceDivision.LblDivision
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="DivisionId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allDivisionFromDb | orderBy: 'Name'" name="DivisionId" ng-required="true">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceDivision.LblDivision</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.DivisionId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceDivision.LblDivision)
+                                    </b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceFGDealerZone.ZoneName
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="ZoneName" ng-model="ZoneName" required ng-maxlength="50" focus-on="focusMe" />
+                                    <b class="help-block" ng-if="form.ZoneName.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGDealerZone.ZoneName)
+                                    </b>
+
+                                    <b class="help-block" ng-if="form.ZoneName.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addFGDealerZone()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+
+                                    <input ng-show="dealerzoneId" type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deleteFGDealerZone()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgdealerzoneService', ['$http', function ($http) {
+
+        return {
+            saveFGDealerZone: function (fgdealerzone) {
+                return $http({
+                    url: '/FGDealerZone/CreateFGDealerZone',
+                    method: 'POST',
+                    data: fgdealerzone
+                });
+            },
+            getAllDivision: function () {
+                return $http.get('/Division/GetDivisionList');
+            },
+            getFGDealerZone: function (id) {
+                return $http.get('/FGDealerZone/GetFGDealerZone/' + id);
+            },
+            getAllFGDealerZone: function () {
+                return $http.get('/FGDealerZone/GetFGDealerZoneList');
+            },
+            deleteFGDealerZone: function (fgdealerzone) {
+                return $http({
+                    url: '/FGDealerZone/DeleteFGDealerZone',
+                    method: 'POST',
+                    data: fgdealerzone
+                });
+            }
+        };
+    }]);
+
+    app.controller('fgdealerzoneCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgdealerzoneService, $log, $ngBootbox) {
+        if ('@ViewBag.permission' == "NO") {
+            $scope.NoPermission = true;
+        }
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        loadAllFGDealerZone();
+        $scope.showModalforSearch = false;
+
+        // Add a new fgdealerzone
+        $scope.addFGDealerZone = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgdealerzone = {};
+                fgdealerzone["Id"] = $scope.Id;
+                fgdealerzone["DivisionId"] = $scope.DivisionId;
+                fgdealerzone["ZoneName"] = $scope.ZoneName;
+
+
+                fgdealerzoneService.saveFGDealerZone(fgdealerzone)
+                .then(function onSuccess(response) {
+                    loadAllFGDealerZone();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+
+        // Populate fgdealerzone
+        $scope.selectedRow = null;
+        $scope.populateFGDealerZone = function (rowvalue) {
+            $scope.Id = rowvalue.Id;
+            $scope.DivisionId = rowvalue.DivisionId;
+            $scope.ZoneName = rowvalue.ZoneName;
+
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+            $scope.desableIdField = true;
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = ''; 
+            $scope.DivisionId = null;
+            $scope.ZoneName = '';
+        }
+
+        $scope.deleteFGDealerZone = function () {
+            var fgdealerzone = {};
+                 fgdealerzone["Id"] = $scope.Id;
+                 fgdealerzoneService.deleteFGDealerZone(fgdealerzone)
+                .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                $scope.reset();
+                loadAllFGDealerZone();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+        $scope.loadDealerZoneById = function (dealerzoneId) {
+            fgdealerzoneService.getFGDealerZone(dealerzoneId)
+                .then(function onSuccess(response) {
+                    $scope.populateFGDealerZone(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        // Load FGDealerZone
+        function loadAllFGDealerZone() {
+            $scope.allFGDealerZoneFromDb = [];
+            fgdealerzoneService.getAllFGDealerZone()
+                    .then(function onSuccess(response) {
+                        $scope.allFGDealerZoneFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        @*$scope.selectedDiv = function (division) {
+            fgdealerzoneService.getAllDivision()
+                .then(function onSuccess(response) {
+                    $scope.allDivisionFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }*@
+
+
+        loadAllDivision();
+        function loadAllDivision() {
+            $scope.allDivisionFromDb = [];
+            fgdealerzoneService.getAllDivision()
+                .then(function onSuccess(response) {
+                    $scope.allDivisionFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allFGDealerZoneFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allFGDealerZoneFromDb.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });
+
+</script>
+

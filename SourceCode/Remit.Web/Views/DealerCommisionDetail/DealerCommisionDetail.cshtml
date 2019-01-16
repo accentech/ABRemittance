@@ -1,0 +1,837 @@
+﻿@using Remit.Web.Helpers
+@{
+    ViewBag.Title = Resources.ResourceDealerCommisionDetail.Header;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+
+@*@{
+        ViewBag.Title = Resources.ResourceZoneCommision.Title;
+        Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+    }*@
+
+
+<div class="col-xs-12 col-sm-12" ng-controller="dealerCommisionDetailCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceDealerCommisionDetail.Header
+        </div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceZoneCommision.Zone</label>
+                                <select data-ng-model="ZoneIdUpdated" class="form-control"
+                                        data-ng-options="c.Id as c.ZoneName for c in allDealerZoneFromDb | orderBy: 'ZoneName'" name="ZoneIdUpdated" ng-change="getEffectiveDateWhenUpdate()">
+                                    <option value="">@Resources.ResourceZoneCommision.SelectZone</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="control-label">@Resources.ResourceZoneCommision.EffectiveDate</label>
+                                    <select data-ng-model="EffectiveDateWhenUpdated" class="form-control"
+                                            data-ng-options="c.Id as c.EffectiveDateString for c in allEffectiveDateByZoneWhenUpdate" name="EffectiveDateWhenUpdated" ng-change="getDealerWhenUpdate()">
+                                        <option value="">@Resources.ResourceDealerCommisionDetail.SelectDate</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceDealerCommisionDetail.DealerList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="SelectedDealer" class="form-control listSelect" focus-on="focusMe"
+                                            data-ng-options="c.Id as c.Name for c in allDealersWhenUpdate" name="SelectedDealer"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="getAllData(SelectedDealer[0])">
+                                        @*<option value="">Select Date</option>*@
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-8 col-sm-8 col-md-8">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceZoneCommision.Zone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="ZoneId" class="form-control" ng-disabled="editmode" ng-required="true"
+                                                    data-ng-options="c.Id as c.ZoneName for c in allDealerZoneFromDb | orderBy: 'ZoneName'" name="ZoneId" ng-change="getEffectiveDateAndDealer()">
+                                                <option value="">@Resources.ResourceZoneCommision.SelectZone</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.ZoneId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceZoneCommision.Zone)
+                                            </b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceZoneCommision.EffectiveDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="ZoneCommisionId" class="form-control" ng-hide="editmode" ng-required="true"
+                                                    data-ng-options="c.Id as c.EffectiveDateString for c in allEffectiveDateByZone" @*| orderBy: 'ZoneName'"*@ name="ZoneCommisionId"
+                                                ng-change="changeByEffectiveDate()">
+                                                <option value="">@Resources.ResourceDealerCommisionDetail.SelectDate</option>
+                                            </select>
+                                            <input type="text" ng-show="editmode" class="form-control" ng-value="EffectiveDate" ng-disabled="true" />
+                                            <b class="help-block" ng-if="form.ZoneCommisionId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, @Resources.ResourceZoneCommision.EffectiveDate)
+                                            </b>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceFGDealer.LblFGDealer
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="DealerId" class="form-control" ng-hide="editmode" ng-required="true" ng-change="getAllDataFirst(DealerId)"
+                                                    data-ng-options="c.Id as c.Name for c in allDealerByZone | orderBy: 'Name'" name="DealerId" ng-disabled="!ZoneCommisionId">
+                                                <option value="">@Resources.ResourceDealerCommisionDetail.SelectDealer</option>
+                                            </select>
+                                            <input type="text" ng-show="editmode" class="form-control" ng-value="DealerName" ng-disabled="true" />
+                                            <b class="help-block" ng-if="form.DealerId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, @Resources.ResourceFGDealer.LblFGDealer)
+                                            </b>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <h3 class="heading">@Resources.ResourceZoneCommision.SFT</h3>
+                                <table class="table table-responsive table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>@Resources.ResourceZoneCommision.MonthTarget</th>
+                                            <th>@Resources.ResourceZoneCommision.MonthCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.QuaterCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.HalfYearCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.YearCommision</th>
+                                            <th>@Resources.ResourceCommon.LblAction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="zoneSFT in zoneDetailsSFT">
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSFT.FGUOMId" ng-init="zoneSFT.FGUOMId == 3" ng-hide="true">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSFT.MonthlyTarget">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSFT.MonthlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSFT.QuarterlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSFT.HalfYearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSFT.YearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="button" class=" btn btn-danger" ng-click="zoneDetailsSFT.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                @*<div class="col-md-2 padding-left-zero">
+                                        <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetailSFT($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                                    </div>*@
+                            </div>
+
+                            <div class="row">
+                                <h3 class="heading">@Resources.ResourceZoneCommision.PCS</h3>
+                                <table class="table table-responsive table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>@Resources.ResourceZoneCommision.MonthTarget</th>
+                                            <th>@Resources.ResourceZoneCommision.MonthCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.QuaterCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.HalfYearCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.YearCommision</th>
+                                            <th>@Resources.ResourceCommon.LblAction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="zonePCS in zoneDetailsPCS">
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zonePCS.FGUOMId" ng-init="zonePCS.FGUOMId == 2" ng-hide="true">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zonePCS.MonthlyTarget">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zonePCS.MonthlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zonePCS.QuarterlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zonePCS.HalfYearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zonePCS.YearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="button" class=" btn btn-danger" ng-click="zoneDetailsPCS.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                @*<div class="col-md-2 padding-left-zero">
+                                        <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetailPCS($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                                    </div>*@
+                            </div>
+
+                            <div class="row">
+                                <h3 class="heading">@Resources.ResourceZoneCommision.CTN</h3>
+                                <table class="table table-responsive table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>@Resources.ResourceZoneCommision.MonthTarget</th>
+                                            <th>@Resources.ResourceZoneCommision.MonthCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.QuaterCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.HalfYearCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.YearCommision</th>
+                                            <th>@Resources.ResourceCommon.LblAction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="zoneCTN in zoneDetailsCTN">
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneCTN.FGUOMId" ng-init="zoneCTN.FGUOMId == 1" ng-hide="true">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneCTN.MonthlyTarget">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneCTN.MonthlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneCTN.QuarterlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneCTN.HalfYearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneCTN.YearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="button" class=" btn btn-danger" ng-click="zoneDetailsCTN.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                @*<div class="col-md-2 padding-left-zero">
+                                        <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetailCTN($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                                    </div>*@
+                            </div>
+
+                            <div class="row">
+                                <h3 class="heading">@Resources.ResourceZoneCommision.SMT</h3>
+                                <table class="table table-responsive table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>@Resources.ResourceZoneCommision.MonthTarget</th>
+                                            <th>@Resources.ResourceZoneCommision.MonthCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.QuaterCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.HalfYearCommision</th>
+                                            <th>@Resources.ResourceZoneCommision.YearCommision</th>
+                                            <th>@Resources.ResourceCommon.LblAction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="zoneSMT in zoneDetailsSMT">
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSMT.FGUOMId" ng-init="zoneSMT.FGUOMId == 4" ng-hide="true">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSMT.MonthlyTarget">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSMT.MonthlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSMT.QuarterlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSMT.HalfYearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" ng-model="zoneSMT.YearlyCommission">
+                                            </td>
+                                            <td>
+                                                <input type="button" class=" btn btn-danger" ng-click="zoneDetailsSMT.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                @*<div class="col-md-2 padding-left-zero">
+                                        <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetailSMT($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                                    </div>*@
+                            </div>
+
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <input type="button" ng-click="addDealerCommision()" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    <input type="button" ng-click="addDealerCommision()" ng-show="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                    @*<input type="button" ng-show="editmode" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                        ng-bootbox-confirm-action="Delete()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />*@
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('dealerCommisionDetailService', ['$http', function ($http) {
+        return {
+            saveDealerCommisionDetail: function (dealerZoneCommisionDetailsList) {
+                var params = { dealerZoneCommisionDetailsList: dealerZoneCommisionDetailsList }
+                return $http({
+                    //url: '/DealerCommisionDetail/CreateDealerCommisionDetail',
+                    url: '/DealerCommisionDetail/UpdateDealerCommisionDetail',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            updateDealerCommisionDetail: function (dealerZoneCommisionDetailsList) {
+                var params = { dealerZoneCommisionDetailsList: dealerZoneCommisionDetailsList }
+                return $http({
+                    url: '/DealerCommisionDetail/UpdateDealerCommisionDetail',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+
+                });
+            },
+
+            getFGItemInListByYearMonth: function (year, month) {
+                return $http.get('/FGItemIn/GetReceiveListByYear', { params: { year: year, month: month + 1 } });
+            },
+
+            deleteFGItemIn: function (id) {
+                return $http.get('/FGItemIn/DeleteFGItemIn?id=' + id);
+            },
+            getAllDealerZone: function () {
+                return $http.get('/FGDealerZone/GetFGDealerZoneListWithoutOther');
+            },
+            getZoneDetailByZoneAndDate: function (id) {
+                return $http.get('/ZoneCommision/GetZoneCommisionByZoneAndDate?id=' + id);
+            },
+            getDateAndDealer: function (zoneId) {
+                return $http.get('/ZoneCommision/GetDateAndDealer?zoneId=' + zoneId);
+            },
+            getDateWhenUpdate: function (zoneId) {
+                return $http.get('/DealerCommisionDetail/GetEffectiveDate?zoneId=' + zoneId);
+            },
+            getDealerWhenUpdate: function (zoneId, zoneCommissionId) {
+                return $http.get('/DealerCommisionDetail/GetDealerZoneAndDateWhenUpdate?zoneId=' + zoneId + '&zoneCommissionId=' + zoneCommissionId);
+            },
+            getAllData: function (zoneCommisionId, dealerId) {
+                return $http.get('/DealerCommisionDetail/GetDealerCommisionByZoneDateDealer?zoneCommissionId=' + zoneCommisionId + '&dealerId=' + dealerId);
+            }
+        };
+    }]);
+
+    app.controller('dealerCommisionDetailCtrl',
+        function ($scope, $timeout, $http, focus, $location, $anchorScroll, dealerCommisionDetailService, $log, $ngBootbox, $filter) {
+            $scope.selectedYear = new Date();
+            //$scope.EffectiveDate = new Date().toISOString();
+            $scope.editmode = false;
+            $scope.notApprovemode = true;
+            @*$scope.ReceivedBy = @UserSession.GetUserFromSession().Employee.Id*@
+
+
+            $scope.messageModalObj = {};
+            $scope.messageModalObj.message = '';
+            $scope.showModalforSearch = false;
+            $scope.selectedRow = null;
+
+            $scope.zoneDetailsSFT = [];
+            $scope.zoneDetailsSFT.push({
+                Id: '',
+                FGUOMId: 3,
+                MonthlyTarget: 0,
+                MonthlyCommission: 0,
+                QuarterlyCommission: 0,
+                HalfYearlyCommission: 0,
+                YearlyCommission: 0
+            });
+            $scope.addNewDetailSFT = function ($event) {
+                $scope.zoneDetailsSFT.push({
+                    Id: '',
+                    FGUOMId: 3,
+                    MonthlyTarget: 0,
+                    MonthlyCommission: 0,
+                    QuarterlyCommission: 0,
+                    HalfYearlyCommission: 0,
+                    YearlyCommission: 0
+                });
+            }
+
+            $scope.zoneDetailsPCS = [];
+            $scope.zoneDetailsPCS.push({
+                Id: '',
+                FGUOMId: 2,
+                MonthlyTarget: 0,
+                MonthlyCommission: 0,
+                QuarterlyCommission: 0,
+                HalfYearlyCommission: 0,
+                YearlyCommission: 0
+            });
+            $scope.addNewDetailPCS = function ($event) {
+                $scope.zoneDetailsPCS.push({
+                    Id: '',
+                    FGUOMId: 2,
+                    MonthlyTarget: 0,
+                    MonthlyCommission: 0,
+                    QuarterlyCommission: 0,
+                    HalfYearlyCommission: 0,
+                    YearlyCommission: 0
+                });
+            }
+
+            $scope.zoneDetailsCTN = [];
+            $scope.zoneDetailsCTN.push({
+                Id: '',
+                FGUOMId: 1,
+                MonthlyTarget: 0,
+                MonthlyCommission: 0,
+                QuarterlyCommission: 0,
+                HalfYearlyCommission: 0,
+                YearlyCommission: 0
+            });
+            $scope.addNewDetailCTN = function ($event) {
+                $scope.zoneDetailsCTN.push({
+                    Id: '',
+                    FGUOMId: 1,
+                    MonthlyTarget: 0,
+                    MonthlyCommission: 0,
+                    QuarterlyCommission: 0,
+                    HalfYearlyCommission: 0,
+                    YearlyCommission: 0
+                });
+            }
+
+            $scope.zoneDetailsSMT = [];
+            $scope.zoneDetailsSMT.push({
+                Id: '',
+                FGUOMId: 4,
+                MonthlyTarget: 0,
+                MonthlyCommission: 0,
+                QuarterlyCommission: 0,
+                HalfYearlyCommission: 0,
+                YearlyCommission: 0
+            });
+            $scope.addNewDetailSMT = function ($event) {
+                $scope.zoneDetailsSMT.push({
+                    Id: '',
+                    FGUOMId: 4,
+                    MonthlyTarget: 0,
+                    MonthlyCommission: 0,
+                    QuarterlyCommission: 0,
+                    HalfYearlyCommission: 0,
+                    YearlyCommission: 0
+                });
+            }
+
+
+            $scope.addDealerCommision = function () {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+                    //var zoneCommision = {};
+                    var dealerZoneCommisionDetails = [];
+
+                    if ($scope.zoneDetailsSFT != null || $scope.zoneDetailsSFT !== "") {
+                        if ($scope.zoneDetailsSFT.length > 0) {
+                            for (var i = 0; i < $scope.zoneDetailsSFT.length; i++) {
+                                if ($scope.zoneDetailsSFT[i].MonthlyTarget !== 0 ||
+                                    $scope.zoneDetailsSFT[i].MonthlyCommission !== 0 ||
+                                    $scope.zoneDetailsSFT[i].QuarterlyCommission !== 0 ||
+                                    $scope.zoneDetailsSFT[i].HalfYearlyCommission !== 0 ||
+                                    $scope.zoneDetailsSFT[i].YearlyCommission !== 0) {
+                                    dealerZoneCommisionDetails.push($scope.zoneDetailsSFT[i]);
+                                } else { }
+                            }
+                        }
+                    }
+
+                    if ($scope.zoneDetailsPCS != null || $scope.zoneDetailsPCS !== "") {
+                        if ($scope.zoneDetailsPCS.length > 0) {
+                            for (var j = 0; j < $scope.zoneDetailsPCS.length; j++) {
+                                if ($scope.zoneDetailsPCS[j].MonthlyTarget !== 0 ||
+                                    $scope.zoneDetailsPCS[j].MonthlyCommission !== 0 ||
+                                    $scope.zoneDetailsPCS[j].QuarterlyCommission !== 0 ||
+                                    $scope.zoneDetailsPCS[j].HalfYearlyCommission !== 0 ||
+                                    $scope.zoneDetailsPCS[j].YearlyCommission !== 0) {
+                                    dealerZoneCommisionDetails.push($scope.zoneDetailsPCS[j]);
+                                } else { }
+                            }
+                        }
+                    }
+
+                    if ($scope.zoneDetailsCTN != null || $scope.zoneDetailsCTN !== "") {
+                        if ($scope.zoneDetailsCTN.length > 0) {
+                            for (var k = 0; k < $scope.zoneDetailsCTN.length; k++) {
+                                if ($scope.zoneDetailsCTN[k].MonthlyTarget !== 0 ||
+                                    $scope.zoneDetailsCTN[k].MonthlyCommission !== 0 ||
+                                    $scope.zoneDetailsCTN[k].QuarterlyCommission !== 0 ||
+                                    $scope.zoneDetailsCTN[k].HalfYearlyCommission !== 0 ||
+                                    $scope.zoneDetailsCTN[k].YearlyCommission !== 0) {
+                                    dealerZoneCommisionDetails.push($scope.zoneDetailsCTN[k]);
+                                } else { }
+                            }
+                        }
+                    }
+
+                    if ($scope.zoneDetailsSMT != null || $scope.zoneDetailsSMT !== "") {
+                        if ($scope.zoneDetailsSMT.length > 0) {
+                            for (var l = 0; l < $scope.zoneDetailsSMT.length; l++) {
+                                if ($scope.zoneDetailsSMT[l].MonthlyTarget !== 0 ||
+                                    $scope.zoneDetailsSMT[l].MonthlyCommission !== 0 ||
+                                    $scope.zoneDetailsSMT[l].QuarterlyCommission !== 0 ||
+                                    $scope.zoneDetailsSMT[l].HalfYearlyCommission !== 0 ||
+                                    $scope.zoneDetailsSMT[l].YearlyCommission !== 0) {
+                                    dealerZoneCommisionDetails.push($scope.zoneDetailsSMT[l]);
+                                } else { }
+                            }
+                        }
+                    }
+
+                    var dealerZoneCommisionDetailsList = [];
+                    for (var i = 0; i < dealerZoneCommisionDetails.length; i++) {
+                        var dealerZoneCommision = {};
+                        dealerZoneCommision["Id"] = dealerZoneCommisionDetails[i].Id;
+                        dealerZoneCommision["DealerId"] = $scope.DealerId;
+                        dealerZoneCommision["ZoneCommisionId"] = $scope.ZoneCommisionId;
+                        dealerZoneCommision["FGUOMId"] = dealerZoneCommisionDetails[i].FGUOMId;
+                        dealerZoneCommision["MonthlyTarget"] = dealerZoneCommisionDetails[i].MonthlyTarget;
+                        dealerZoneCommision["MonthlyCommission"] = dealerZoneCommisionDetails[i].MonthlyCommission;
+                        dealerZoneCommision["QuarterlyCommission"] = dealerZoneCommisionDetails[i].QuarterlyCommission;
+                        dealerZoneCommision["HalfYearlyCommission"] = dealerZoneCommisionDetails[i].HalfYearlyCommission;
+                        dealerZoneCommision["YearlyCommission"] = dealerZoneCommisionDetails[i].YearlyCommission;
+                        dealerZoneCommisionDetailsList.push(dealerZoneCommision);
+                    }
+
+                    //return null;
+                    if ($scope.editMode) {
+                        dealerCommisionDetailService.updateDealerCommisionDetail(dealerZoneCommisionDetailsList).then(
+                            function onSuccess(response) {
+                                $scope.messageModalObj.message = response.data.message;
+                                $scope.showModalforSearch = true;
+                                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                $scope.reset();
+                                //$scope.loadAllFGItemInList();
+                            }).catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                            });
+                    } else {
+                        dealerCommisionDetailService.saveDealerCommisionDetail(dealerZoneCommisionDetailsList).then(
+                            function onSuccess(response) {
+                                $scope.messageModalObj.message = response.data.message;
+                                $scope.showModalforSearch = true;
+                                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                $scope.reset();
+                                //$scope.loadAllFGItemInList();
+                            }).catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                            });
+                    }
+
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceLCShipment.FillRequiredData');
+                }
+            }
+
+            $scope.Delete = function () {
+                if ($scope.Id !== undefined && $scope.Id !== null && $scope.Id !== "") {
+                    dealerCommisionDetailService.deleteFGItemIn($scope.Id).then(function onSuccess(response) {
+                        if (response.data.isSuccess === true) {
+                            $ngBootbox.alert(response.data.message);
+                            $scope.reset();
+                            $scope.loadAllFGItemInList();
+                        } else {
+                            $ngBootbox.alert(response.data.message);
+                        }
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+                    return;
+                }
+            }
+            $scope.populateDealerCommisionDetail = function (rowvalue) {
+                $scope.selectedRow = rowvalue;
+                $scope.Id = rowvalue.Id;
+
+                //$scope.EffectiveDate = new Date(rowvalue.EffectiveDateString);
+                $scope.EffectiveDate = rowvalue.EffectiveDateString;
+                $scope.ZoneId = rowvalue.ZoneId;
+                $scope.DealerId = rowvalue.DealerId;
+                $scope.ZoneCommisionId = rowvalue.ZoneCommisionId;
+                $scope.DealerName = rowvalue.DealerName;
+
+                $scope.zoneDetailsSFT = rowvalue.zoneDetailsSFT;
+                $scope.zoneDetailsCTN = rowvalue.zoneDetailsCTN;
+                $scope.zoneDetailsPCS = rowvalue.zoneDetailsPCS;
+                $scope.zoneDetailsSMT = rowvalue.zoneDetailsSMT;
+            }
+            $scope.reset = function () {
+                $scope.$broadcast('show-errors-reset');
+                $scope.selectedRow = null;
+                $scope.editmode = false;
+                $scope.ZoneId = null;
+                $scope.EffectiveDate = null;
+                $scope.DealerId = null;
+                //$scope.EffectiveDateWhenUpdated = null;
+                //$scope.SelectedDealer = null;
+                //$scope.ZoneIdUpdated = null;
+                //$scope.EffectiveDateWhenUpdated = "";
+                $scope.SelectedDealer = null;
+                $scope.ZoneCommisionId = null;
+                $scope.DealerName = null;
+
+                $scope.zoneDetailsSFT = [];
+                $scope.addNewDetailSFT();
+                $scope.zoneDetailsCTN = [];
+                $scope.addNewDetailCTN();
+                $scope.zoneDetailsPCS = [];
+                $scope.addNewDetailPCS();
+                $scope.zoneDetailsSMT = [];
+                $scope.addNewDetailSMT();
+            }
+
+            // WHen Select ZOne..........
+            $scope.getEffectiveDateAndDealer = function () {
+                if (!$scope.ZoneId) {
+                    $scope.allEffectiveDateByZone = [];
+                    $scope.allDealerByZone = [];
+                    $scope.reset();
+                    return;
+                }
+
+                $scope.allEffectiveDateByZone = [];
+                $scope.allDealerByZone = [];
+                $scope.zoneDetailsSFT = [];
+                $scope.zoneDetailsCTN = [];
+                $scope.zoneDetailsPCS = [];
+                $scope.zoneDetailsSMT = [];
+
+                dealerCommisionDetailService.getDateAndDealer($scope.ZoneId).then(
+                    function onSuccess(response) {
+                        $scope.allEffectiveDateByZone = response.data.dates;
+                        $scope.allDealerByZone = response.data.Dealers;
+                    }).catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            }
+
+            // WHen Select Effective Date..........
+            $scope.getZoneCommissionDetails = function () {
+                if (!$scope.ZoneId && !$scope.ZoneCommisionId) {
+                    return;
+                }
+                dealerCommisionDetailService.getZoneDetailByZoneAndDate($scope.ZoneCommisionId).then(
+                    function onSuccess(response) {
+                        $scope.zoneDetailsSFT = response.data.zoneDetailsSFT;
+                        $scope.zoneDetailsPCS = response.data.zoneDetailsPCS;
+                        $scope.zoneDetailsCTN = response.data.zoneDetailsCTN;
+                        $scope.zoneDetailsSMT = response.data.zoneDetailsSMT;
+
+                        //$scope.ZoneCommisionId = response.data.Id;
+
+                    }).catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            }
+
+            //....Select Zone From List.......
+            $scope.getEffectiveDateWhenUpdate = function () {
+                if (!$scope.ZoneIdUpdated) {
+                    $scope.allEffectiveDateByZoneWhenUpdate = [];
+                    $scope.allDealersWhenUpdate = [];
+                    return null;
+                }
+                $scope.allEffectiveDateByZoneWhenUpdate = [];
+                dealerCommisionDetailService.getDateWhenUpdate($scope.ZoneIdUpdated).then(
+                    function onSuccess(response) {
+                        $scope.allEffectiveDateByZoneWhenUpdate = response.data;
+                    }).catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            }
+            //....Select Date From List.......
+            $scope.getDealerWhenUpdate = function () {
+                if (!$scope.ZoneIdUpdated && !$scope.EffectiveDateWhenUpdated) {
+                    $scope.allDealersWhenUpdate = [];
+                    return null;
+                }
+                $scope.allDealersWhenUpdate = [];
+                dealerCommisionDetailService.getDealerWhenUpdate($scope.ZoneIdUpdated, $scope.EffectiveDateWhenUpdated).then(
+                    function onSuccess(response) {
+                        $scope.allDealersWhenUpdate = response.data;
+                    }).catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            }
+
+            $scope.getAllData = function (dealer) {
+                $scope.editmode = true;
+                dealerCommisionDetailService.getAllData($scope.EffectiveDateWhenUpdated, dealer).then(
+                    function onSuccess(response) {
+                        $scope.populateDealerCommisionDetail(response.data);
+                    }).catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            }
+
+            $scope.getAllDataFirst = function (dealer) {
+                if ($scope.ZoneCommisionId != null &&
+                    $scope.ZoneCommisionId !== "" &&
+                    $scope.ZoneCommisionId != undefined) {
+                    if (dealer != null && dealer !== "" && dealer != undefined) {
+                        $scope.editmode = false;
+                        dealerCommisionDetailService.getAllData($scope.ZoneCommisionId, dealer).then(
+                            function onSuccess(response) {
+                                $scope.populateDealerCommisionDetail(response.data);
+                            }).catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                            });
+                    }
+                }
+            }
+            $scope.changeByEffectiveDate = function() {
+                $scope.zoneDetailsSFT = [];
+                $scope.zoneDetailsCTN = [];
+                $scope.zoneDetailsPCS = [];
+                $scope.zoneDetailsSMT = [];
+                if ($scope.ZoneCommisionId != null &&
+                    $scope.ZoneCommisionId !== "" &&
+                    $scope.ZoneCommisionId != undefined) {
+                    var dealer = $scope.DealerId;
+                    if (dealer != null && dealer !== "" && dealer != undefined) {
+                        $scope.editmode = false;
+                        dealerCommisionDetailService.getAllData($scope.ZoneCommisionId, dealer).then(
+                            function onSuccess(response) {
+                                $scope.populateDealerCommisionDetail(response.data);
+                            }).catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                    }
+                }
+            }
+
+            @*$scope.loadAllFGItemInList = function () {
+                var year = $scope.selectedYear;
+                var month = year.getMonth();
+                $scope.allFGItemInListByYearMonth = [];
+                year = year.getFullYear();
+
+                dealerCommisionDetailService.getFGItemInListByYearMonth(year, month).then(function onSuccess(response) {
+                    $scope.allFGItemInListByYearMonth = response.data;
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }*@
+            //$scope.loadAllFGItemInList();
+
+            loadAllDealerZone();
+            function loadAllDealerZone() {
+                $scope.allDealerZoneFromDb = [];
+                dealerCommisionDetailService.getAllDealerZone()
+                    .then(function onSuccess(response) {
+                        $scope.allDealerZoneFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+        });
+</script>

@@ -1,0 +1,8 @@
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\bin\Debug\Remit.CachingService.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\bin\Debug\Remit.CachingService.pdb
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\bin\Debug\MoreLinq.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\bin\Debug\MoreLinq.xml
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\obj\Debug\Remit.CachingService.csproj.CoreCompileInputs.cache
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\obj\Debug\Remit.CachingService.csproj.CopyComplete
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\obj\Debug\Remit.CachingService.dll
+E:\Projects\ABBank\Development\Remittance\SourceCode\Remit.CachingService\obj\Debug\Remit.CachingService.pdb

@@ -1,0 +1,218 @@
+﻿@using Remit.Web.Helpers
+@{
+    ViewBag.Title = "YearGradeUnitWiseDealerSalesReport";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+@*@{
+    ViewBag.Title = @Resources.ResourceReport.LblSalesStatement;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}*@
+
+<div class="row" ng-controller="rctrl">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Resources.ResourceReport.LblYGUWDSR
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-4 col-md-offset-4">
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceReport.Reason
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="selectedReason" class="form-control" name="selectedReason">
+                                            <option value="1">@Resources.ResourceFGSale.Sales</option>
+                                            <option value="2">@Resources.ResourceFGSale.Sample</option>
+                                            <option value="3">@Resources.ResourceFGSale.FreeOfCost</option>
+                                            <option value="4">@Resources.ResourceFGSale.InternalUse</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceCommon.LblYear
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <input type="text" class="form-control" ng-model="SelectedYear" name="SelectedYear" data-date-format="yyyy" data-min-view="2" data-autoclose="true"
+                                               data-placement="auto" data-container="body" bs-datepicker ng-change="changevalue()">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceReport.LblSalesUnit
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="salesUnit" class="form-control"
+                                                data-ng-options="c.Id as c.UnitName for c in allItemUnitFromDb" name="salesUnit">
+                                            @*<option value="">@Resources.ResourceReport.LblSelectUnit</option>*@
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceFGGrade.LblFGGrade
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="fgGradeId" class="form-control"
+                                                data-ng-options="c.Id as c.Grade for c in allGradeFromDb" name="fgGradeId">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGGrade.LblFGGrade</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceFGDealer.DealersZone
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-7 col-md-7">
+                                        <select data-ng-model="DealersZoneId" class="form-control"
+                                                data-ng-options="c.Id as c.ZoneName for c in allDealerZoneFromDb | orderBy: 'ZoneName'" name="DealersZoneId" ng-required="true">
+                                            <option value="">@Resources.ResourceFGDealer.Select</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-5 col-sm-offset-6 col-xs-12 col-sm-6 col-md-5 ">
+                                        <a ng-href="" class="btn btn-primary" ng-click="generateReport()" role="button">
+                                            @Resources.ResourceReport.LblVIewReport
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('rService', ['$http', function ($http) {
+        return {
+            getAllUnit: function () {
+                return $http.get('/FGUOM/GetFGUOMList');
+            },
+            getAllGrade: function () {
+                return $http.get('/FGGrade/GetFGGradeList');
+            },
+            getAllDealerZone: function () {
+                return $http.get('/FGDealerZone/GetFGDealerZoneList');
+            },
+        };
+    }]);
+
+    app.controller('rctrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, rService, $log, $ngBootbox,$window ) {
+        $scope.selectedReason = "1";
+        $scope.SelectedYear = new Date();
+        $scope.Year = $scope.SelectedYear.getFullYear();
+        //$scope.Month = $scope.SelectedYear.getMonth();
+        $scope.changevalue = function () {
+            $scope.Year = $scope.SelectedYear.getFullYear();
+            //$scope.Month = $scope.SelectedYear.getMonth();
+        }
+        var loadAllUnit = function() {
+            $scope.allItemUnitFromDb = [];
+            rService.getAllUnit()
+                .then(function onSuccess(response) {
+                    $scope.allItemUnitFromDb = response.data;
+                    $scope.salesUnit = 3;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        };
+        loadAllUnit();
+
+        var loadAllGrade = function () {
+            $scope.allItemGradeFromDb = [];
+            rService.getAllGrade()
+                .then(function onSuccess(response) {
+                    $scope.allGradeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        };
+        loadAllGrade();
+        
+        loadAllDealerZone();
+        function loadAllDealerZone() {
+            $scope.allDealerZoneFromDb = [];
+            rService.getAllDealerZone()
+                .then(function onSuccess(response) {
+                    $scope.allDealerZoneFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.generateReport = function () {
+            var year = $scope.Year;
+            var salesUnit = 0;
+            var fgGrade = 0;
+            var dealersZoneId = 0;
+            
+            if ($scope.salesUnit != undefined && $scope.salesUnit != null && $scope.salesUnit !== "") {
+                salesUnit = $scope.salesUnit;
+            } else {
+                $ngBootbox.alert('Please, Select an Unit');
+                return;
+            }
+
+            if ($scope.fgGradeId != undefined && $scope.fgGradeId != null && $scope.fgGradeId !== "") {
+                fgGrade = $scope.fgGradeId;
+            }
+            
+            if ($scope.DealersZoneId != undefined && $scope.DealersZoneId != null && $scope.DealersZoneId !== "") {
+                dealersZoneId = $scope.DealersZoneId;
+            }
+
+            var url = "/RDLCReport/YearGradeUnitWiseDealerSalesReport.aspx?SelectedYear=" + year + "&saleUnit=" + salesUnit + "&FGGradeId=" + fgGrade + "&dealersZoneId=" + dealersZoneId +  "&reason=" + $scope.selectedReason ;
+
+            $window.open(url, '_blank');
+        };
+
+    });
+</script>
+
+
+
