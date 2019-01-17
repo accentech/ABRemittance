@@ -1,0 +1,715 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceSupplier.LblSupplier;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="supplierCtrl">
+
+
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceSupplier.LblSupplier</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceSupplier.LblName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" name="Name" ng-model="Name" required ng-maxlength="200" />
+                                            <b class="help-block" ng-if="form.Name.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceSupplier.LblName)
+                                            </b>
+                                            <b class="help-block" ng-if="form.Name.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceSupplier.LblAddress1
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <textarea class="form-control" name="AddressLine1" ng-model="AddressLine1" required ng-maxlength="999"></textarea>
+                                            <b class="help-block" ng-if="form.AddressLine1.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceSupplier.LblAddress)
+                                            </b>
+                                            <b class="help-block" ng-if="form.AddressLine1.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblAddress2
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <textarea class="form-control" name="AddressLine2" ng-model="AddressLine2" ng-maxlength="999"></textarea>
+                                            <b class="help-block" ng-if="form.AddressLine2.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblAddress3
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <textarea class="form-control" name="AddressLine3" ng-model="AddressLine3" ng-maxlength="999"></textarea>
+                                            <b class="help-block" ng-if="form.AddressLine3.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group" show-errors id="searchdivid">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceSupplier.LblCountry
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <select data-ng-model="CountryId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allCountryFromDb | orderBy: 'Name'" name="CountryId" ng-required="true" ng-change="getCity()">
+                                                <option value="">@Resources.ResourceSupplier.LblSelectCountry</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.Name.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceSupplier.LblCountry)
+                                            </b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @*<b class="starStyle">*</b>*@ @Resources.ResourceSupplier.LblCity
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <select data-ng-model="CityId" class="form-control" ng-disabled="!CountryId"
+                                                    data-ng-options="c.Id as c.Name for c in allCityByCountry | orderBy: 'Name'" name="CityId" @*ng-required="true"*@>
+                                                <option value="">@Resources.ResourceSupplier.LblSelCity</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.CityId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceSupplier.LblCity)
+                                            </b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblLoadingPort
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" name="ItemLoadingPort" ng-model="ItemLoadingPort" ng-maxlength="50" />
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblOfficePhone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" name="OfficePhone" ng-model="OfficePhone" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblEmergencyContact
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" name="EmergencyContact" ng-model="EmergencyContact" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblEmail
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" name="Email" ng-model="Email" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblSkype
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" name="Skype" ng-model="Skype" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblWebsite
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <input class="form-control" type="text" name="Website" ng-model="Website" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                @Resources.ResourceSupplier.LblCurrency
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-9 col-md-9">
+                                            <select data-ng-model="CurrencyId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allCurrencyFromDb | orderBy: 'Name'" name="CurrencyId">
+                                                <option value="">Select @Resources.ResourceSupplier.LblCurrency</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <div class="padding-right-zero">
+                                                    <label class="col-xs-8 col-sm-8 col-md-8 control-label default-color">
+                                                        @Resources.ResourceSupplier.LblLocalSupplier
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-3 col-sm-3 col-md-3 padding-left-zero">
+                                                    <div class="col-xs-12 col-sm-2 col-md-2">
+                                                        <input class="form-control" type="checkbox" ng-model="IsLocalSupplier" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+
+                                                <div class="padding-right-zero">
+                                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                        @Resources.ResourceSupplier.LblActive
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-3 col-sm-9 col-md-9 padding-left-zero">
+                                                    <div class="col-xs-12 col-sm-2 col-md-2">
+                                                        <input class="form-control" type="checkbox" ng-model="IsActive" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    @*<div class="form-group">
+                                            <div class="padding-right-zero">
+                                                <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                                    @Resources.ResourceSupplier.LblActive
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-3 col-sm-9 col-md-9 padding-left-zero">
+                                                <div class="col-xs-12 col-sm-2 col-md-2">
+                                                    <input class="form-control" type="checkbox" ng-model="IsActive"/>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top: 20px;">
+                                <div class="form-group">
+                                    <div class=" col-xs-12 col-md-offset-1 col-sm-6 col-md-6 " style="margin-left: 165px;">
+                                        <input type="button" ng-click="addSupplier()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+
+
+    @* ************ TABLE - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceSupplier.LblSupplier @Resources.ResourceCommon.lblList</div>
+        <div class="panel-body border-green  pt pb">
+            <div class="row mb">
+                <div class="col-sm-8 padding-left-zero">
+                    <div class="col-sm-4">
+                        <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                    </div>
+                    <div class="col-sm-8 text-center-vertical">
+                        @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{ allSupplierFromDb.length}}</b> @Resources.ResourceSupplier.LblTotalSupplier
+                    </div>
+                </div>
+                <div class="col-sm-4 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical text-right">
+                        <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select ng-model="entryLimit" class="form-control">
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div class="">
+                        <table class="table table-bordered slidable-table">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.ResourceSupplier.LblName</th>
+                                    <th>@Resources.ResourceSupplier.LblAddress</th>
+                                    <th>@Resources.ResourceSupplier.LblCountry</th>
+                                    <th>@Resources.ResourceSupplier.LblEmail</th>
+                                    <th>@Resources.ResourceSupplier.LblEmergencyContact</th>
+                                    <th>@Resources.ResourceSupplier.LblLoadingPort</th>
+                                    <th>@Resources.ResourceSupplier.LblOfficePhone</th>
+                                    <th>@Resources.ResourceSupplier.LblCurrency</th>
+                                    <th> @Resources.ResourceSupplier.LocalSupplier</th>
+                                    <th>@Resources.ResourceSupplier.Active</th>
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>@Resources.ResourceSupplier.LblName</th>
+                                    <th>@Resources.ResourceSupplier.LblAddress</th>
+                                    <th>@Resources.ResourceSupplier.LblCountry</th>
+                                    <th>@Resources.ResourceSupplier.LblEmail</th>
+                                    <th>@Resources.ResourceSupplier.LblEmergencyContact</th>
+                                    <th>@Resources.ResourceSupplier.LblLoadingPort</th>
+                                    <th>@Resources.ResourceSupplier.LblOfficePhone</th>
+                                    <th>@Resources.ResourceSupplier.LblCurrency</th>
+                                    <th>@Resources.ResourceSupplier.LocalSupplier</th>
+                                    <th>@Resources.ResourceSupplier.Active</th>
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr ng-class="{'selected':data == selectedRow}" ng-repeat="data in filtered = (allSupplierFromDB  | filter:SearchText | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                                    <td>{{data.Name }}</td>
+
+                                    <td>
+                                        {{data.AddressLine1}} <br />{{data.AddressLine2}} <br />{{data.AddressLine2}}
+                                    </td>
+                                    <td>{{data.CountryName }}</td>
+                                    <td>{{data.Email }}</td>
+                                    <td>{{data.EmergencyContact }}</td>
+                                    <td>{{data.ItemLoadingPort }}</td>
+                                    <td>{{data.OfficePhone }}</td>
+                                    <td>{{data.CurrencyName}}</td>
+                                    <td>{{data.IsLocalSupplier == 1?"Yes":"No" }}</td>
+                                    <td>{{data.IsActive == 1?"Yes":"No" }}</td>
+
+                                    <td><input type="button" value=@Resources.ResourceCommon.LblEdit class="btn btn-info btn-sm" ng-click="populateSupplier(data)" /></td>
+                                    <td>
+                                        <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger btn-sm" ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                               ng-bootbox-confirm-action="deleteSupplier(data)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @Resources.ResourceSupplier.LblNoSupplierFound
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ TABLE - SECTION (End)*************** *@
+
+</div>
+
+
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('supplierService', ['$http', function ($http) {
+
+        return {
+            saveSupplier: function (supplier, componentList) {
+                var parameters = { supplier: supplier, componentList: componentList }
+                return $http({
+                    url: '/Supplier/CreateSupplier',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(parameters)
+                });
+            },
+
+
+
+            getSupplier: function (id) {
+                return $http.get('/Supplier/GetSupplier/' + id);
+            },
+
+            getAllCityByCountry: function (id) {
+                return $http.get('/City/GetCityByCountry/' + id);
+            },
+
+            getAllSupplier: function () {
+                return $http.get('/Supplier/GetSupplierAndManufacturerList');
+            },
+            getAllCountry: function () {
+                return $http.get('/Country/GetCountryList');
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+            deleteSupplier: function (supplier) {
+                return $http({
+                    url: '/Supplier/DeleteSupplier',
+                    method: 'POST',
+                    data: supplier
+                })
+            },
+            getAllComponent: function () {
+                return $http.get('/Supplier/GetAllComponent');
+            }
+        };
+    }]); app.controller('supplierCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, supplierService, $log, $ngBootbox) {
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.RegistrationDate = new Date();
+        $scope.Type = 1;
+        $scope.availableComponent = [];
+        $scope.selectedComponent = [];
+        loadAllSupplier();
+        $scope.showModalforSearch = false;
+        // Add a new supplier
+        $scope.addSupplier = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var supplier = {};
+                supplier["Id"] = $scope.Id;
+                supplier["Name"] = $scope.Name;
+                supplier["RegistrationDate"] = $scope.RegistrationDate;
+
+                supplier["CountryId"] = $scope.CountryId;
+
+                supplier["AddressLine1"] = $scope.AddressLine1;
+                supplier["AddressLine2"] = $scope.AddressLine2;
+                supplier["AddressLine3"] = $scope.AddressLine3;
+
+                if ($scope.CityId === 0) {
+                    $scope.CityId = null;
+                }
+                supplier["CityId"] = $scope.CityId;
+                supplier["OfficePhone"] = $scope.OfficePhone;
+                supplier["EmergencyContact"] = $scope.EmergencyContact;
+                supplier["Email"] = $scope.Email;
+                supplier["Type"] = $scope.Type;
+
+                supplier["Skype"] = $scope.Skype;
+                supplier["Website"] = $scope.Website;
+                supplier["ClientList"] = $scope.ClientList;
+                supplier["CurrencyId"] = $scope.CurrencyId;
+                supplier["ItemsBuild"] = $scope.ItemsBuild;
+                supplier["CountryItemOrigin"] = $scope.CountryItemOrigin;
+                supplier["ItemLoadingPort"] = $scope.ItemLoadingPort;
+                supplier["ItemLoadingPort"] = $scope.ItemLoadingPort;
+                supplier["IsLocalSupplier"] = $scope.IsLocalSupplier;
+                supplier["IsActive"] = $scope.IsActive;
+
+                supplierService.saveSupplier(supplier, $scope.selectedComponent)
+                  .then(function onSuccess(response) {
+                      loadAllSupplier();
+                      $scope.messageModalObj.message = response.data.message;
+                      $scope.showModalforSearch = true;
+                      $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                      $scope.reset();
+
+                  })
+                  .catch(function onError(response) {
+                      $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                  });
+            }
+        };
+        // Populate supplier
+        $scope.selectedRow = null;
+        $scope.populateSupplier = function (supplier) {
+            $scope.selectedRow = supplier;
+            $scope.Id = supplier.Id;
+            $scope.Name = supplier.Name;
+            //alert(supplier.RegistrationDate)
+            $scope.RegistrationDate = supplier.RegistrationDate;
+            $scope.CountryId = supplier.CountryId;
+            $scope.getCity();
+
+            $scope.AddressLine1 = supplier.AddressLine1;
+            $scope.AddressLine2 = supplier.AddressLine2;
+            $scope.AddressLine3 = supplier.AddressLine3;
+
+            $scope.CityId = supplier.CityId;
+            $scope.OfficePhone = supplier.OfficePhone;
+            $scope.EmergencyContact = supplier.EmergencyContact;
+            $scope.Email = supplier.Email;
+            $scope.Type = supplier.Type;
+
+            $scope.Skype = supplier.Skype;
+            $scope.Website = supplier.Website;
+            $scope.ClientList = supplier.ClientList;
+            $scope.CurrencyId = supplier.CurrencyId;
+
+            $scope.ItemsBuild = supplier.ItemsBuild;
+            $scope.CountryOrigin = supplier.CountryOrigin;
+            $scope.ItemLoadingPort = supplier.ItemLoadingPort;
+            $scope.CountryItemOrigin = supplier.CountryOrigin;
+            $scope.IsLocalSupplier = supplier.IsLocalSupplier;
+            $scope.IsActive = supplier.IsActive;
+
+            $scope.selectedComponent = supplier.ComponentViewModels;
+
+
+
+            for (var i = $scope.availableComponent.length - 1; i >= 0; i--) {
+                for (var j = 0; j < $scope.selectedComponent.length; j++) {
+                    if ($scope.availableComponent[i] && ($scope.availableComponent[i].Id === $scope.selectedComponent[j].Id)) {
+                        $scope.availableComponent.splice(i, 1);
+                    }
+                }
+            }
+
+
+
+
+
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.Name = '';
+            $scope.CountryId = '';
+
+            $scope.RegistrationDate = '';
+
+            $scope.AddressLine1 = '';
+            $scope.AddressLine2 = '';
+            $scope.AddressLine3 = '';
+
+            $scope.CityId = '';
+            $scope.OfficePhone = '';
+            $scope.EmergencyContact = '';
+            $scope.Email = '';
+            $scope.Type = 1;
+
+            $scope.Skype = '';
+            $scope.Website = '';
+            $scope.ClientList = '';
+            $scope.CurrencyId = '';
+
+            $scope.ItemsBuild = '';
+            $scope.CountryOrigin = '';
+            $scope.ItemLoadingPort = '';
+            $scope.CountryItemOrigin = '';
+            $scope.IsLocalSupplier = '';
+            $scope.IsActive = '';
+
+            $scope.selectedRow = null;
+            $scope.selectedComponent = [];
+
+        }
+
+        $scope.deleteSupplier = function (supplier) {
+            supplierService.deleteSupplier(supplier)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                loadAllSupplier();
+                $scope.reset();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+        // Load Country
+        $scope.getCity = function () {
+            if ($scope.CountryId != undefined && $scope.CountryId != '' && $scope.CountryId != null) {
+                $scope.CityId = '';
+
+                $scope.allCityByCountry = [];
+                supplierService.getAllCityByCountry($scope.CountryId)
+                    .then(function onSuccess(response) {
+                        $scope.allCityByCountry = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            } else {
+                $scope.CityId = '';
+            }
+        }
+
+
+        loadAllCountry();
+        function loadAllCountry() {
+            $scope.allCountryFromDb = [];
+            supplierService.getAllCountry()
+              .then(function onSuccess(response) {
+                  $scope.allCountryFromDb = response.data;
+              })
+              .catch(function onError(response) {
+                  $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+              });
+        }
+
+
+        loadAllCurrency();
+        function loadAllCurrency() {
+            $scope.allCurrencyFromDb = [];
+            supplierService.getAllCurrency()
+              .then(function onSuccess(response) {
+                  $scope.allCurrencyFromDb = response.data;
+              })
+              .catch(function onError(response) {
+                  $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+              });
+        }
+
+        loadAllSupplier();
+
+        function loadAllSupplier() {
+
+            $scope.allSupplierFromDB = [];
+            supplierService.getAllSupplier()
+                .then(function onSuccess(response) {
+                    $scope.allSupplierFromDB = response.data.list;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+
+        $scope.moveItem = function (item, from, to) {
+            //console.log('Move item   Item: ' + item + ' From:: ' + from + ' To:: ' + to);
+            //Here from is returned as blank and to as undefined
+            var idx = from.indexOf(item);
+
+            if (idx != -1) {
+                from.splice(idx, 1);
+                to.push(item);
+            }
+        };
+        $scope.moveAll = function (from, to) {
+            //console.log('Move all  From:: ' + from + ' To:: ' + to);
+            //Here from is returned as blank and to as undefined
+            angular.forEach(from, function (item) {
+                to.push(item);
+            });
+            from.length = 0;
+        };
+
+
+
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allSupplierFromDB.length; //Initially for no filter
+        $scope.totalItems = $scope.allSupplierFromDB.length;
+        //$scope.maxSize = 15;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });</script>

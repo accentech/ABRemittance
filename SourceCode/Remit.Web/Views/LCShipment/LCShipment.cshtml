@@ -1,0 +1,679 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceLCShipment.Title;
+    //Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="lcShipmentCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceLCShipment.Heading
+        </div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            @*<div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker
+                                       data-min-view="2" data-autoclose="true"  data-trigger="click" />
+                            </div>*@
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceLC.LblLCNo</label>
+                                <select data-ng-model="selectedLcId" class="form-control" data-ng-options="c as c.LCNo for c in allLCList"
+                                        name="selectedLcId" ng-change="loadInvoiceByLcIdhasLcShipment()">
+                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceLC.LblLCNo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceLCShipment.CommercialInvoice</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="selectedCommercialInvoiceId" class="form-control listSelect"
+                                            data-ng-options="c as c.CommercialInvoiceNo for c in allCommercialInvoiceHasShipment"
+                                            name="selectedCommercialInvoiceId" style="height: 100%; overflow-y: auto; padding: 0;"
+                                            ng-change="loadLcShipmentByCI()">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceLCShipment.CommercialInvoice</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceLC.LblLCNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="LcObj" class="form-control" data-ng-options="c as c.LCNo for c in allLCList"
+                                                    name="LcObj" ng-change="loadAllCommercialInvoice()" ng-disabled="editMode">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceLC.LblLCNo</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.LcObj.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceLC.LblLCNo)
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceLCShipment.CommercialInvoice
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="CommercialInvoiceObj" class="form-control" ng-disabled="editMode"
+                                                    data-ng-options="c as c.CommercialInvoiceNo for c in allunusedCommercialInvoiceFromDb" name="CommercialInvoiceObj" ng-change="getDocumentsByCI()">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceLCShipment.CommercialInvoice</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.CommercialInvoiceObj.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceLCShipment.CommercialInvoice)
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.VesselDescription
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <textarea class="form-control" ng-model="VesselDescription" name="VesselDescription"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.ShipmentDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="ShipmentDate" name="ShipmentDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.ArrivalDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="ArrivalDate" name="ArrivalDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.PortReleaseDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="PortReleaseDate" name="PortReleaseDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.BillOfEntryNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="BillOfEntryNo" name="BillOfEntryNo" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.BillOfEntryDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="BillOfEntryDate" name="BillOfEntryDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.AssesmentValue (@ViewBag.LocalCurrency)
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="number" style="text-align:right" class="form-control" ng-model="AssesmentValueInLocalCurrency" name="AssesmentValueInLocalCurrency" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.PayableAmount (@ViewBag.LocalCurrency)
+                                            </label>
+                                        </div>
+                                        <div class="">
+                                            <label class="col-xs-12 col-sm-8 col-md-8 control-label default-color">
+                                                {{TotalAmount}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.PaidAmount (@ViewBag.LocalCurrency)
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="number" style="text-align:right" class="form-control" ng-model="PaidAmount" name="PaidAmount" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.PaymentDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="PaymentDate" name="PaymentDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.Container
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="Container" name="Container" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceLCShipment.Duty (@ViewBag.LocalCurrency)
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="number" style="text-align: right" class="form-control" ng-model="Duty" name="Duty" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <h3 class="heading">@Resources.ResourceLCShipmentExpenseHead.Lbllcshipmentexpensehead</h3>
+                                    <table class="table table-bordered table-condensed" >
+                                        <thead>
+                                            <tr>
+                                                <th>@Resources.ResourceLCShipmentExpenseHead.Lbllcshipmentexpenseheadname &nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                <th>@Resources.ResourceLCShipmentExpenseHead.AmountInLocal (@ViewBag.LocalCurrency)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="aLcExpenceHeadCat in allLcShipmentExpenceHeadFromDb">
+                                                <td colspan="2">
+                                                    <div>
+                                                        <div class="col-md-8">
+                                                            <h5 style="text-align: left;"><b>{{aLcExpenceHeadCat.HeadCategory}}</b></h5>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <h5 style="text-align: right"> <b>{{getTotalPrice(aLcExpenceHeadCat.LCShipmentExpenseHeads)}}</b></h5>
+                                                        </div>
+                                                    </div>
+
+                                                    <table class="table table-responsive">
+                                                        <tr ng-repeat="aLcExpenceHead in aLcExpenceHeadCat.LCShipmentExpenseHeads">
+                                                            <td style="width:50%">
+                                                                {{aLcExpenceHead.Head}}
+                                                            </td>
+                                                            <td style="width:50%">
+                                                                <input style="text-align: right" class="form-control" type="number" name="aLcExpenceHead.AmountInLocal" ng-model="aLcExpenceHead.AmountInLocal" min="0"
+                                                                       ng-change="getTotal(allLcShipmentExpenceHeadFromDb)" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h5 style="text-align: left;"><b>@Resources.ResourceLCShipment.Total (@ViewBag.LocalCurrency)</b></h5>
+                                                </td>
+                                                <td>
+                                                    <h5 style="text-align: right"><b>{{TotalAmount}}</b></h5>
+                                                    @*<input type="number" ng-model="TotalAmount" class="form-control" ng-disabled="true" style="text-align: right; font-weight: bold"/>*@
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <h3 class="heading">@Resources.ResourceLCShipment.LcShipmentDoc</h3>
+                                    <table class="table slidable-table" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resources.ResourceLCShipmentDocument.LCDocument</th>
+                                                <th>@Resources.ResourceLCShipmentDocument.Status</th>
+                                                <th>@Resources.ResourceLCShipmentDocument.Comment</th>
+                                                <th>@Resources.ResourceLCShipmentDocument.FileUp</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="LCDocument in allDocumentsByCI">
+                                                <td>
+                                                    {{LCDocument.DocumentName}}
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" type="text" name="Status" ng-model="LCDocument.Status" />
+                                                </td>
+                                                <td>
+                                                    <textarea class="form-control" name="Comments" ng-model="LCDocument.Comments" maxlength="99"></textarea>
+                                                </td>
+                                                @*file upload*@
+                                                <td>
+                                                    <input type="file" id="file" name="file" multiple onchange="angular.element(this,this).scope().setFile(this)" accept="image/*" />
+                                                    <a ng-show="editMode" class=" link-text-style" href="/files/LCShipment/{{LcObj.LCNo}}_{{CommercialInvoiceObj.CommercialInvoiceNo}}_{{LCDocument.DocumentPath}}">Download File</a><a ng-show="editmode" class=" link-text-style" href="/files/quotefiles/{{QuoteFileName}}">Download File</a>
+                                                </td>
+                                                @*file upload*@
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    @*<button class="btn btn-block btn-sm btn-info buttonAddItem" ng-click="addRow();">@Resources.ResourceCommon.LblAddDetailItem</button>*@
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <input type="button" ng-click="addLC()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('lcShipmentService', ['$http', function ($http) {
+        return {
+            saveLC: function (lcShipment, lcShipmentExpenceHeadCategoryList) {
+                var params = { lcShipment: lcShipment, lcShipmentExpenseHeadCategory: lcShipmentExpenceHeadCategoryList }
+                return $http({
+                    url: '/LCShipment/CreateLCShipment',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+
+            getIsEditAllowed: function () {
+                return $http.get('/LC/IsEditAllowed/');
+            },
+            getLcShipmentByCi: function (id) {
+                return $http.get('/LCShipment/GetLCShipmentByCI?id=' + id);
+            },
+            getAllunusedCommercialInvoice: function (id) {
+                return $http.get('/CommercialInvoice/GetUnusedCommercialInvoiceList?id=' + id);
+            },
+            getAllLcShipmentExpenceHead: function () {
+                return $http.get('/LCShipmentExpenseHeadCategory/GetLCShipmentExpenseHeadCategoryListForShipment');
+            },
+            getallLC: function () {
+                return $http.get('/LC/GetLCList');
+            },
+            getCIDocuments: function (id) {
+                return $http.get('/CommercialInvoice/GetCommercialInvoiceDocumentList?id=' + id);
+            },
+            getCIListByLcId: function (id) {
+                return $http.get('/CommercialInvoice/GetUsedCommercialInvoiceByLcId?id=' + id);
+            }
+
+        };
+    }]);
+
+    app.controller('lcShipmentCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, lcShipmentService, $log, $ngBootbox, $filter) {
+
+        $scope.ShipmentDate = $filter('date')(Date.now(),'yyyy-MM-dd');
+        $scope.LCShipmentDocuments = [];
+        $scope.counter = 1;
+        $scope.TotalAmount = 0.00;
+        $scope.editMode = false;
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        $scope.getTotalPrice = function (expences) {
+            return expences.reduce(function (sum, expence) {
+                return (sum + expence.AmountInLocal);
+            }, 0.00);
+        };
+        $scope.getTotal = function (lcExpenses) {
+            $scope.TotalAmount = 0.00;
+            for (var i = 0; i < lcExpenses.length; i++) {
+                $scope.TotalAmount += lcExpenses[i].LCShipmentExpenseHeads.reduce(function (sum, aLcExpence) { return sum + aLcExpence.AmountInLocal }, 0.00);
+            }
+        }
+
+        // Add a new lc
+        $scope.addLC = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var lcShipment = {};
+                lcShipment["Id"] = $scope.Id;
+                lcShipment["CommercialInvoiceId"] = $scope.CommercialInvoiceObj.Id;
+                lcShipment["VesselDescription"] = $scope.VesselDescription;
+                if ($scope.ShipmentDate == null) {
+                    lcShipment["ShipmentDate"] = null;
+                } else {
+                    lcShipment["ShipmentDate"] = new Date($scope.ShipmentDate).toDateString(); //$scope.ShipmentDate;
+                }
+                if ($scope.ArrivalDate == null) {
+                    lcShipment["ArrivalDate"] = null;
+                } else {
+                    lcShipment["ArrivalDate"] = new Date($scope.ArrivalDate).toDateString(); //$scope.ArrivalDate;
+                }
+                if ($scope.PortReleaseDate == null) {
+                    lcShipment["PortReleaseDate"] = null;
+                } else {
+                    lcShipment["PortReleaseDate"] = new Date($scope.PortReleaseDate).toDateString(); //$scope.PortReleaseDate;
+                }
+                if ($scope.BillOfEntryDate == null) {
+                    lcShipment["BillOfEntryDate"] = null;
+                } else {
+                    lcShipment["BillOfEntryDate"] = new Date($scope.BillOfEntryDate).toDateString(); //$scope.BillOfEntryDate;
+                }
+                if ($scope.PaymentDate == null) {
+                    lcShipment["PaymentDate"] = null;
+                } else {
+                    lcShipment["PaymentDate"] = new Date($scope.PaymentDate).toDateString(); //$scope.BillOfEntryDate;
+                }
+                //lcShipment["ArrivalDate"] = new Date($scope.ArrivalDate).toDateString(); //$scope.ArrivalDate;
+                //lcShipment["PortReleaseDate"] = new Date($scope.PortReleaseDate).toDateString(); //$scope.PortReleaseDate;
+                //lcShipment["BillOfEntryDate"] = new Date($scope.BillOfEntryDate).toDateString(); //$scope.BillOfEntryDate;
+                //lcShipment["PaymentDate"] = new Date($scope.PaymentDate).toDateString();// Payment Date;
+                lcShipment["BillOfEntryNo"] = $scope.BillOfEntryNo;
+                lcShipment["AssesmentValueInLocalCurrency"] = $scope.AssesmentValueInLocalCurrency;
+                lcShipment["Duty"] = $scope.Duty;
+                lcShipment["PaidAmount"] = $scope.PaidAmount;
+                lcShipment["Container"] = $scope.Container;
+                lcShipment["LCShipmentDocuments"] = $scope.allDocumentsByCI;
+
+                var lcShipmentExpenceHeadCategoryList = $scope.allLcShipmentExpenceHeadFromDb;
+
+                lcShipmentService.saveLC(lcShipment, lcShipmentExpenceHeadCategoryList).then(function onSuccess(response) {
+
+                    if ($scope.fileList.length > 0) {
+                        $scope.UploadFile();
+                    }
+
+
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+                }).catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            } else {
+                $ngBootbox.alert('@Resources.ResourceLCShipment.FillRequiredData');
+            }
+        }
+        $scope.populateLC = function (rowvalue, expenceData) {
+            $scope.editMode = true;
+            $scope.Id = rowvalue.Id;
+            $scope.LcObj = $scope.selectedLcId;
+            $scope.allunusedCommercialInvoiceFromDb = $scope.selectedCommercialInvoiceId;
+            $scope.CommercialInvoiceObj = $scope.selectedCommercialInvoiceId[0];
+            $scope.VesselDescription = rowvalue.VesselDescription;  //new Date($scope.LCIssueDate).toDateString();
+
+            $scope.ShipmentDate = rowvalue.ShipmentDateString;//$scope.ShipmentDate;
+            $scope.ArrivalDate = rowvalue.ArrivalDateString; //$scope.ArrivalDate;
+            $scope.PortReleaseDate = rowvalue.PortReleaseDateString; //$scope.PortReleaseDate;
+            $scope.BillOfEntryDate = rowvalue.BillOfEntryDateString;
+            $scope.PaymentDate = rowvalue.PaymentDateString;
+
+            $scope.AssesmentValueInLocalCurrency = rowvalue.AssesmentValueInLocalCurrency;
+            $scope.BillOfEntryNo = rowvalue.BillOfEntryNo;
+            $scope.Duty = rowvalue.Duty;
+            $scope.PaidAmount = rowvalue.PaidAmount;
+            $scope.Container = rowvalue.Container;
+            $scope.allDocumentsByCI = rowvalue.LCShipmentDocuments;
+            $scope.allLcShipmentExpenceHeadFromDb = expenceData;
+            $scope.getTotal($scope.allLcShipmentExpenceHeadFromDb);
+        }
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.editMode = false;
+            $scope.Id = '';
+            $scope.selectedLcId = [];
+            $scope.LcObj = [];
+            $scope.CommercialInvoiceObj = [];
+            $scope.VesselDescription = '';
+            $scope.ShipmentDate = '';
+            $scope.ArrivalDate = '';
+            $scope.PortReleaseDate = '';
+            $scope.AssesmentValueInLocalCurrency = '';
+            $scope.BillOfEntryNo = '';
+            $scope.BillOfEntryDate = '';
+            $scope.Duty = '';
+            $scope.Container = '';
+            $scope.PaymentDate = '';
+            $scope.TotalAmount = 0.00;
+            $scope.PaidAmount = 0.00;
+            $scope.LCShipmentDocuments = [];
+            $scope.allDocumentsByCI = [];
+            $scope.selectedCommercialInvoiceId = [];
+            $scope.allunusedCommercialInvoiceFromDb = [];
+            $scope.selectedLcId = [];
+            $scope.allCommercialInvoiceHasShipment = [];
+            loadAllLcShipmentExpenceHead();
+        }
+        $scope.getDocumentsByCI = function () {
+            $scope.allDocumentsByCI = [];
+            lcShipmentService.getCIDocuments($scope.CommercialInvoiceObj.Id).then(function onSuccess(response) {
+                $scope.allDocumentsByCI = response.data;
+            }).catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+        //load CI By LC............
+        $scope.loadAllCommercialInvoice = function () {
+            if ($scope.LcObj !== null || $scope.LcObj !== "" || $scope.LcObj !== undefined) {
+                $scope.allCommercialInvoice = [];
+                lcShipmentService.getAllunusedCommercialInvoice($scope.LcObj.Id).then(function onSuccess(response) {
+                    $scope.allunusedCommercialInvoiceFromDb = response.data;
+                }).catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+        }
+
+        loadAllLcShipmentExpenceHead();
+        function loadAllLcShipmentExpenceHead() {
+            $scope.allLcShipmentExpenceHeadFromDb = [];
+            lcShipmentService.getAllLcShipmentExpenceHead().then(function onSuccess(response) {
+                $scope.allLcShipmentExpenceHeadFromDb = response.data;
+            }).catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+
+        loadAllLc();
+        function loadAllLc() {
+            $scope.allLCList = [];
+            lcShipmentService.getallLC().then(function onSuccess(response) {
+                $scope.allLCList = response.data;
+            }).catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+        $scope.loadLcShipmentByCI = function () {
+            if ($scope.selectedCommercialInvoiceId != null ||
+                $scope.selectedCommercialInvoiceId !== [] ||
+                $scope.selectedCommercialInvoiceId != undefined) {
+                lcShipmentService.getLcShipmentByCi($scope.selectedCommercialInvoiceId[0].Id).then(
+                    function onSuccess(res) {
+                        if (res.data.isOk === true) {
+                            $scope.populateLC(res.data.lcShipment, res.data.lcshipmentexpenseheadcategoryVmList);
+                        } else {
+                            $ngBootbox.alert('@Resources.ResourceLCShipment.failed');
+                        }
+
+                    }).catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            } else {
+                $scope.reset();
+            }
+
+        }
+
+
+        $scope.fileList = [];
+        $scope.ImageProperty = {
+            file: ''
+        }
+        $scope.setFile = function (element) {
+            var index = angular.element(element).scope().$index;
+            var files = element.files;
+            for (var i = 0; i < files.length; i++) {
+                $scope.ImageProperty.file = files[i];
+                $scope.fileList.push($scope.ImageProperty);
+                $scope.allDocumentsByCI[index].DocumentPath = $scope.ImageProperty.file.name;
+                $scope.ImageProperty = {};
+                $scope.$apply();
+            }
+        }
+        $scope.UploadFile = function () {
+            for (var i = 0; i < $scope.fileList.length; i++) {
+                $scope.UploadFileIndividual($scope.fileList[i].file,
+                    $scope.fileList[i].file.name,
+                    $scope.fileList[i].file.type,
+                    $scope.fileList[i].file.size, i);
+            }
+        }
+        $scope.UploadFileIndividual = function (fileToUpload, name, type, size, index) {
+            //Create XMLHttpRequest Object
+            var reqObj = new XMLHttpRequest();
+            reqObj.open("POST", "/LCShipment/UploadFiles?lcName=" + $scope.LcObj.LCNo + "&commercialInvoiceNo=" + $scope.CommercialInvoiceObj.CommercialInvoiceNo, true);//open the object and set method of call(get/post), url to call, isAsynchronous(true/False)
+            reqObj.setRequestHeader("Content-Type", "multipart/form-data");//set Content-Type at request header.for file upload it's value must be multipart/form-data
+            //Set Other header like file name,size and type
+            reqObj.setRequestHeader('X-File-Name', name);
+            reqObj.setRequestHeader('X-File-Type', type);
+            reqObj.setRequestHeader('X-File-Size', size);
+            // send the file
+            reqObj.send(fileToUpload);
+        }
+
+        $scope.loadInvoiceByLcIdhasLcShipment = function () {
+            if ($scope.selectedLcId != null || $scope.selectedLcId !== [] || $scope.selectedLcId != undefined) {
+                $scope.allCommercialInvoiceHasShipment = [];
+                lcShipmentService.getCIListByLcId($scope.selectedLcId.Id).then(function onSuccess(response) {
+                    $scope.allCommercialInvoiceHasShipment = response.data;
+                    if ($scope.allCommercialInvoiceHasShipment.length < 1) {
+                        $ngBootbox.alert('@Resources.ResourceLCShipment.NoShipment');
+                    }
+                }).catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            } else {
+                $scope.allCommercialInvoiceHasShipment = [];
+            }
+        }
+    })
+</script>

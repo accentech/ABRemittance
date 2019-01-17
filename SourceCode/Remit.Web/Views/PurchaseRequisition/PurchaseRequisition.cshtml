@@ -1,0 +1,714 @@
+﻿@{
+    ViewBag.Title = "PurchaseRequisition";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="purchaseRequisitionCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourcePurchaseRequisition.LblPurchaseRequisition
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="MMM-yyyy" bs-datepicker
+                                       data-min-view="1" data-autoclose="true" ng-change="loadPrListByYear()" data-trigger="click">
+                            </div>
+                            <select data-ng-model="selectedStatus" class="form-control" name="selectedStatus" @*ng-change="loadStatusedItem(selectedStatus)"*@>
+                                <option value="">@Resources.ResourceItemDemand.All</option>
+                                <option value="@((int)Remit.Service.Enums.CommonEnum.Pending)">@Remit.Service.Enums.CommonEnum.Pending</option>
+                                <option value="@((int)Remit.Service.Enums.CommonEnum.Approved)">@Remit.Service.Enums.CommonEnum.Approved</option>
+                                <option value="@((int)Remit.Service.Enums.CommonEnum.Rejected)">@Remit.Service.Enums.CommonEnum.Rejected</option>
+                            </select>
+                           
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourcePurchaseRequisition.LblRequisitionNo</label>
+                                <div class="" style="height: 300px; overflow: auto; ">
+                                    <select multiple data-ng-model="PrId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.RequisitionNo for c in allPrListByYearFromDb | filter:{'Status':selectedStatus}:false" name=" prid"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="loadPrDetailsById(PrId);">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourcePurchaseRequisition.LblRequisitionNo</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               @*<pre>{{allPrListByYearFromDb | json}}</pre>*@ 
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourcePurchaseRequisition.LblRequisitionNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="RequisitionNo" ng-model="RequisitionNo" required />
+                                            <b class="help-block" ng-if="form.RequisitionNo.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourcePurchaseRequisition.LblRequisitionNo)
+                                            </b>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourcePurchaseRequisition.LblRequisitionDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="RequisitionDate" name="RequisitionDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourcePurchaseRequisition.LblRequisitionBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="RequisitionBy" class="form-control"
+                                                    data-ng-options="c.Id as c.FullName for c in allEmployeeFromDb | orderBy: 'FullName'" name="RequisitionBy">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourcePurchaseRequisition.LblPerson</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourcePurchaseRequisition.LblIsLCRequired
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="checkbox" ng-model="IsLCRequired" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6" ng-show="PrId">
+                                    <div class="form-group" show-errors="true" ng-if="PrId && Status=='2' || PrId">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourcePurchaseRequisition.LblReviewedBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input readonly type="text" class="form-control" ng-model="ReviewedBy" name="ReviewedBy" data-autoclose="true">
+
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" show-errors="true" ng-if="PrId && Status=='2' || PrId">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourcePurchaseRequisition.LblReviewedDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-disabled="true" ng-model="ReviewedDate" name="ReviewedDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors="true" ng-hide="PrId && Status=='1'">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourcePurchaseRequisition.LblApprovedBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input readonly type="text" class="form-control" ng-model="ApprovedBy" name="ApprovedBy" data-autoclose="true">
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors="true" ng-hide="PrId && Status=='1'">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourcePurchaseRequisition.LblApprovedDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-disabled="true" ng-model="ApprovedDate" name="ApprovedDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+
+                                    </div>
+                                    
+                                    <div class="form-group" show-errors="true" ng-if="PrId && Status=='5'">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourcePurchaseRequisition.LblRemarks
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input readonly="true"  type="text" class="form-control" ng-model="Remarks" name="Remarks" data-autoclose="true">
+
+                                        </div>
+                                    </div>
+
+
+                                   
+                                    <input ng-if="PrId && Status=='1'" type="button" value=@Resources.ResourceCommon.LblReview class="btn btn-success pull-right  " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Review'
+                                           ng-bootbox-confirm-action="reviewPurchaseRequisition()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                   
+                                    
+                                    <input ng-if="PrId && Status=='2'"  type="button" value=@Resources.ResourceCommon.LblApprove class="btn btn-success pull-right  " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Approve'
+                                           ng-bootbox-confirm-action="approvePurchaseRequisition()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    
+                                    <input style="margin-right: 5px;" ng-if="PrId && Status=='2'" type="button" value=@Resources.ResourceCommon.LblReject class="btn btn-danger pull-right  " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Reject'
+                                           ng-bootbox-confirm-action="rejectPurchaseRequisition()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                </div>
+
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourcePurchaseRequisition.LblItemDetails</h3>
+
+                            <table class="table slidable-table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceItem.LblItemCategory
+                                        </th>
+                                        <th class="col-md-4">
+                                            @Resources.ResourcePurchaseRequisition.LblItem
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourcePurchaseRequisition.LblQuantity
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourcePurchaseRequisition.LblUnit
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourcePurchaseRequisition.LblUsage
+                                        </th>
+
+                                        <th class="col-md-1">
+                                            @Resources.ResourceCommon.LblAction
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat="aPurchaseRequisitionDet in PurchaseRequisitionDetails">
+                                        
+                                        <td>
+                                            <select data-ng-model="aPurchaseRequisitionDet.ItemCategoryId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allItemCategoryFromDb | orderBy: 'Name'" name="ItemCategoryId" ng-change="getAllItemByCategoryId($index,aPurchaseRequisitionDet.ItemCategoryId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblItemCategory</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="aPurchaseRequisitionDet.ItemId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in aPurchaseRequisitionDet.allItemFromDb | orderBy: 'Name'" name="ItemId" ng-change="setUnitId($index,aPurchaseRequisitionDet.ItemId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourcePurchaseRequisition.LblItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input  data-ng-class="form-control" style="text-align:right" type="number" class="form-control" ng-model="aPurchaseRequisitionDet.Quantity" name="Quantity" min="0" ng-change="getTotal()">
+                                        </td>
+                                        <td>
+                                            <select style="-webkit-appearance: none;" disabled data-ng-model="aPurchaseRequisitionDet.UnitId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allUnitofMeasurementFromDb | orderBy: 'Name'" name="UnitId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourcePurchaseRequisition.LblUnit</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="aPurchaseRequisitionDet.Usage" name="Usage">
+                                        </td>
+
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="PurchaseRequisitionDetails.splice($index,1);" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero" >
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                
+
+                                <div class="col-xs-12 col-sm-8 col-md-8" ng-if="PrId && Status=='1'">
+                                    <input type="button" ng-click="addPurchaseRequisition()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+
+                                    <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deletePurchaseRequisition(purchaseRequisition)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+
+                                </div>
+
+                                <div class="col-xs-12 col-sm-8 col-md-8" ng-if="PrId && Status=='5'">
+                                   
+                                    <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deletePurchaseRequisition(purchaseRequisition)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+
+                                </div>
+
+                                <div class="col-xs-12 col-sm-8 col-md-8" ng-if="PrId && Status=='2' || Status=='4'">
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+
+                                </div>
+                               
+
+                                <div class="col-xs-12 col-sm-8 col-md-8" ng-if="PrId==Null">
+                                    <input type="button" ng-click="addPurchaseRequisition()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+
+                                </div>
+
+
+
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('purchaseRequisitionService', ['$http', function ($http) {
+        return {
+            savePurchaseRequisition: function (purchaseRequisition) {
+                return $http({
+                    url: '/PurchaseRequisition/CreatePurchaseRequisition',
+                    method: 'POST',
+                    data: purchaseRequisition
+                })
+
+            },
+            getPurchaseRequisition: function (id) {
+                return $http.get('/PurchaseRequisition/GetPurchaseRequisition/?id=' + id);
+            },
+            getAllItem: function () {
+                return $http.get('/Item/GetItemList');
+            },
+            getAllItemByCategoryId: function (id) {
+                return $http.get('/Item/GetItemListByCategoryId?id=' + id);
+            },
+            getAllItemCategory: function (groupType) {
+                if (groupType === "" || groupType === undefined || groupType === null) {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithoutGroupType');
+                } else {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithGroupType?groupType=' + groupType);
+                }
+            },
+
+            getAllSupplier: function () {
+                return $http.get('/Supplier/GetSupplierList');
+            },
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getPrListByYear: function (year, month) {
+                return $http.get('/PurchaseRequisition/GetPrListByYear',
+                {
+                    params: { year: year, month: month + 1 }
+                });
+            },
+            getAllPurchaseRequisition: function () {
+                return $http.get('/PurchaseRequisition/GetPurchaseRequisitionList');
+            },
+            getAllUnitOfMesurement: function () {
+                return $http.get('/UnitOfMeasurement/GetUnitOfMeasurementList');
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+
+            deletePurchaseRequisition: function (purchaseRequisition) {
+                return $http({
+                    url: '/PurchaseRequisition/DeletePurchaseRequisition',
+                    method: 'POST',
+                    data: purchaseRequisition
+                });
+            },
+
+            approvePurchaseRequisition: function (purchaseRequisition) {
+                return $http({
+                    url: '/PurchaseRequisition/ApprovePurchaseRequisition',
+                    method: 'POST',
+                    data: purchaseRequisition
+                });
+            },
+            reviewPurchaseRequisition: function (purchaseRequisition) {
+                return $http({
+                    url: '/PurchaseRequisition/ReviewPurchaseRequisition',
+                    method: 'POST',
+                    data: purchaseRequisition
+                });
+            },
+
+            rejectPurchaseRequisition: function (purchaseRequisition) {
+                return $http({
+                    url: '/PurchaseRequisition/RejectPurchaseRequisition',
+                    method: 'POST',
+                    data: purchaseRequisition
+                });
+            },
+
+            genRequisitionNo1: function () {
+                // return $http.get('/PurchaseRequisition/GenRequisitionNo/');
+                var id = "Requisition";
+                return $http.get('/AutoGeneratedNo/GenNo?id=' + id);
+            }
+        };
+    }]);
+
+    app.controller('purchaseRequisitionCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, purchaseRequisitionService, $log, $ngBootbox) {
+        $scope.selectedYear = new Date();
+
+        $scope.RequisitionDate = new Date();
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+
+        $scope.genRequisitionNo = function () {
+            purchaseRequisitionService.genRequisitionNo1().then(function onSuccess(response) {
+                $scope.RequisitionNo = response.data;
+            });
+        }
+        $scope.genRequisitionNo();
+
+        $scope.PurchaseRequisitionDetails = [];
+        $scope.PurchaseRequisitionDetails.push({ Id: '', PurchaseRequisitionId: '', ItemId: '',ItemCategoryId:'', Quantity: '', UnitId: '', Usage: '' });
+
+        $scope.addNewDetail = function ($event) {
+            $scope.PurchaseRequisitionDetails.push({ Id: '', PurchaseRequisitionId: '', ItemId: '', ItemCategoryId: '', Quantity: '', UnitId: '', Usage: '' });
+        }
+
+        $scope.addItem = function () {
+            var popup = window.open('/Item/Index', '', "width=1000, height=800, left=" + (screen.width - 1000) / 2 + ", top=" + (screen.height - 800) / 2 + "");
+
+            popup.onbeforeunload = function () {
+                loadAllItem();
+            }
+            return false;
+        }
+
+        // Add a new purchaseRequisition
+        $scope.addPurchaseRequisition = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var purchaseRequisition = {};
+                purchaseRequisition["Id"] = $scope.Id;
+                purchaseRequisition["RequisitionNo"] = $scope.RequisitionNo;
+                purchaseRequisition["RequisitionDate"] = new Date($scope.RequisitionDate).toDateString();
+                purchaseRequisition["RequisitionBy"] = $scope.RequisitionBy;
+                purchaseRequisition["IsLCRequired"] = $scope.IsLCRequired;
+
+                purchaseRequisition["PurchaseRequisitionDetails"] = $scope.PurchaseRequisitionDetails;
+
+                if ($scope.PurchaseRequisitionDetails != null && $scope.PurchaseRequisitionDetails !== "" && $scope.PurchaseRequisitionDetails != undefined) {
+                    if ($scope.PurchaseRequisitionDetails.length > 0) {
+                        for (var i = 0; i < $scope.PurchaseRequisitionDetails.length; i++) {
+                            if ($scope.PurchaseRequisitionDetails[i].Quantity !== 0 && $scope.PurchaseRequisitionDetails[i].Quantity !== null && $scope.PurchaseRequisitionDetails[i].Quantity !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourcePurchaseRequisition.LblQuantityRequiredPRDetails');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('Need PR details.');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('Need PR details.');
+                    return;
+                }
+
+                purchaseRequisitionService.savePurchaseRequisition(purchaseRequisition)
+                .then(function onSuccess(response) {
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+                   
+                    $scope.loadPrListByYear();
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            } else {
+                $ngBootbox.alert('Fill up all required data.');
+            }
+        };
+
+        // Delete purchaseRequisition
+        $scope.deletePurchaseRequisition = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var purchaseRequisition = {};
+                purchaseRequisition["Id"] = $scope.Id;
+                purchaseRequisition["PurchaseRequisitionDetails"] = $scope.PurchaseRequisitionDetails;
+
+                purchaseRequisitionService.deletePurchaseRequisition(purchaseRequisition)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadPrListByYear();
+                    });
+            }
+        };
+
+        //Approve purchase Requisition.....
+        $scope.approvePurchaseRequisition = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var purchaseRequisition = {};
+                purchaseRequisition["Id"] = $scope.Id;
+
+                purchaseRequisition["PurchaseRequisitionDetails"] = $scope.PurchaseRequisitionDetails;
+
+                purchaseRequisitionService.approvePurchaseRequisition(purchaseRequisition)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadPrListByYear();
+                    });
+            }
+        };
+
+        //Review Purchase Requisition
+        $scope.reviewPurchaseRequisition = function () {
+            {               
+                var purchaseRequisition = {};
+                purchaseRequisition["Id"] = $scope.Id;
+
+                purchaseRequisition["PurchaseRequisitionDetails"] = $scope.PurchaseRequisitionDetails;
+
+                purchaseRequisitionService.reviewPurchaseRequisition(purchaseRequisition)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadPrListByYear();
+                    });
+            }
+        };
+
+        //Reject Purchase Requisition
+        $scope.rejectPurchaseRequisition = function () {
+            {
+                var purchaseRequisition = {};
+                purchaseRequisition["Id"] = $scope.Id;
+                purchaseRequisition["Remarks"] = $scope.Remarks;
+               
+                purchaseRequisition["PurchaseRequisitionDetails"] = $scope.PurchaseRequisitionDetails;
+
+                purchaseRequisitionService.rejectPurchaseRequisition(purchaseRequisition)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadPrListByYear();
+                    });
+            }
+        };
+
+        //Populate.....      
+        $scope.populatePurchaseRequisition = function (rowvalue) {
+            $scope.Id = rowvalue.Id;
+            $scope.RequisitionNo = rowvalue.RequisitionNo;
+            $scope.RequisitionDate = new Date(rowvalue.RequisitionDate);
+            $scope.RequisitionBy = rowvalue.RequisitionBy;
+            $scope.ApprovedBy = rowvalue.ApprovedByName;
+            $scope.ApprovedDate = new Date(rowvalue.ApprovedDate);
+            $scope.ReviewedBy = rowvalue.ReviewedByName;
+            $scope.ReviewedDate = new Date(rowvalue.ReviewedDate);
+            $scope.Status = rowvalue.Status; 
+            $scope.Remarks = rowvalue.Remarks;
+            $scope.IsLCRequired = rowvalue.IsLCRequired;
+
+            $scope.PurchaseRequisitionDetails = rowvalue.PurchaseRequisitionDetails;
+            for (x in rowvalue.PurchaseRequisitionDetails) {
+                $scope.getAllItemByCategoryId(x, rowvalue.PurchaseRequisitionDetails[x].ItemCategoryId);
+            }
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.RequisitionNo = '';
+            $scope.RequisitionDate = new Date();
+            $scope.RequisitionBy = '';
+            $scope.ApprovedDate = '';
+            $scope.ReviewedDate = '';
+            $scope.Status = ''; 
+            $scope.IsLCRequired = 0;
+
+            $scope.PurchaseRequisitionDetails = [];
+            $scope.PurchaseRequisitionDetails.push({ Id: '', PurchaseRequisitionId: '', ItemId: '',ItemCategoryId:'', Quantity: '', UnitId: '', Usage: '' });
+
+            $scope.PrId = null;
+            $scope.genRequisitionNo();
+        }
+
+        $scope.setUnitId = function (index, itemId) {
+            $scope.PurchaseRequisitionDetails[index].UnitId = '';
+            if (itemId != null)
+                angular.forEach($scope.PurchaseRequisitionDetails[index].allItemFromDb, function (value, key) {
+                    if (value.Id === itemId) {
+                        $scope.PurchaseRequisitionDetails[index].UnitId = value.PurchaseunitId;
+                    }
+                });
+        }
+
+        $scope.getAllItemByCategoryId = function (index, categoryId) {
+            $scope.PurchaseRequisitionDetails[index].allItemFromDb = [];
+            if (categoryId != null)
+                purchaseRequisitionService.getAllItemByCategoryId(categoryId)
+                    .then(function onSuccess(response) {
+                        $scope.PurchaseRequisitionDetails[index].allItemFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        loadAllEmployee();
+        function loadAllEmployee() {
+            $scope.allEmployeeFromDb = [];
+            purchaseRequisitionService.getAllEmployee()
+                .then(function onSuccess(response) {
+                    $scope.allEmployeeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllItem();
+        function loadAllItem() {
+            $scope.allItemFromDb = [];
+            purchaseRequisitionService.getAllItem()
+                .then(function onSuccess(response) {
+                    $scope.allItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllItemCategory();
+        function loadAllItemCategory() {
+            $scope.allItemCategoryFromDb = [];
+            purchaseRequisitionService.getAllItemCategory(@ViewBag.GroupType)
+                .then(function onSuccess(response) {
+                    $scope.allItemCategoryFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllUnitOfMesurement();
+        function loadAllUnitOfMesurement() {
+            $scope.allUnitofMeasurementFromDb = [];
+            purchaseRequisitionService.getAllUnitOfMesurement()
+                .then(function onSuccess(response) {
+                    $scope.allUnitofMeasurementFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadPrDetailsById = function (prId) {
+            $scope.allPrDetail = [];
+            purchaseRequisitionService.getPurchaseRequisition(prId)
+                .then(function onSuccess(response) {
+                    $scope.allPrDetail = response.data;
+                    $scope.populatePurchaseRequisition(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadPrListByYear = function () {
+           var year = $scope.selectedYear;
+            var month = year.getMonth();
+            $scope.allPrListByYearFromDb = [];
+            year = year.getFullYear();
+            purchaseRequisitionService.getPrListByYear(year,month)
+                .then(function onSuccess(response) {
+                    $scope.allPrListByYearFromDb = response.data;
+                    if ('@ViewBag.IndexPending' == 1) {
+                        $scope.selectedStatus = '@((int)Remit.Service.Enums.CommonEnum.Pending)';
+                    }
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadPrListByYear();
+    });
+</script>

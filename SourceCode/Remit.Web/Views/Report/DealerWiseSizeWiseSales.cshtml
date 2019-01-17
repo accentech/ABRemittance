@@ -1,0 +1,166 @@
+﻿@using Remit.Web.Helpers
+
+@{
+    ViewBag.Title = Resources.ResourceReport.LblDealerWiseSizeWiseSalesReport;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="row" ng-controller="rctrl">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Resources.ResourceReport.LblDealerWiseSizeWiseSalesReport
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                
+                                
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceReport.Reason
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <select data-ng-model="selectedReason" class="form-control" name="selectedReason">
+                                            <option value="1">@Resources.ResourceFGSale.Sales</option>
+                                            <option value="2">@Resources.ResourceFGSale.Sample</option>
+                                            <option value="3">@Resources.ResourceFGSale.FreeOfCost</option>
+                                            <option value="4">@Resources.ResourceFGSale.InternalUse</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                
+                                
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceCommon.LblFromDate
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <input type="text" class="form-control" ng-model="fromDate" name="fromDate"
+                                               data-date-format="dd-MMM-yyyy" data-container="body"
+                                               bs-datepicker data-min-view="0" data-autoclose="true"
+                                               data-placement="auto" ng-change="formatDate()">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceCommon.LblToDate
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <input type="text" class="form-control" ng-model="toDate" name="toDate"
+                                               data-date-format="dd-MMM-yyyy" data-container="body"
+                                               bs-datepicker data-min-view="0" data-autoclose="true"
+                                               data-placement="auto" ng-change="formatDate()">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceFGGrade.LblFGGrade
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <select data-ng-model="fgGradeId" class="form-control"
+                                                data-ng-options="c.Id as c.Grade for c in allGradeFromDb" name="fgGradeId">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGGrade.LblFGGrade</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <a ng-href="" class="btn btn-primary" ng-click="generateReport()" role="button">
+                                            @Resources.ResourceReport.LblVIewReport
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('rService', ['$http', function ($http) {
+        return {
+            getAllGrade: function() {
+                return $http.get('/FGGrade/GetFGGradeList');
+            }
+        };
+    }]);
+
+    app.controller('rctrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, rService, $log, $ngBootbox, $window ) {
+
+        $scope.toDate = new Date();
+        $scope.fromDate = new Date();
+        $scope.selectedReason = "1";
+        $scope.formatDate = function () {
+            $scope.toDate = $scope.toDate;
+            $scope.fromDate = $scope.fromDate;
+        }
+
+        var loadAllGrade = function () {
+            $scope.allItemGradeFromDb = [];
+            rService.getAllGrade()
+                .then(function onSuccess(response) {
+                    $scope.allGradeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        };
+        loadAllGrade();
+
+        $scope.generateReport = function () {
+           var selectedReason = 1;
+            if ($scope.selectedReason != undefined && $scope.selectedReason != null && $scope.selectedReason != "") {
+                selectedReason = $scope.selectedReason;
+            }
+            var fromDate = $scope.fromDate.toDateString();
+            var toDate = $scope.toDate.toDateString();
+            var fgGradeId = 0;
+            if ($scope.fgGradeId != undefined && $scope.fgGradeId != null && $scope.fgGradeId != "") {
+                fgGradeId = $scope.fgGradeId;
+            }
+
+            var url = "/RDLCReport/DealerWiseSizeWiseSales.aspx?DateFrom=" + fromDate + "&DateTo=" + toDate + "&FGGradeId=" + fgGradeId + "&Reason=" + selectedReason;
+
+            $window.open(url, '_blank');
+        };
+    });
+</script>

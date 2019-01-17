@@ -1,0 +1,2797 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D97764D7-A0C5-411C-B7CC-017E84235D3B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Remit.Web</RootNamespace>
+    <AssemblyName>Remit.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.4.1\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.Mvc5.3.3.3\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Extended">
+      <HintPath>..\packages\EntityFramework.Extended.6.0.0.86\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Excel">
+      <HintPath>..\packages\ExcelDataReader.2.1.2.3\lib\net45\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="iTextSharp, Version=4.1.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
+      <HintPath>..\packages\iTextSharp-LGPL.4.1.6\lib\iTextSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.10\lib\itextsharp.xmlworker.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.1.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.1.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.ReportViewer.WinForms.VS2010.10.0.40219.1\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.6\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="CompanyLogo\" />
+    <Folder Include="files\CommercialInvoice\" />
+    <Folder Include="files\InvoiceRelatedDoc\" />
+    <Folder Include="files\ItemDemandFiles\" />
+    <Folder Include="files\LCRelatedDoc\" />
+    <Folder Include="RDLCReportDataset\" />
+    <Folder Include="RDLCReport\" />
+    <Folder Include="Scripts\FunctionScripts\" />
+    <Folder Include="Views\FileRead\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_GlobalResources\ResourceAutoGeneratedNo.zh.designer.cs">
+      <DependentUpon>ResourceAutoGeneratedNo.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceAutoGeneratedNo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceAutoGeneratedNo.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBreakageCalculator.zh.designer.cs">
+      <DependentUpon>ResourceBreakageCalculator.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBreakageCalculator.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceBreakageCalculator.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCommissionCalculator.zh.designer.cs">
+      <DependentUpon>ResourceCommissionCalculator.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCompany.zh.designer.cs">
+      <DependentUpon>ResourceCompany.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCompany.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceCompany.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDivision.zh.designer.cs">
+      <DependentUpon>ResourceDivision.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDivision.designer.cs">
+      <DependentUpon>ResourceDivision.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBank.zh.designer.cs">
+      <DependentUpon>ResourceBank.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBankAccount.zh.designer.cs">
+      <DependentUpon>ResourceBankAccount.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBinCard.zh.designer.cs">
+      <DependentUpon>ResourceBinCard.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBranch.zh.designer.cs">
+      <DependentUpon>ResourceBranch.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCommissionCalculator.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceCommissionCalculator.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCountry.zh.designer.cs">
+      <DependentUpon>ResourceCountry.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCurrency.zh.designer.cs">
+      <DependentUpon>ResourceCurrency.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDealerCommisionDetail.zh.designer.cs">
+      <DependentUpon>ResourceDealerCommisionDetail.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDealerCommisionDetail.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceDealerCommisionDetail.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDesignation.zh.designer.cs">
+      <DependentUpon>ResourceDesignation.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceEmployee.zh.designer.cs">
+      <DependentUpon>ResourceEmployee.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceEmploymentHistory.zh.designer.cs">
+      <DependentUpon>ResourceEmploymentHistory.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGAdjustmentSetup.zh.designer.cs">
+      <DependentUpon>ResourceFGAdjustmentSetup.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGDealer.zh.designer.cs">
+      <DependentUpon>ResourceFGDealer.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGDealerZone.zh.designer.cs">
+      <DependentUpon>ResourceFGDealerZone.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGGrade.zh.designer.cs">
+      <DependentUpon>ResourceFGGrade.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItem.zh.designer.cs">
+      <DependentUpon>ResourceFGItem.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemAdjustment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGItemAdjustment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemAdjustment.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGItemAdjustment.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemDispose.zh.designer.cs">
+      <DependentUpon>ResourceFGItemDispose.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemIn.zh.designer.cs">
+      <DependentUpon>ResourceFGItemIn.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemOpening.zh.designer.cs">
+      <DependentUpon>ResourceFGItemOpening.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemPrice.zh.designer.cs">
+      <DependentUpon>ResourceFGItemPrice.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGSale.zh.designer.cs">
+      <DependentUpon>ResourceFGSale.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGSalesDelivery.zh.designer.cs">
+      <DependentUpon>ResourceFGSalesDelivery.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGSalesDelivery.designer.cs">
+      <DependentUpon>ResourceFGSalesDelivery.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGSize.zh.designer.cs">
+      <DependentUpon>ResourceFGSize.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGType.zh.designer.cs">
+      <DependentUpon>ResourceFGType.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGUOM.zh.designer.cs">
+      <DependentUpon>ResourceFGUOM.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFileRead.zh.designer.cs">
+      <DependentUpon>ResourceFileRead.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFileRead.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFileRead.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBank.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceBank.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBinCard.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceBinCard.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBankAccount.designer.cs">
+      <DependentUpon>ResourceBankAccount.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceBranch.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceBranch.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCommercialInvoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceCommercialInvoice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCommercialInvoice.zh.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceCommercialInvoice.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCommon.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceCommon.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCurrency.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceCurrency.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDepartment.zh.designer.cs">
+      <DependentUpon>ResourceDepartment.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGAdjustmentSetup.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGAdjustmentSetup.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGDealer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGDealer.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGDealerZone.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGDealerZone.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGGrade.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGGrade.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemDispose.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGItemDispose.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemIn.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGItemIn.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemPrice.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGItemPrice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGSale.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGSale.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGSize.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGSize.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGType.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGType.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGUOM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFGUOM.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrument.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrument.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrument.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrument.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentLocation.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentLocation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentLocation.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentLocation.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentMaintenance.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentMaintenance.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentMaintenance.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentMaintenance.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentMaster.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentMaster.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentMaster.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentMaster.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentSchedule.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentSchedule.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentSchedule.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentSchedule.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentStatus.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentStatus.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceInstrumentStatus.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceInstrumentStatus.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemAdjustment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceItemAdjustment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemAdjustment.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceItemAdjustment.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemCategory.zh.designer.cs">
+      <DependentUpon>ResourceItemCategory.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemDemand.zh.designer.cs">
+      <DependentUpon>ResourceItemDemand.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemDispose.zh.designer.cs">
+      <DependentUpon>ResourceItemDispose.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemGroup.zh.designer.cs">
+      <DependentUpon>ResourceItemGroup.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceFGItemOpening.designer.cs">
+      <DependentUpon>ResourceFGItemOpening.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemIssue.zh.designer.cs">
+      <DependentUpon>ResourceItemIssue.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemOpening.zh.designer.cs">
+      <DependentUpon>ResourceItemOpening.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemOpening.designer.cs">
+      <DependentUpon>ResourceItemOpening.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItem.zh.designer.cs">
+      <DependentUpon>ResourceItem.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItem.designer.cs">
+      <DependentUpon>ResourceItem.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemDispose.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceItemDispose.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemGroup.designer.cs">
+      <DependentUpon>ResourceItemGroup.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemCategory.designer.cs">
+      <DependentUpon>ResourceItemCategory.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemReceive.zh.designer.cs">
+      <DependentUpon>ResourceItemReceive.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemReceive.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceItemReceive.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLC.zh1.designer.cs">
+      <DependentUpon>ResourceLC.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLC.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLC.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLcReport.zh.designer.cs">
+      <DependentUpon>ResourceLcReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLcReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLcReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLC.zh.Designer.cs" />
+    <Compile Include="App_GlobalResources\ResourceLCShipment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLCShipment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLCShipment.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLCShipment.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLCShipmentDocument.zh.designer.cs">
+      <DependentUpon>ResourceLCShipmentDocument.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLCShipmentDocument.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLCShipmentDocument.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLCShipmentExpenseHead.zh.designer.cs">
+      <DependentUpon>ResourceLCShipmentExpenseHead.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLCShipmentExpenseHead.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLCShipmentExpenseHead.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLCShipmentExpenseHeadCategory.zh.designer.cs">
+      <DependentUpon>ResourceLCShipmentExpenseHeadCategory.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLCShipmentExpenseHeadCategory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLCShipmentExpenseHeadCategory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLogin.zh.designer.cs">
+      <DependentUpon>ResourceLogin.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceManufacturer.zh.designer.cs">
+      <DependentUpon>ResourceManufacturer.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCBreakageCalculatorReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCBreakageCalculatorReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCBreakageCalculatorReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCBreakageCalculatorReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCCommissionCalculatorReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCCommissionCalculatorReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCCommissionCalculatorReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCCommissionCalculatorReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCDealerInfoReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCDealerInfoReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCDealerInfoReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCDealerInfoReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCDealerWiseSizeWiseSalesReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCDealerWiseSizeWiseSalesReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCDealerWiseSizeWiseSalesReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCDealerWiseSizeWiseSalesReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCDSaleStatementReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCDSaleStatementReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCDSaleStatementReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCDSaleStatementReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCEmpWiseDealerWiseReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCEmpWiseDealerWiseReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCEmpWiseDealerWiseReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCEmpWiseDealerWiseReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCEmpWiseItemUseReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCEmpWiseItemUseReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCEmpWiseItemUseReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCEmpWiseItemUseReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemInventoryReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCItemInventoryReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemInventoryReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCItemInventoryReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemReceiveReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCItemReceiveReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemReceiveReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCItemReceiveReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemStockRegisterReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCItemStockRegisterReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemStockRegisterReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCItemStockRegisterReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemStockStatusReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCItemStockStatusReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemStockStatusReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCItemStockStatusReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemUseReport2.zh.designer.cs">
+      <DependentUpon>ResourceRDLCItemUseReport2.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemUseReport2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCItemUseReport2.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemWiseCommercialReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCItemWiseCommercialReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCItemWiseCommercialReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCItemWiseCommercialReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCMMDeliveryReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCMMDeliveryReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCMMDeliveryReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCMMDeliveryReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCProductInReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCProductInReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCProductInReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCProductInReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCProductStock.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCProductStock.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCProductStock.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCProductStock.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCProductWiseSalesReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCProductWiseSalesReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCProductWiseSalesReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCProductWiseSalesReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCSizeWiseGradeWIseDeliveryReport.designer.cs">
+      <DependentUpon>ResourceRDLCSizeWiseGradeWIseDeliveryReport.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCSizeWiseGradeWIseDeliveryReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCSizeWiseGradeWIseDeliveryReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCReport.designer.cs">
+      <DependentUpon>ResourceRDLCReport.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceMenu.zh.designer.cs">
+      <DependentUpon>ResourceMenu.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceModule.zh.designer.cs">
+      <DependentUpon>ResourceModule.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceModuleName.zh.designer.cs">
+      <DependentUpon>ResourceModuleName.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceModuleName.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceModuleName.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceNewMenuView.zh.designer.cs">
+      <DependentUpon>ResourceNewMenuView.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceNewMenuView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceNewMenuView.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceNotificationSetting.zh.designer.cs">
+      <DependentUpon>ResourceNotificationSetting.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourcePackingUnit.zh.designer.cs">
+      <DependentUpon>ResourcePackingUnit.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourcePackingUnit.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcePackingUnit.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceProformaInvoice.designer.cs">
+      <DependentUpon>ResourceProformaInvoice.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceProformaInvoice.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceProformaInvoice.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourcePurchaseRequisition.zh.designer.cs">
+      <DependentUpon>ResourcePurchaseRequisition.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourcePurchaseRequisition.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcePurchaseRequisition.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCSupplierWiseCommercialReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCSupplierWiseCommercialReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCSupplierWiseCommercialReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCSupplierWiseCommercialReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCWBReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCWBReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCWBReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCWBReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCYearGradeUnitWiseDealerSalesReport.zh.designer.cs">
+      <DependentUpon>ResourceRDLCYearGradeUnitWiseDealerSalesReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRDLCYearGradeUnitWiseDealerSalesReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceRDLCYearGradeUnitWiseDealerSalesReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceReport.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceReport.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceReportConfiguration.zh.designer.cs">
+      <DependentUpon>ResourceReportConfiguration.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRole.zh.designer.cs">
+      <DependentUpon>ResourceRole.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceServiceProvider.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceServiceProvider.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceServiceProvider.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceServiceProvider.zh.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceStore.zh.designer.cs">
+      <DependentUpon>ResourceStore.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSubModuleItem.zh.designer.cs">
+      <DependentUpon>ResourceSubModuleItem.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSubModuleItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceSubModuleItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSubModuleName.zh.designer.cs">
+      <DependentUpon>ResourceSubModuleName.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSubModuleName.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceSubModuleName.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSupplier.zh.designer.cs">
+      <DependentUpon>ResourceSupplier.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSupplierWiseCommercialReport.zh.designer.cs">
+      <DependentUpon>ResourceSupplierWiseCommercialReport.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSupplierWiseCommercialReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceSupplierWiseCommercialReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceUnitOfMeasurement.zh.designer.cs">
+      <DependentUpon>ResourceUnitOfMeasurement.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceUser.zh.designer.cs">
+      <DependentUpon>ResourceUser.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceWarehouse.zh.designer.cs">
+      <DependentUpon>ResourceWarehouse.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceWarehouse.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceWarehouse.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceWorkflowactionSetting.zh.designer.cs">
+      <DependentUpon>ResourceWorkflowactionSetting.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceWorkflowactionSetting.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceWorkflowactionSetting.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDepartment.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceDepartment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceDesignation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceDesignation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceEmployee.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceEmployee.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceEmploymentHistory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceEmploymentHistory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemDemand.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceItemDemand.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceItemIssue.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceItemIssue.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceManufacturer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceManufacturer.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceMenu.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceMenu.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceLogin.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceLogin.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceNotificationSetting.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceNotificationSetting.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceReportConfiguration.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceReportConfiguration.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceStore.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceStore.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceSupplier.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceSupplier.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceUser.designer.cs">
+      <DependentUpon>ResourceUser.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceRole.designer.cs">
+      <DependentUpon>ResourceRole.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceModule.designer.cs">
+      <DependentUpon>ResourceModule.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCountry.designer.cs">
+      <DependentUpon>ResourceCountry.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceCommon.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceCommon.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceUnitOfMeasurement.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceUnitOfMeasurement.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceZoneCommision.zh.designer.cs">
+      <DependentUpon>ResourceZoneCommision.zh.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\ResourceZoneCommision.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceZoneCommision.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\Bootstrapper.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActionLogController.cs" />
+    <Compile Include="Controllers\DivisionController.cs" />
+    <Compile Include="Controllers\BankController.cs" />
+    <Compile Include="Controllers\BranchController.cs" />
+    <Compile Include="Controllers\CurrencyController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\DesignationController.cs" />
+    <Compile Include="Controllers\DepartmentController.cs" />
+    <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\ModuleController.cs" />
+    <Compile Include="Controllers\RoleSubModuleItemController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\SubModuleController.cs" />
+    <Compile Include="Controllers\SubModuleItemController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\WorkflowactionController.cs" />
+    <Compile Include="Controllers\WorkflowactionSettingController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\EmailUtility.cs" />
+    <Compile Include="Helpers\NetworkDriveUtility.cs" />
+    <Compile Include="Helpers\Renders.cs" />
+    <Compile Include="Helpers\ReportService.cs" />
+    <Compile Include="Helpers\UserSession.cs" />
+    <Compile Include="Helpers\UtilityService.cs" />
+    <Compile Include="Models\DayOfWeekEnum.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\EnumUnitOfMeasurement.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\angularPrint.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Images\English.svg" />
+    <Content Include="Content\Images\chineese.svg" />
+    <Content Include="Content\Images\login-bg.jpg" />
+    <Content Include="Content\Images\module-bg.png" />
+    <Content Include="Content\defaultStyle.css" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\languages.min.css" />
+    <Content Include="Content\multiple-select.css" />
+    <Content Include="Content\progress-wizard.min.css" />
+    <Content Include="Content\style-black.css" />
+    <Content Include="Content\style-pink.css" />
+    <Content Include="Content\style-blue.css" />
+    <Content Include="Content\style-red.css" />
+    <Content Include="Content\style-Green.css" />
+    <Content Include="Content\style-brown.css" />
+    <Content Include="Demand Issue\demand-issue-voucher-templae.xlsx" />
+    <Content Include="files\LCShipment\LC101_CI01_AFMSelim.jpg" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="img\Loading.gif" />
+    <Content Include="Scripts\angular-strap.compat.js" />
+    <Content Include="Scripts\angular-strap.compat.min.js" />
+    <Content Include="Scripts\angular-strap.min.js" />
+    <Content Include="Scripts\angular-strap.tpl.min.js" />
+    <Content Include="Scripts\angularPrint.js" />
+    <Content Include="Scripts\angular_1_6_7.min.js" />
+    <Content Include="Scripts\bootstrap-tooltip.js" />
+    <Content Include="Scripts\angular-strap.min.js.map" />
+    <Content Include="App_GlobalResources\ResourceFGDealer.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGDealer.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGDealerZone.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGDealerZone.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemPrice.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemPrice.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGGrade.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGGrade.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGAdjustmentSetup.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGAdjustmentSetup.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGSale.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGSale.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGSalesDelivery.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGSalesDelivery.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemIn.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemIn.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemOpening.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemOpening.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItem.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItem.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemDispose.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemDispose.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFileRead.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFileRead.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGType.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGType.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGSize.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGSize.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGUOM.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGUOM.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourcePurchaseRequisition.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourcePurchaseRequisition.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemDemand.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemDemand.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemDispose.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemDispose.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemGroup.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemGroup.zh.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemIssue.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemIssue.zh.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBank.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBank.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBankAccount.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBankAccount.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBinCard.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBinCard.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBranch.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBranch.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCountry.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCountry.zh.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCurrency.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCurrency.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDesignation.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDesignation.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceEmployee.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceEmployee.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceEmploymentHistory.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceEmploymentHistory.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemOpening.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemOpening.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemReceive.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemReceive.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLcReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLcReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipmentDocument.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipmentDocument.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipmentExpenseHead.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipmentExpenseHead.zh.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipmentExpenseHeadCategory.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipmentExpenseHeadCategory.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLogin.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLogin.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceManufacturer.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceManufacturer.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceModuleName.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceModuleName.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceNotificationSetting.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceNotificationSetting.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourcePackingUnit.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourcePackingUnit.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLC.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLC.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceReportConfiguration.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceReportConfiguration.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRole.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRole.zh.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceStore.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceStore.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSubModuleName.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSubModuleName.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSupplier.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSupplier.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceUnitOfMeasurement.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceUnitOfMeasurement.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceUser.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceUser.zh.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceWarehouse.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceWarehouse.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceWorkflowactionSetting.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceWorkflowactionSetting.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceAutoGeneratedNo.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceAutoGeneratedNo.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLC.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLC.zh1.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCReport.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCSizeWiseGradeWIseDeliveryReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCSizeWiseGradeWIseDeliveryReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCSizeWiseGradeWIseDeliveryReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCSizeWiseGradeWIseDeliveryReport.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCProductStock.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCProductStock.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCProductStock.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCProductStock.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCMMDeliveryReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCMMDeliveryReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCMMDeliveryReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCMMDeliveryReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceZoneCommision.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceZoneCommision.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDealerCommisionDetail.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDealerCommisionDetail.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceServiceProvider.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceServiceProvider.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrument.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrument.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrument.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrument.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentLocation.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentLocation.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentLocation.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentLocation.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentMaintenance.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentMaintenance.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentMaintenance.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentMaintenance.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentMaster.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentMaster.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentMaster.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentMaster.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentSchedule.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentSchedule.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentSchedule.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentSchedule.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentStatus.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentStatus.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceInstrumentStatus.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceInstrumentStatus.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceServiceProvider.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceServiceProvider.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCommissionCalculator.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCommissionCalculator.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemAdjustment.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemAdjustment.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemAdjustment.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemAdjustment.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemAdjustment.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemAdjustment.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemAdjustment.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemAdjustment.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceZoneCommision.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceZoneCommision.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDealerCommisionDetail.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDealerCommisionDetail.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDivision.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDivision.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDivision.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDivision.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCommissionCalculator.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCommissionCalculator.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCompany.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCompany.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCompany.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCompany.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCProductWiseSalesReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCProductWiseSalesReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCProductWiseSalesReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCProductWiseSalesReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCYearGradeUnitWiseDealerSalesReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCYearGradeUnitWiseDealerSalesReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCYearGradeUnitWiseDealerSalesReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCYearGradeUnitWiseDealerSalesReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCDealerWiseSizeWiseSalesReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCDealerWiseSizeWiseSalesReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCDealerWiseSizeWiseSalesReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCDealerWiseSizeWiseSalesReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCDealerInfoReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCDealerInfoReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCDealerInfoReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCDealerInfoReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSupplierWiseCommercialReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSupplierWiseCommercialReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCDSaleStatementReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCDSaleStatementReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCDSaleStatementReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCDSaleStatementReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCEmpWiseDealerWiseReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCEmpWiseDealerWiseReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCEmpWiseDealerWiseReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCEmpWiseDealerWiseReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCProductInReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCProductInReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCProductInReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCProductInReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCSupplierWiseCommercialReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCSupplierWiseCommercialReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCSupplierWiseCommercialReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCSupplierWiseCommercialReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemWiseCommercialReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemWiseCommercialReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemWiseCommercialReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemWiseCommercialReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSupplierWiseCommercialReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSupplierWiseCommercialReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBreakageCalculator.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBreakageCalculator.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCMonthlySizeWiseSalesUndeliveryReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCCommissionCalculatorReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCCommissionCalculatorReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCCommissionCalculatorReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCCommissionCalculatorReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCBreakageCalculatorReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCBreakageCalculatorReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCBreakageCalculatorReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCBreakageCalculatorReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBreakageCalculator.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBreakageCalculator.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCEmpWiseItemUseReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCEmpWiseItemUseReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCEmpWiseItemUseReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCEmpWiseItemUseReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemStockStatusReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemStockStatusReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemStockStatusReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemStockStatusReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemInventoryReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemInventoryReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemInventoryReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemInventoryReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemReceiveReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemReceiveReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemReceiveReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemReceiveReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemUseReport2.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemUseReport2.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemUseReport2.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemUseReport2.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCWBReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCWBReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCWBReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCWBReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemStockRegisterReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemStockRegisterReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRDLCItemStockRegisterReport.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRDLCItemStockRegisterReport.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="files\LCShipment\LC101_CI01_AMP Format by USBA.xlsx" />
+    <Content Include="files\LCShipment\LC101_CI01_Client Feedback%284-10-17%29.docx" />
+    <Content Include="App_GlobalResources\ResourceBankAccount.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBankAccount.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFileRead.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFileRead.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceAutoGeneratedNo.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceAutoGeneratedNo.Designer.cs</LastGenOutput>
+    </Content>
+    <EmbeddedResource Include="App_GlobalResources\ResourceCommercialInvoice.zh.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceCommercialInvoice.zh.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\PublishProfiles\TilesSolution.pubxml" />
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\Controller\mainCtrl.js" />
+    <Content Include="Scripts\Controller\modalCtrl.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\JsFile\angular-ui-bootstrap-modal.js" />
+    <Content Include="Scripts\JsFile\cmnNewjs.js" />
+    <Content Include="Scripts\JsFile\multiple-select.js" />
+    <Content Include="Scripts\JsFile\ui-bootstrap-tpls-0.10.0.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Views\CustomModalView\modalView.html" />
+    <Content Include="Views\Company\Company.cshtml" />
+    <Content Include="Views\Bank\Bank.cshtml" />
+    <Content Include="Views\Branch\Branch.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Country\TestAngCountryIndex.cshtml" />
+    <Content Include="Views\Shared\_Angular1_6_7NewMenuView.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Currency\Currency.cshtml" />
+    <Content Include="Views\ServiceProvider\ServiceProvider.cshtml" />
+    <Content Include="Views\Division\Division.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CacheKeys\CacheKeys.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\angucomplete-alt.css" />
+    <Content Include="Content\angular-block-ui.css" />
+    <Content Include="Content\angular-strap_styles_libs_min.css" />
+    <Content Include="Content\autocomplete.css" />
+    <Content Include="Content\awesome-bootstrap-checkbox.css" />
+    <Content Include="Content\bootstrap-combined.css" />
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-select.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dataTables.bootstrap.min.css" />
+    <Content Include="Content\datatables.min.css" />
+    <Content Include="Content\fileinput.min.css" />
+    <Content Include="Content\HomePage.css" />
+    <Content Include="Content\hover.css" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\SpinnerImages\FlipFlop.GIF" />
+    <Content Include="Content\Images\SpinnerImages\LoaderImg.GIF" />
+    <Content Include="Content\Images\SpinnerImages\gettestr-large-spinner-orange.gif" />
+    <Content Include="Content\Images\SpinnerImages\loader.gif" />
+    <Content Include="Content\Images\SpinnerImages\loading_circle_fully_working_by_assasinna-d5xfzgb.gif" />
+    <Content Include="Content\jqModal.css" />
+    <Content Include="Content\jquery-ui-1.8.21.custom.css" />
+    <Content Include="Content\jquery.dataTables.min.css" />
+    <Content Include="Content\jquery.jqplot.min.css" />
+    <Content Include="Content\Menu\style-responsive.css" />
+    <Content Include="Content\Menu\style.css" />
+    <Content Include="Content\normalize.css" />
+    <Content Include="Content\simple-sidebar.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\SliderContent\images\NecessaryImages\a08.png" />
+    <Content Include="Content\SliderContent\images\NecessaryImages\a09.png" />
+    <Content Include="Content\SliderContent\images\NecessaryImages\a17.png" />
+    <Content Include="Content\SliderContent\images\NecessaryImages\loading.gif" />
+    <Content Include="Content\SliderContent\images\NecessaryImages\t01.png" />
+    <Content Include="Content\SliderContent\images\travel\01.jpg" />
+    <Content Include="Content\SliderContent\images\travel\02.jpg" />
+    <Content Include="Content\SliderContent\images\travel\03.jpg" />
+    <Content Include="Content\SliderContent\images\travel\04.jpg" />
+    <Content Include="Content\SliderContent\images\travel\05.jpg" />
+    <Content Include="Content\SliderContent\images\travel\06.jpg" />
+    <Content Include="Content\SliderContent\images\travel\07.jpg" />
+    <Content Include="Content\SliderContent\images\travel\08.jpg" />
+    <Content Include="Content\SliderContent\images\travel\09.jpg" />
+    <Content Include="Content\SliderContent\images\travel\10.jpg" />
+    <Content Include="Content\SliderContent\images\travel\11.jpg" />
+    <Content Include="Content\SliderContent\images\travel\12.jpg" />
+    <Content Include="Content\SliderContent\images\travel\13.jpg" />
+    <Content Include="Content\SliderContent\images\travel\14.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-01.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-02.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-03.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-04.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-05.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-06.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-07.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-08.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-09.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-10.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-11.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-12.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-13.jpg" />
+    <Content Include="Content\SliderContent\images\travel\thumb-14.jpg" />
+    <Content Include="Content\SliderContent\js\jquery-1.9.1.min.js" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\StyleSheet1.css" />
+    <Content Include="Content\Tabs.css" />
+    <Content Include="Content\ui-grid-unstable.css" />
+    <Content Include="Content\ui-grid-unstable.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\ui-grid.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\AjaxLogin.js" />
+    <Content Include="Scripts\angucomplete-alt.js" />
+    <Content Include="Scripts\angular-animate.js" />
+    <Content Include="Scripts\angular-animate.min.js" />
+    <Content Include="Scripts\angular-cookies.js" />
+    <Content Include="Scripts\angular-cookies.min.js" />
+    <Content Include="Scripts\angular-csp.css" />
+    <Content Include="Scripts\angular-loader.js" />
+    <Content Include="Scripts\angular-loader.min.js" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular-resource.js" />
+    <Content Include="Scripts\angular-resource.min.js" />
+    <Content Include="Scripts\angular-route.js" />
+    <Content Include="Scripts\angular-route.min.js" />
+    <Content Include="Scripts\angular-sanitize.js" />
+    <Content Include="Scripts\angular-sanitize.min.js" />
+    <Content Include="Scripts\angular-scenario.js" />
+    <Content Include="Scripts\angular-strap.docs.tpl.js" />
+    <Content Include="Scripts\angular-strap.js" />
+    <Content Include="Scripts\angular-strap.tpl.js" />
+    <Content Include="Scripts\angular-touch.js" />
+    <Content Include="Scripts\angular-touch.min.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\bootstrap-alert.js" />
+    <Content Include="Scripts\bootstrap-collapse.js" />
+    <Content Include="Scripts\bootstrap-dropdown.js" />
+    <Content Include="Scripts\bootstrap-modal.js" />
+    <Content Include="Scripts\bootstrap-popover.js" />
+    <Content Include="Scripts\bootstrap-scrollspy.js" />
+    <Content Include="Scripts\bootstrap-tab.js" />
+    <Content Include="Scripts\bootstrap-transition.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.css" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\handlebars-1.0.rc.1.js" />
+    <Content Include="Scripts\i18n\angular-locale_af-na.js" />
+    <Content Include="Scripts\i18n\angular-locale_af-za.js" />
+    <Content Include="Scripts\i18n\angular-locale_af.js" />
+    <Content Include="Scripts\i18n\angular-locale_am-et.js" />
+    <Content Include="Scripts\i18n\angular-locale_am.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-001.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-ae.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-bh.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-dz.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-eg.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-iq.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-jo.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-kw.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-lb.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-ly.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-ma.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-om.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-qa.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-sa.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-sd.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-sy.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-tn.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar-ye.js" />
+    <Content Include="Scripts\i18n\angular-locale_ar.js" />
+    <Content Include="Scripts\i18n\angular-locale_bg-bg.js" />
+    <Content Include="Scripts\i18n\angular-locale_bg.js" />
+    <Content Include="Scripts\i18n\angular-locale_bn-bd.js" />
+    <Content Include="Scripts\i18n\angular-locale_bn-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_bn.js" />
+    <Content Include="Scripts\i18n\angular-locale_ca-ad.js" />
+    <Content Include="Scripts\i18n\angular-locale_ca-es.js" />
+    <Content Include="Scripts\i18n\angular-locale_ca.js" />
+    <Content Include="Scripts\i18n\angular-locale_cs-cz.js" />
+    <Content Include="Scripts\i18n\angular-locale_cs.js" />
+    <Content Include="Scripts\i18n\angular-locale_da-dk.js" />
+    <Content Include="Scripts\i18n\angular-locale_da.js" />
+    <Content Include="Scripts\i18n\angular-locale_de-at.js" />
+    <Content Include="Scripts\i18n\angular-locale_de-be.js" />
+    <Content Include="Scripts\i18n\angular-locale_de-ch.js" />
+    <Content Include="Scripts\i18n\angular-locale_de-de.js" />
+    <Content Include="Scripts\i18n\angular-locale_de-li.js" />
+    <Content Include="Scripts\i18n\angular-locale_de-lu.js" />
+    <Content Include="Scripts\i18n\angular-locale_de.js" />
+    <Content Include="Scripts\i18n\angular-locale_el-cy.js" />
+    <Content Include="Scripts\i18n\angular-locale_el-gr.js" />
+    <Content Include="Scripts\i18n\angular-locale_el.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-as.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-au.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-bb.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-be.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-bm.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-bw.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-bz.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-ca.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-dsrt-us.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-dsrt.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-fm.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-gb.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-gu.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-gy.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-hk.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-ie.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-iso.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-jm.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-mh.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-mp.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-mt.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-mu.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-na.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-nz.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-ph.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-pk.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-pr.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-pw.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-sg.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-tc.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-tt.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-um.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-us.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-vg.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-vi.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-za.js" />
+    <Content Include="Scripts\i18n\angular-locale_en-zw.js" />
+    <Content Include="Scripts\i18n\angular-locale_en.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-419.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-ar.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-bo.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-cl.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-co.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-cr.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-do.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-ea.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-ec.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-es.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-gq.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-gt.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-hn.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-ic.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-mx.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-ni.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-pa.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-pe.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-pr.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-py.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-sv.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-us.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-uy.js" />
+    <Content Include="Scripts\i18n\angular-locale_es-ve.js" />
+    <Content Include="Scripts\i18n\angular-locale_es.js" />
+    <Content Include="Scripts\i18n\angular-locale_et-ee.js" />
+    <Content Include="Scripts\i18n\angular-locale_et.js" />
+    <Content Include="Scripts\i18n\angular-locale_eu-es.js" />
+    <Content Include="Scripts\i18n\angular-locale_eu.js" />
+    <Content Include="Scripts\i18n\angular-locale_fa-af.js" />
+    <Content Include="Scripts\i18n\angular-locale_fa-ir.js" />
+    <Content Include="Scripts\i18n\angular-locale_fa.js" />
+    <Content Include="Scripts\i18n\angular-locale_fi-fi.js" />
+    <Content Include="Scripts\i18n\angular-locale_fi.js" />
+    <Content Include="Scripts\i18n\angular-locale_fil-ph.js" />
+    <Content Include="Scripts\i18n\angular-locale_fil.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-be.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-bf.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-bi.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-bj.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-bl.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-ca.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-cd.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-cf.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-cg.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-ch.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-ci.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-cm.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-dj.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-fr.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-ga.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-gf.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-gn.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-gp.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-gq.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-km.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-lu.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-mc.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-mf.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-mg.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-ml.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-mq.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-ne.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-re.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr-yt.js" />
+    <Content Include="Scripts\i18n\angular-locale_fr.js" />
+    <Content Include="Scripts\i18n\angular-locale_gl-es.js" />
+    <Content Include="Scripts\i18n\angular-locale_gl.js" />
+    <Content Include="Scripts\i18n\angular-locale_gsw-ch.js" />
+    <Content Include="Scripts\i18n\angular-locale_gsw.js" />
+    <Content Include="Scripts\i18n\angular-locale_gu-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_gu.js" />
+    <Content Include="Scripts\i18n\angular-locale_he-il.js" />
+    <Content Include="Scripts\i18n\angular-locale_he.js" />
+    <Content Include="Scripts\i18n\angular-locale_hi-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_hi.js" />
+    <Content Include="Scripts\i18n\angular-locale_hr-hr.js" />
+    <Content Include="Scripts\i18n\angular-locale_hr.js" />
+    <Content Include="Scripts\i18n\angular-locale_hu-hu.js" />
+    <Content Include="Scripts\i18n\angular-locale_hu.js" />
+    <Content Include="Scripts\i18n\angular-locale_id-id.js" />
+    <Content Include="Scripts\i18n\angular-locale_id.js" />
+    <Content Include="Scripts\i18n\angular-locale_in.js" />
+    <Content Include="Scripts\i18n\angular-locale_is-is.js" />
+    <Content Include="Scripts\i18n\angular-locale_is.js" />
+    <Content Include="Scripts\i18n\angular-locale_it-it.js" />
+    <Content Include="Scripts\i18n\angular-locale_it-sm.js" />
+    <Content Include="Scripts\i18n\angular-locale_it.js" />
+    <Content Include="Scripts\i18n\angular-locale_iw.js" />
+    <Content Include="Scripts\i18n\angular-locale_ja-jp.js" />
+    <Content Include="Scripts\i18n\angular-locale_ja.js" />
+    <Content Include="Scripts\i18n\angular-locale_kn-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_kn.js" />
+    <Content Include="Scripts\i18n\angular-locale_ko-kr.js" />
+    <Content Include="Scripts\i18n\angular-locale_ko.js" />
+    <Content Include="Scripts\i18n\angular-locale_ln-cd.js" />
+    <Content Include="Scripts\i18n\angular-locale_ln.js" />
+    <Content Include="Scripts\i18n\angular-locale_lt-lt.js" />
+    <Content Include="Scripts\i18n\angular-locale_lt.js" />
+    <Content Include="Scripts\i18n\angular-locale_lv-lv.js" />
+    <Content Include="Scripts\i18n\angular-locale_lv.js" />
+    <Content Include="Scripts\i18n\angular-locale_ml-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_ml.js" />
+    <Content Include="Scripts\i18n\angular-locale_mr-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_mr.js" />
+    <Content Include="Scripts\i18n\angular-locale_ms-my.js" />
+    <Content Include="Scripts\i18n\angular-locale_ms.js" />
+    <Content Include="Scripts\i18n\angular-locale_mt-mt.js" />
+    <Content Include="Scripts\i18n\angular-locale_mt.js" />
+    <Content Include="Scripts\i18n\angular-locale_nl-cw.js" />
+    <Content Include="Scripts\i18n\angular-locale_nl-nl.js" />
+    <Content Include="Scripts\i18n\angular-locale_nl-sx.js" />
+    <Content Include="Scripts\i18n\angular-locale_nl.js" />
+    <Content Include="Scripts\i18n\angular-locale_no.js" />
+    <Content Include="Scripts\i18n\angular-locale_or-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_or.js" />
+    <Content Include="Scripts\i18n\angular-locale_pl-pl.js" />
+    <Content Include="Scripts\i18n\angular-locale_pl.js" />
+    <Content Include="Scripts\i18n\angular-locale_pt-br.js" />
+    <Content Include="Scripts\i18n\angular-locale_pt-pt.js" />
+    <Content Include="Scripts\i18n\angular-locale_pt.js" />
+    <Content Include="Scripts\i18n\angular-locale_ro-ro.js" />
+    <Content Include="Scripts\i18n\angular-locale_ro.js" />
+    <Content Include="Scripts\i18n\angular-locale_ru-ru.js" />
+    <Content Include="Scripts\i18n\angular-locale_ru.js" />
+    <Content Include="Scripts\i18n\angular-locale_sk-sk.js" />
+    <Content Include="Scripts\i18n\angular-locale_sk.js" />
+    <Content Include="Scripts\i18n\angular-locale_sl-si.js" />
+    <Content Include="Scripts\i18n\angular-locale_sl.js" />
+    <Content Include="Scripts\i18n\angular-locale_sq-al.js" />
+    <Content Include="Scripts\i18n\angular-locale_sq.js" />
+    <Content Include="Scripts\i18n\angular-locale_sr-cyrl-rs.js" />
+    <Content Include="Scripts\i18n\angular-locale_sr-latn-rs.js" />
+    <Content Include="Scripts\i18n\angular-locale_sr.js" />
+    <Content Include="Scripts\i18n\angular-locale_sv-se.js" />
+    <Content Include="Scripts\i18n\angular-locale_sv.js" />
+    <Content Include="Scripts\i18n\angular-locale_sw-tz.js" />
+    <Content Include="Scripts\i18n\angular-locale_sw.js" />
+    <Content Include="Scripts\i18n\angular-locale_ta-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_ta.js" />
+    <Content Include="Scripts\i18n\angular-locale_te-in.js" />
+    <Content Include="Scripts\i18n\angular-locale_te.js" />
+    <Content Include="Scripts\i18n\angular-locale_th-th.js" />
+    <Content Include="Scripts\i18n\angular-locale_th.js" />
+    <Content Include="Scripts\i18n\angular-locale_tl.js" />
+    <Content Include="Scripts\i18n\angular-locale_tr-tr.js" />
+    <Content Include="Scripts\i18n\angular-locale_tr.js" />
+    <Content Include="Scripts\i18n\angular-locale_uk-ua.js" />
+    <Content Include="Scripts\i18n\angular-locale_uk.js" />
+    <Content Include="Scripts\i18n\angular-locale_ur-pk.js" />
+    <Content Include="Scripts\i18n\angular-locale_ur.js" />
+    <Content Include="Scripts\i18n\angular-locale_vi-vn.js" />
+    <Content Include="Scripts\i18n\angular-locale_vi.js" />
+    <Content Include="Scripts\i18n\angular-locale_zh-cn.js" />
+    <Content Include="Scripts\i18n\angular-locale_zh-hans-cn.js" />
+    <Content Include="Scripts\i18n\angular-locale_zh-hk.js" />
+    <Content Include="Scripts\i18n\angular-locale_zh-tw.js" />
+    <Content Include="Scripts\i18n\angular-locale_zh.js" />
+    <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
+    <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <Content Include="Scripts\jqDnR.js" />
+    <Content Include="Scripts\jqModal.js" />
+    <Content Include="Scripts\jqplot.barRenderer.min.js" />
+    <Content Include="Scripts\jqplot.canvasAxisTickRenderer.min.js" />
+    <Content Include="Scripts\jqplot.canvasTextRenderer.min.js" />
+    <Content Include="Scripts\jqplot.categoryAxisRenderer.min.js" />
+    <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
+    <Content Include="Scripts\jqplot.highlighter.min.js" />
+    <Content Include="Scripts\jqplot.ohlcRenderer.min.js" />
+    <Content Include="Scripts\jqplot.pointLabels.min.js" />
+    <Content Include="Scripts\errors.json" />
+    <Content Include="Scripts\angular-touch.min.js.map" />
+    <Content Include="Scripts\angular-sanitize.min.js.map" />
+    <Content Include="Scripts\angular-route.min.js.map" />
+    <Content Include="Scripts\angular-resource.min.js.map" />
+    <Content Include="Scripts\angular-loader.min.js.map" />
+    <Content Include="Scripts\angular-cookies.min.js.map" />
+    <Content Include="Scripts\angular-animate.min.js.map" />
+    <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="fonts\ui-grid.woff" />
+    <Content Include="fonts\ui-grid.ttf" />
+    <Content Include="fonts\ui-grid.eot" />
+    <Content Include="fonts\Lato-Black.ttf" />
+    <Content Include="fonts\Lato-BlackItalic.ttf" />
+    <Content Include="fonts\Lato-Bold.ttf" />
+    <Content Include="fonts\Lato-BoldItalic.ttf" />
+    <Content Include="fonts\Lato-Hairline.ttf" />
+    <Content Include="fonts\Lato-HairlineItalic.ttf" />
+    <Content Include="fonts\Lato-Italic.ttf" />
+    <Content Include="fonts\Lato-Light.ttf" />
+    <Content Include="fonts\Lato-LightItalic.ttf" />
+    <Content Include="fonts\Lato-Regular.ttf" />
+    <Content Include="fonts\Oswald-Bold.ttf" />
+    <Content Include="fonts\Oswald-Light.ttf" />
+    <Content Include="fonts\Oswald-Regular.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <None Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery-1.7.2.min.js" />
+    <None Include="Scripts\jquery-2.2.2.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.2.js" />
+    <Content Include="Scripts\jquery-2.2.2.min.js" />
+    <Content Include="Scripts\jquery-latest.js" />
+    <Content Include="Scripts\jquery-ui-1.8.11.js" />
+    <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.21.custom.min.js" />
+    <Content Include="Scripts\jquery-ui.css" />
+    <Content Include="Scripts\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery.autocomplete.js" />
+    <Content Include="Scripts\jquery.color.js" />
+    <Content Include="Scripts\jquery.imgareaselect.js" />
+    <Content Include="Scripts\jquery.Jcrop.js" />
+    <Content Include="Scripts\jquery.Jcrop.min.js" />
+    <Content Include="Scripts\jquery.jqplot.min.js" />
+    <Content Include="Scripts\jquery.nicescroll.min.js" />
+    <Content Include="Scripts\jquery.pjax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery-2.2.2.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Content\SliderContent\js\jssor.js" />
+    <Content Include="Content\SliderContent\js\jssor.slider.js" />
+    <Content Include="Scripts\JsFile\AdminHighChart.js" />
+    <Content Include="Scripts\JsFile\angular-base64-upload.js" />
+    <Content Include="Scripts\JsFile\autocomplete.js" />
+    <Content Include="Scripts\JsFile\bootbox.js" />
+    <Content Include="Scripts\JsFile\Menu\common-scripts.js" />
+    <Content Include="Scripts\JsFile\Menu\jquery.nicescroll.js" />
+    <Content Include="Scripts\JsFile\Menu\jquery.scrollTo.min.js" />
+    <Content Include="Scripts\JsFile\Menu\jquery.ui.touch-punch.min.js" />
+    <Content Include="Scripts\JsFile\ngBootbox.js" />
+    <Content Include="Scripts\JsFile\sortable.js" />
+    <Content Include="Scripts\knockout-2.0.0.debug.js" />
+    <Content Include="Scripts\knockout-2.0.0.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\JsFile\angular-block-ui.js" />
+    <Content Include="Scripts\JsFile\highcharts-ng.js" />
+    <Content Include="Scripts\JsFile\highcharts.js" />
+    <Content Include="Scripts\JsFile\common-directives.js" />
+    <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\Plugin\datatables\css\demo_page.css" />
+    <Content Include="Scripts\Plugin\datatables\css\demo_table.css" />
+    <Content Include="Scripts\Plugin\datatables\css\demo_table_jui.css" />
+    <Content Include="Scripts\Plugin\datatables\css\jquery.dataTables.css" />
+    <Content Include="Scripts\Plugin\datatables\css\jquery.dataTables_themeroller.css" />
+    <Content Include="Scripts\Plugin\datatables\images\back_disabled.png" />
+    <Content Include="Scripts\Plugin\datatables\images\back_enabled.png" />
+    <Content Include="Scripts\Plugin\datatables\images\back_enabled_hover.png" />
+    <Content Include="Scripts\Plugin\datatables\images\favicon.ico" />
+    <Content Include="Scripts\Plugin\datatables\images\forward_disabled.png" />
+    <Content Include="Scripts\Plugin\datatables\images\forward_enabled.png" />
+    <Content Include="Scripts\Plugin\datatables\images\forward_enabled_hover.png" />
+    <Content Include="Scripts\Plugin\datatables\images\sort_asc.png" />
+    <Content Include="Scripts\Plugin\datatables\images\sort_asc_disabled.png" />
+    <Content Include="Scripts\Plugin\datatables\images\sort_both.png" />
+    <Content Include="Scripts\Plugin\datatables\images\sort_desc.png" />
+    <Content Include="Scripts\Plugin\datatables\images\sort_desc_disabled.png" />
+    <Content Include="Scripts\Plugin\datatables\js\jquery.dataTables.js" />
+    <Content Include="Scripts\Plugin\datatables\js\jquery.dataTables.min.js" />
+    <Content Include="Scripts\Plugin\datatables\js\jquery.js" />
+    <Content Include="Scripts\Plugin\timePicker\jquery.timeentry.js" />
+    <Content Include="Scripts\Plugin\toast\jquery.toastmessage-min.css" />
+    <Content Include="Scripts\Plugin\toast\jquery.toastmessage-min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sidebar_menu.js" />
+    <Content Include="Scripts\timepickerpop.js" />
+    <Content Include="Scripts\ui-grid-unstable.js" />
+    <Content Include="Scripts\ui-grid-unstable.min.js" />
+    <Content Include="Scripts\version.json" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="Views\City\City.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\_AnonymousLayout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\PasswordRecovery.cshtml" />
+    <Content Include="Views\Account\SwitchRole.cshtml" />
+    <Content Include="Views\Country\Country.cshtml" />
+    <Content Include="Views\Module\Module.cshtml" />
+    <Content Include="Views\Role\Role.cshtml" />
+    <Content Include="Views\RoleSubModuleItem\RoleSubModuleItem.cshtml" />
+    <Content Include="Views\SubModule\SubModule.cshtml" />
+    <Content Include="Views\SubModuleItem\SubModuleItem.cshtml" />
+    <Content Include="Views\User\User.cshtml" />
+    <Content Include="Views\Shared\_DashboardLayout.cshtml" />
+    <Content Include="Views\Shared\_MenuLayout.cshtml" />
+    <Content Include="Views\Shared\NoPermission.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithoutMenu.cshtml" />
+    <Content Include="Views\Department\Department.cshtml" />
+    <Content Include="Views\Shared\_LoginLayout.cshtml" />
+    <Content Include="Views\Designation\Designation.cshtml" />
+    <Content Include="Views\Employee\Employee.cshtml" />
+    <Content Include="Views\WorkflowactionSetting\WorkflowactionSetting.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\Plugin\datatables\images\Sorting icons.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Remit.CachingService\Remit.CachingService.csproj">
+      <Project>{a8997781-b306-48b9-a2ba-a45efb6e7f96}</Project>
+      <Name>Remit.CachingService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.Core\Remit.Core.csproj">
+      <Project>{c620b128-6555-4f1c-82c7-87e759c948ce}</Project>
+      <Name>Remit.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.Data\Remit.Data.csproj">
+      <Project>{e5c70ac1-fe25-4ddc-b7c9-44f46349a8b0}</Project>
+      <Name>Remit.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.LoggerService\Remit.LoggerService.csproj">
+      <Project>{7b5f38e8-dd12-4d1d-9bcf-11282f0c3ad4}</Project>
+      <Name>Remit.LoggerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.Model\Remit.Model.csproj">
+      <Project>{a461c7ec-ec7a-402e-84be-eb016fc17ee5}</Project>
+      <Name>Remit.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.Service\Remit.Service.csproj">
+      <Project>{16606571-8e5a-42e3-89b9-2ae23370f4b1}</Project>
+      <Name>Remit.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\ResourceCountry.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCountry.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceWorkflowactionSetting.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceWorkflowactionSetting.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBank.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBank.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBranch.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBranch.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCommercialInvoice.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCommercialInvoice.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceBinCard.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceBinCard.Designer.cs</LastGenOutput>
+    </Content>
+    <EmbeddedResource Include="App_GlobalResources\ResourceCommon.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCommon.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="App_GlobalResources\ResourceUser.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceUser.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceMenu.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceMenu.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceManufacturer.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceManufacturer.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDepartment.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDepartment.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDesignation.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDesignation.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceEmployee.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceEmployee.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceEmploymentHistory.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceEmploymentHistory.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSupplier.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSupplier.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceStore.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceStore.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemDemand.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemDemand.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemIssue.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemIssue.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceNotificationSetting.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceNotificationSetting.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceReportConfiguration.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceReportConfiguration.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceUnitOfMeasurement.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceUnitOfMeasurement.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemCategory.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemCategory.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItem.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItem.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceProformaInvoice.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceProformaInvoice.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemGroup.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemGroup.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipmentExpenseHeadCategory.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipmentExpenseHeadCategory.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipmentExpenseHead.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipmentExpenseHead.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipment.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipment.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipmentDocument.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipmentDocument.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItem.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItem.zh.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLcReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLcReport.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceProformaInvoice.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceProformaInvoice.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCommon.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCommon.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLCShipment.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLCShipment.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceDepartment.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceDepartment.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceNewMenuView.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceNewMenuView.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceNewMenuView.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceNewMenuView.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemDispose.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemDispose.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemReceive.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemReceive.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceWarehouse.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceWarehouse.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourcePurchaseRequisition.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourcePurchaseRequisition.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemOpening.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemOpening.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceCurrency.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceCurrency.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourcePackingUnit.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourcePackingUnit.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceMenu.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceMenu.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceModule.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceModule.zh.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceItemCategory.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceItemCategory.zh.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSubModuleItem.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSubModuleItem.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSubModuleItem.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSubModuleItem.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceModuleName.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceModuleName.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceSubModuleName.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceSubModuleName.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGUOM.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGUOM.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemOpening.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemOpening.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGGrade.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGGrade.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGType.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGType.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGDealerZone.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGDealerZone.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGSize.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGSize.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGDealer.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGDealer.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemIn.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemIn.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItem.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItem.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemPrice.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemPrice.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGAdjustmentSetup.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGAdjustmentSetup.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGItemDispose.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGItemDispose.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGSale.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGSale.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceFGSalesDelivery.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceFGSalesDelivery.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\ResourceModule.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceModule.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceRole.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceRole.designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_GlobalResources\ResourceLogin.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ResourceLogin.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>6292</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:7200/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,506 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceInstrumentSchedule.LblInstrumentSchedule;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+
+<div class="col-xs-12 col-sm-12" ng-controller="instrumentScheduleCtrl">
+
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceInstrumentSchedule.LblInstrumentSchedule
+            <a class="btn btn-sm btn-facebook  pull-right " href="/InstrumentSchedule/Index">@Resources.ResourceCommon.LblViewAll</a>
+        </div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrumentSchedule.LblInstrument
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="InstrumentId" class="form-control"
+                                            data-ng-options="c.Id as c.USTCCode + ' - ' + c.InstrumentMasterName for c in allInstrumentFromDb | orderBy: 'USTCCode'" name="InstrumentId" ng-required="true" ng-change="setLastServiceDate(InstrumentId)">
+                                        <option value="">@Resources.ResourceInstrumentSchedule.LblSelectInstrument</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.InstrumentId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrumentSchedule.LblInstrument)
+                                    </b>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrumentSchedule.LblServiceDate
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input type="text" class="form-control" datepicker-append-to-body="true" ng-model="ServiceDate" ng-data-model="ServiceDate" datepicker-popup="@System.Configuration.ConfigurationManager.AppSettings["dateFormat"]" name="ServiceDate" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrumentSchedule.LblNextServiceDate
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input type="text" class="form-control" datepicker-append-to-body="true" ng-model="NextServiceDate" ng-data-model="NextServiceDate" datepicker-popup="@System.Configuration.ConfigurationManager.AppSettings["dateFormat"]" name="NextServiceDate" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceInstrumentSchedule.LblInstrumentStatus
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="InstrumentStatusId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allInstrumentStatusFromDb | orderBy: 'Name'" name="InstrumentStatusId" ng-required="true">
+                                        <option value="">@Resources.ResourceInstrumentSchedule.LblSelectInstrumentStatus</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.InstrumentStatusId.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrumentSchedule.LblInstrumentStatus)
+                                    </b>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceInstrumentSchedule.LblIsActive
+                                    </label>
+                                </div>
+                                <div class="col-xs-3 col-sm-9 col-md-9 padding-left-zero">
+                                    <div class="col-xs-12 col-sm-2 col-md-2">
+                                        <input class="form-control" type="checkbox" ng-model="IsActive" checked />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceInstrumentSchedule.LblIsInitial
+                                    </label>
+                                </div>
+                                <div class="col-xs-3 col-sm-9 col-md-9 padding-left-zero">
+                                    <div class="col-xs-12 col-sm-2 col-md-2">
+                                        <input class="form-control" type="checkbox" ng-model="IsInitial" ng-disabled="true" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                         @Resources.ResourceInstrumentSchedule.LblComment
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="Comment" ng-model="Comment" ng-maxlength="50"  />
+                                    <b class="help-block" ng-if="form.ModelNo.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceInstrumentSchedule.LblComment)
+                                    </b>
+                                    <b class="help-block" ng-if="form.ModelNo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceInstrumentSchedule.LblCommentOn
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input type="text" class="form-control" datepicker-append-to-body="true" ng-model="CommentOn" ng-data-model="CommentOn" datepicker-popup="@System.Configuration.ConfigurationManager.AppSettings["dateFormat"]" name="CommentOn" ng-disabled="true" />
+                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceInstrumentSchedule.LblCommentBy
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="CommentBy" ng-model="CommentBy" ng-maxlength="50" ng-disabled="true" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-disabled="!IsEditable" ng-click="addInstrumenttMaintenance()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSubmit />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+
+
+    @* ************ TABLE - SECTION (Start)*************** *@
+    @*<div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceInstrumentSchedule.LblInstrumentSchedule @Resources.ResourceCommon.lblList</div>
+        <div class="panel-body border-green  pt pb">
+            <div class="row mb">
+                <div class="col-sm-8 padding-left-zero">
+                    <div class="col-sm-4">
+                        <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                    </div>
+                    <div class="col-sm-8 text-center-vertical">
+                        @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{allInstrumentScheduleFromDb.length}}</b> @Resources.ResourceInstrumentSchedule.LblTotalInstrumentSchedule
+                    </div>
+                </div>
+                <div class="col-sm-4 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical text-right">
+                        <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select ng-model="entryLimit" class="form-control">
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblInstrument <a ng-click="sort_by('InstrumentName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblServiceDate <a ng-click="sort_by('ServiceDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblNextServiceDate <a ng-click="sort_by('NextServiceDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblInstrumentStatus <a ng-click="sort_by('InstrumentStatusName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblIsActive <a ng-click="sort_by('LblIsActive');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblIsInitial <a ng-click="sort_by('IsInitial');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblInstrument <a ng-click="sort_by('InstrumentName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblServiceDate <a ng-click="sort_by('ServiceDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblNextServiceDate <a ng-click="sort_by('NextServiceDate');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblInstrumentStatus <a ng-click="sort_by('InstrumentStatusName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblIsActive <a ng-click="sort_by('LblIsActive');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                    <th>@Resources.ResourceInstrumentSchedule.LblIsInitial <a ng-click="sort_by('IsInitial');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+
+                                    <th>@Resources.ResourceCommon.LblEdit </th>
+                                    <th>@Resources.ResourceCommon.LblDelete </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr ng-class="{'selected':data == selectedRow}" ng-repeat="data in filtered = (allInstrumentScheduleFromDb  | filter:SearchText | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+
+                                    <td>{{data.InstrumentName }}</td>
+                                    <td>{{data.ServiceDate }}</td>
+                                    <td>{{data.NextServiceDate }}</td>
+                                    <td>{{data.InstrumentStatusName }}</td>
+                                    <td>{{data.IsActive }}</td>
+                                    <td>{{data.IsInitial }}</td>
+
+                                    <td><input type="button" value=@Resources.ResourceCommon.LblEdit class="btn btn-info btn-sm" ng-click="populateInstrumenttMaintenance(data)" /></td>
+                                    <td>
+                                        <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger btn-sm" ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                               ng-disabled="!data.IsInitial" ng-bootbox-confirm-action="deleteInstrumenttMaintenance(data)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @Resources.ResourceInstrumentSchedule.LblNoInstrumentScheduleFound
+                </div>
+            </div>
+        </div>
+    </div>*@
+    @* ************ TABLE - SECTION (End)*************** *@
+
+</div>
+
+
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('instrumentScheduleService', ['$http', function ($http) {
+
+        return {
+            saveInstrumentSchedule: function (instrumentSchedule) {
+                return $http({
+                    url: '/InstrumentSchedule/CreateInstrumentSchedule',
+                    method: 'POST',
+                    data: instrumentSchedule
+                })
+            },
+            getInstrumentSchedule: function (id) {
+                return $http.get('/InstrumentSchedule/GetInstrumentSchedule/' + id);
+            },
+            getAllInstrumentSchedule: function () {
+                return $http.get('/InstrumentSchedule/GetActiveInstrumentList');
+            },
+            deleteInstrumentSchedule: function (instrumentSchedule) {
+                return $http({
+                    url: '/InstrumentSchedule/DeleteInstrumenttMaintenance',
+                    method: 'POST',
+                    data: instrumentSchedule
+                })
+            },
+            getAllInstrument: function () {
+                return $http.get('/instrument/GetActiveInstrumentList');
+            },
+            getAllServiceableInstrument: function () {
+                return $http.get('/instrument/GetServiceableInstrumentList');
+            },
+            getAllInstrumentStatus: function () {
+                return $http.get('/instrumentStatus/GetActiveInstrumentStatusList');
+            },
+            getLastServiceDate: function (instrumentId) {
+                return $http.get('/InstrumentMaintenance/GetLastServiceDate/' + instrumentId);
+            },
+            
+        };
+    }]);
+
+    app.controller('instrumentScheduleCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, instrumentScheduleService, $log, $ngBootbox) {
+        $scope.IsEditable = true;
+
+        loadAllInstrument();       
+        function loadAllInstrument() {
+            $scope.allInstrumentFromDb = [];
+            if ('@ViewBag.ScheduleId' == '') {
+                instrumentScheduleService.getAllServiceableInstrument()
+                .then(function onSuccess(response) {
+                    $scope.allInstrumentFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            } else {
+                instrumentScheduleService.getAllInstrument()
+                    .then(function onSuccess(response) {
+                        $scope.allInstrumentFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+        }
+                
+        
+
+        loadAllInstrumentStatus();
+        function loadAllInstrumentStatus() {
+            $scope.allInstrumentStatusFromDb = [];
+            instrumentScheduleService.getAllInstrumentStatus()
+                .then(function onSuccess(response) {
+                    $scope.allInstrumentStatusFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        //loadAllInstrumentSchedule();
+        // Add a new instrumentSchedule
+        $scope.addInstrumenttMaintenance = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var instrumentSchedule = {};
+                instrumentSchedule["Id"] = $scope.Id;
+                instrumentSchedule["InstrumentId"] = $scope.InstrumentId;
+                instrumentSchedule["InstrumentStatusId"] = $scope.InstrumentStatusId;
+                instrumentSchedule["ServiceDate"] = $scope.ServiceDate;
+                instrumentSchedule["NextServiceDate"] = $scope.NextServiceDate;
+                instrumentSchedule["IsActive"] = $scope.IsActive;
+                instrumentSchedule["IsInitial"] = $scope.IsInitial;
+                instrumentSchedule["Comment"] = $scope.Comment;
+                
+                instrumentScheduleService.saveInstrumentSchedule(instrumentSchedule)
+                .then(function onSuccess(response) {
+                    loadAllInstrumentSchedule();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+        // Populate instrumentSchedule
+        $scope.selectedRow = null;
+        $scope.populateInstrumenttMaintenance = function (instrumentSchedule) {
+            $scope.selectedRow = instrumentSchedule;
+            $scope.Id = instrumentSchedule.Id;
+            $scope.InstrumentId = instrumentSchedule.InstrumentId;
+            $scope.InstrumentStatusId = instrumentSchedule.InstrumentStatusId;
+           // if (instrumentSchedule.ServiceDate!=undefined)
+                $scope.ServiceDate = instrumentSchedule.ServiceDate;
+            $scope.NextServiceDate = instrumentSchedule.NextServiceDate;
+            $scope.IsActive = instrumentSchedule.IsActive;
+            $scope.IsInitial = instrumentSchedule.IsInitial;
+            $scope.IsEditable = instrumentSchedule.IsEditable;
+            $scope.Comment = instrumentSchedule.Comment;
+            $scope.CommentOn = instrumentSchedule.CommentOn;
+            $scope.CommentBy = instrumentSchedule.CommentByName;
+          
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+        }
+
+        //for eiditing mode start
+        if ('@ViewBag.ScheduleId' != null && '@ViewBag.ScheduleId' != '') {
+            $scope.isCreateNewMode = false;
+            instrumentScheduleService.getInstrumentSchedule('@ViewBag.ScheduleId').then(function onSuccess(response) {
+                if (response.data != null)
+                    $scope.populateInstrumenttMaintenance(response.data);
+            });
+        }
+        //eidt end
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.InstrumentId = '';
+            $scope.InstrumentStatusId = '';
+            $scope.ServiceDate = '';
+            $scope.NextServiceDate = '';
+            $scope.IsActive = '';
+            $scope.IsInitial = '';
+            $scope.Comment = '';
+            $scope.CommentOn = '';
+            $scope.CommentBy = '';
+            $scope.IsEditable = true;
+        }
+
+        $scope.deleteInstrumenttMaintenance = function (instrumentSchedule) {
+            instrumentScheduleService.deleteInstrumentSchedule(instrumentSchedule)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                loadAllInstrumentSchedule();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+        function loadAllInstrumentSchedule() {
+            $scope.allInstrumentScheduleFromDb = [];
+            instrumentScheduleService.getAllInstrumentSchedule()
+                .then(function onSuccess(response) {
+                    $scope.allInstrumentScheduleFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        
+        $scope.setLastServiceDate = function (instrumentId) {
+            if (instrumentId != undefined && instrumentId != '' && instrumentId != null) {
+                instrumentScheduleService.getLastServiceDate(instrumentId)
+                    .then(function onSuccess(response) {
+                        $scope.ServiceDate = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+        }
+
+        //$scope.currentPage = 1; //current page
+        //$scope.entryLimit = 10; //max no of items to display in a page
+        //$scope.filteredItems = $scope.allInstrumentScheduleFromDb.length; //Initially for no filter
+        //$scope.totalItems = $scope.allInstrumentScheduleFromDb.length;
+        ////$scope.maxSize = 15;
+
+        //$scope.setPage = function (pageNo) {
+        //    $scope.currentPage = pageNo;
+        //};
+        //$scope.filter = function () {
+        //    $timeout(function () {
+        //        $scope.filteredItems = $scope.filtered.length;
+        //    }, 9000);
+        //};
+        //$scope.sort_by = function (predicate) {
+        //    $scope.predicate = predicate;
+        //    $scope.reverse = !$scope.reverse;
+        //};
+    });
+
+</script>

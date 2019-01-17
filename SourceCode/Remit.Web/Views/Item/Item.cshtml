@@ -1,0 +1,544 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceItemCategory.LblItem;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="itemCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceItemCategory.LblItem</div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+
+                            <div class="form-group" show-errors id="searchdivid">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceItem.LblItemCategory
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="ItemCategoryId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allItemCategoryFromDb | orderBy: 'Name'" name="ItemCategoryId" ng-required="true">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblItemCategory</option>
+                                    </select>
+                                    <b class="help-block" ng-if="form.Name.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItemCategory.LblItemCategory)
+                                    </b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle">*</b> @Resources.ResourceItem.LblItemName
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="Name" ng-model="Name" required ng-maxlength="200" />
+                                    <b class="help-block" ng-if="form.Name.$error.required">
+                                        @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItem.LblItemName)
+                                    </b>
+                                    <b class="help-block" ng-if="form.Name.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItemCategory.LblSpecification
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="Specification" ng-model="Specification" />
+
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblSize
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="Size" ng-model="Size" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblColor
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="Color" ng-model="Color" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblHSCode
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="HSCode" ng-model="HSCode" ng-maxlength="50" />
+                                    <b class="help-block" ng-if="form.HSCode.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblPartNumber
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="text" name="PartNumber" ng-model="PartNumber" ng-maxlength="50" />
+                                    <b class="help-block" ng-if="form.PartNumber.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblPurchaseunit
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="PurchaseunitId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allUnitofMeasurementFromDb | orderBy: 'Name'" name="PurchaseunitId">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblPurchaseunit</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblUsageUnit
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <select data-ng-model="UsageUnitId" class="form-control"
+                                            data-ng-options="c.Id as c.Name for c in allUnitofMeasurementFromDb | orderBy: 'Name'" name="UsageUnitId" ng-change="unitName()">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblUsageUnit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @*hgf*@
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblPerUnitWeight
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" style="text-align:right" type="number" step="any" name="PerUnitWeight" ng-model="PerUnitWeight" ng-maxlength="10" />
+                                    <b class="help-block" ng-if="form.PerUnitWeight.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblThresholdLevel
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" style="text-align:right" type="number" step="any" name="ThresholdLevel" ng-model="ThresholdLevel" ng-maxlength="10" />
+                                    <b class="help-block" ng-if="form.ThresholdLevel.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                                <div ng-model="usagesUnitName">{{usagesUnitName}}</div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblPurchaseToUsageConversionRatio
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+
+                                    <input class="form-control" style="text-align:right" type="number" min="1" name="PurchaseToUsageConversionRatio" ng-model="PurchaseToUsageConversionRatio" ng-maxlength="10" />
+
+                                    <b class="help-block" ng-if="form.PurchaseToUsageConversionRatio.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+                            <div class="form-group" show-errors>
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        <b class="starStyle"></b> @Resources.ResourceItem.LblPriority
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" style="text-align:right" type="number" name="Priority" ng-model="Priority" ng-maxlength="10" />
+                                    <b class="help-block" ng-if="form.Priority.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceItem.IsApprovalRequiredForIssue
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="checkbox" ng-model="IsApprovalRequiredForIssue" checked />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" padding-right-zero">
+                                    <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                        @Resources.ResourceItem.IsApprovalRequiredForDemand
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-5 col-md-5">
+                                    <input class="form-control" type="checkbox" ng-model="IsApprovalRequiredForDemand" checked />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                    <input type="button" ng-click="addItem()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave /> <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceItemCategory.LblItem @Resources.ResourceCommon.lblList</div>
+        <div class="panel-body border-green pt pb">
+            <div class="row mb">
+                <div class="col-sm-9 padding-left-zero">
+                    <div class="col-sm-4">
+                        <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                    </div>
+                    <div class="col-sm-8 text-center-vertical">
+                        @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{ allItemFromDb.length}}</b> @Resources.ResourceItemCategory.LblTotalItemCategory
+                    </div>
+                </div>
+                <div class="col-sm-3 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical">
+                        <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select ng-model="entryLimit" class="form-control">
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <table class="table table-bordered slidable-table">
+                        <thead>
+                            <tr>
+                                <th>@Resources.ResourceItem.LblItemName <a ng-click="sort_by('Name');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblItemCategory <a ng-click="sort_by('ItemCategoryName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblPartNumber <a ng-click="sort_by('PartNumber');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblSpecification <a ng-click="sort_by('Specification');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblPurchaseunit <a ng-click="sort_by('Purchaseunit');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblUsageUnit <a ng-click="sort_by('UsageUnit');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblThresholdLevel <a ng-click="sort_by('ThresholdLevel');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceCommon.LblEdit </th>
+                                <th>@Resources.ResourceCommon.LblDelete </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>@Resources.ResourceItem.LblItemName <a ng-click="sort_by('Name');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblItemCategory <a ng-click="sort_by('ItemCategoryName');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblPartNumber <a ng-click="sort_by('PartNumber');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblSpecification <a ng-click="sort_by('Specification');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblPurchaseunit <a ng-click="sort_by('Purchaseunit');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblUsageUnit <a ng-click="sort_by('UsageUnit');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceItem.LblThresholdLevel <a ng-click="sort_by('ThresholdLevel');"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a></th>
+                                <th>@Resources.ResourceCommon.LblEdit </th>
+                                <th>@Resources.ResourceCommon.LblDelete </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr ng-class="{'selected':data == selectedRow}" ng-repeat="data in filtered = (allItemFromDb  | filter:SearchText | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                                <td>{{data.Name }}</td>
+                                <td>{{data.ItemCategoryName }}</td>
+                                <td>{{data.PartNumber }}</td>
+                                <td>{{data.Specification }}</td>                               
+                                <td>{{data.Purchaseunit }}</td>
+                                <td>{{data.usagesUnitName }}</td>
+                                <td style ="text-align:right">{{data.ThresholdLevel }}</td>
+                                <td><input type="button" value=@Resources.ResourceCommon.LblEdit class="btn btn-info btn-sm" ng-click="populateItem(data)" /></td>
+                                <td>
+                                    <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger btn-sm" ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deleteItem(data)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @Resources.ResourceItemCategory.LblNoItemCategoryFound
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('itemService', ['$http', function ($http) {
+
+        return {
+            saveItem: function (item) {
+                return $http({
+                    url: '/Item/CreateItem',
+                    method: 'POST',
+                    data: item
+                })
+            },
+            getItem: function (id) {
+                return $http.get('/Item/GetItem/' + id);
+            },
+            getAllItem: function () {
+                return $http.get('/Item/GetItemList');
+            },
+            getAllItemCategory: function (groupType) {
+                if (groupType === "" || groupType === undefined || groupType === null) {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithoutGroupType');
+                } else {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithGroupType?groupType=' + groupType);
+                }
+            },
+            getAllUnitOfMesurement: function () {
+                return $http.get('/UnitOfMeasurement/GetUnitOfMeasurementList');
+            },
+            deleteItem: function (item) {
+                return $http({
+                    url: '/Item/DeleteItem',
+                    method: 'POST',
+                    data: item
+                })
+            }
+        };
+    }]);
+
+    app.controller('itemCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, itemService, $log, $ngBootbox) {
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        $scope.PurchaseToUsageConversionRatio = 1;
+        $scope.unitName = function () {          
+            angular.forEach($scope.allUnitofMeasurementFromDb, function (value, key) {
+                if (value.Id === $scope.UsageUnitId) {
+                    $scope.usagesUnitName = value.Name;
+                }
+            });
+        }
+
+        // Add a new item
+        $scope.addItem = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var item = {};
+                item["Id"] = $scope.Id;
+                item["Name"] = $scope.Name;
+                item["Specification"] = $scope.Specification;
+                item["Size"] = $scope.Size;
+                item["Color"] = $scope.Color;
+                item["HSCode"] = $scope.HSCode;
+                item["PartNumber"] = $scope.PartNumber;
+                item["PurchaseunitId"] = $scope.PurchaseunitId;
+                item["UsageUnitId"] = $scope.UsageUnitId;
+                item["PerUnitWeight"] = $scope.PerUnitWeight;
+                item["ThresholdLevel"] = $scope.ThresholdLevel;
+                item["Priority"] = $scope.Priority;
+                item["PurchaseToUsageConversionRatio"] = $scope.PurchaseToUsageConversionRatio;
+                item["ItemCategoryId"] = $scope.ItemCategoryId;
+                item["IsApprovalRequiredForIssue"] = $scope.IsApprovalRequiredForIssue;
+                item["IsApprovalRequiredForDemand"] = $scope.IsApprovalRequiredForDemand;
+
+
+                itemService.saveItem(item)
+                .then(function onSuccess(response) {
+                    loadAllItem();
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+
+        // Populate item
+        $scope.selectedRow = null;
+        $scope.populateItem = function (item) {
+            $scope.selectedRow = item;
+            $scope.Id = item.Id;
+            $scope.Name = item.Name;
+            $scope.Specification = item.Specification;
+            $scope.Size = item.Size;
+            $scope.Color = item.Color;
+            $scope.HSCode = item.HSCode;
+            $scope.PartNumber = item.PartNumber;
+            $scope.PurchaseunitId = item.PurchaseunitId;
+            $scope.UsageUnitId = item.UsageUnitId;
+            $scope.usagesUnitName = item.usagesUnitName;
+            $scope.PerUnitWeight = item.PerUnitWeight;
+            $scope.ThresholdLevel = item.ThresholdLevel;
+            $scope.Priority = item.Priority;
+            $scope.PurchaseToUsageConversionRatio = item.PurchaseToUsageConversionRatio;
+            $scope.ItemCategoryId = item.ItemCategoryId;
+            $scope.IsApprovalRequiredForIssue = item.IsApprovalRequiredForIssue;
+            $scope.IsApprovalRequiredForDemand = item.IsApprovalRequiredForDemand;
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+        }
+
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.Name = '';
+            $scope.Specification = '';
+            $scope.Size = '';
+            $scope.Color = '';
+            $scope.HSCode = '';
+            $scope.PartNumber = '';
+            $scope.PurchaseunitId = '';
+            $scope.UsageUnitId = '';
+            $scope.usagesUnitName = '';
+            $scope.PerUnitWeight = '';
+            $scope.ThresholdLevel = '';
+            $scope.Priority = '';
+            $scope.PurchaseToUsageConversionRatio = '1';
+            $scope.ItemCategoryId = '';
+            $scope.IsApprovalRequiredForIssue = '';
+            $scope.IsApprovalRequiredForDemand = '';
+            $scope.selectedRow = null;
+        }
+
+        $scope.deleteItem = function (item) {
+            itemService.deleteItem(item)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                loadAllItem();
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+        loadAllItem();
+        // Load employee
+        function loadAllItem() {
+            $scope.allItemFromDb = [];
+            itemService.getAllItem()
+                .then(function onSuccess(response) {
+                    $scope.allItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllItemCategory();
+        function loadAllItemCategory() {
+            $scope.allItemCategoryFromDb = [];
+            itemService.getAllItemCategory(@ViewBag.GroupType)
+                .then(function onSuccess(response) {
+                    $scope.allItemCategoryFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllUnitOfMesurement();
+        function loadAllUnitOfMesurement() {
+            $scope.allUnitofMeasurementFromDb = [];
+            itemService.getAllUnitOfMesurement()
+                .then(function onSuccess(response) {
+                    $scope.allUnitofMeasurementFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.allItemFromDb.length; //Initially for no filter
+        $scope.totalItems = $scope.allItemFromDb.length;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.filter = function () {
+            $timeout(function () {
+                $scope.filteredItems = $scope.filtered.length;
+            }, 9000);
+        };
+        $scope.sort_by = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = !$scope.reverse;
+        };
+    });</script>

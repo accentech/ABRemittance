@@ -1,0 +1,792 @@
+﻿
+@{
+    ViewBag.Title = "CommercialInvoice";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="commercialInvoiceCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceCommercialInvoice.LblCommercialInvoice
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker
+                                       data-min-view="2" data-autoclose="true" ng-change="loadCiListByYear()" data-trigger="click">
+                            </div>
+                           
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommercialInvoice.LblCommercialInvoiceList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="ciId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.CommercialInvoiceNo for c in allCiListByYearFromDb" name="ciId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-click="loadCiDetailsById(ciId);ShowHide()">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors id="searchdivid">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommercialInvoice.LblLCNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="LCId" class="form-control" focus-on="focusMe" required data-ng-options="c.Id as c.LCNo for c in allLCFromDb" name="LCId" ng-change="loadLCFinalItemById(LCId);">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblLCNo</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.LCId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommercialInvoice.LblLCNo)
+                                            </b>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="CommercialInvoiceNo" ng-model="CommercialInvoiceNo" required ng-maxlength="50" />
+                                            <b class="help-block" ng-if="form.CommercialInvoiceNo.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo)
+                                            </b>
+                                            <b class="help-block" ng-if="form.CommercialInvoiceNo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommercialInvoice.LblInvoiceDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" required class="form-control" ng-model="InvoiceDate" name="InvoiceDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                            <b class="help-block" ng-if="form.InvoiceDate.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommercialInvoice.LblInvoiceDate)
+                                            </b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceCommercialInvoice.LblInvoiceFilePath
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            
+                                            <input type="file"  file-Model="myFile"  class="form-control" ng-model="InvoiceFilePath" name="file" data-autoclose="true">                                                    
+                                           
+                                            <div ng-hide="IsHidden"> <a class=" link-text-style" href="/Files/CommercialInvoice/{{CommercialInvoiceNo}}_{{InvoiceFilePath}}">Download File</a></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommercialInvoice.LblItemTotalAmount
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align:right;"  class="form-control" type="number" name="ItemTotalAmountString" ng-model="ItemTotalAmount" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" ng-show="hidden" >
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommercialInvoice.LblPreviousFreightCost (&nbsp;{{CurrencyName}}&nbsp;)
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align:right;" readonly class="form-control" type="number" name="DueFreightCost" ng-model="DueFreightCost" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommercialInvoice.LblPreviousFreightCost (&nbsp;{{CurrencyName}}&nbsp;)
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align:right;" readonly class="form-control" type="number" name="DueFreightCost2" ng-model="DueFreightCost2" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommercialInvoice.LblFreightCost (&nbsp;{{CurrencyName}}&nbsp;)
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align: right;" min="0" class="form-control" type="number" name="FreightCost" ng-model="FreightCost" ng-change="UpdateDueFreightCost()" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommercialInvoice.LblInsurrenceCost
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align: right;" class="form-control" type="number" name="InsurrenceCost" ng-model="InsurrenceCost"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommercialInvoice.LblCurrency
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            @*<select disabled data-ng-model="CurrencyId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allCurrencyFromDb | orderBy: 'Name'" name="CurrencyId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblCurrency</option>
+                                            </select>*@
+                                            <input class="form-control" type="text" name="CurrencyId" ng-model="CurrencyName" ng-disabled="true"/>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommercialInvoice.LblConversionRateInlocalCurrency
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align: right;" class="form-control" type="number" name="ConversionRateInLocalCurrency" ng-model="ConversionRateInLocalCurrency"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceCommercialInvoice.LblCommercialInvoiceDetails</h3>
+
+                            <table class="table slidable-table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th >
+                                            @Resources.ResourceCommercialInvoice.LblItem
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblQuantity
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblUnit
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblUnitPrice (&nbsp;{{CurrencyName}}&nbsp;)
+                                        </th>
+
+                                        @*<th>
+                                            @Resources.ResourceCommercialInvoice.LblCurrency
+                                        </th>*@
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblAmount (&nbsp;{{CurrencyName}}&nbsp;)
+                                        </th>
+
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblPackingQuantity
+                                        </th>
+
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblPackingUnit
+                                        </th>
+                                       
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblNetWeight
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblGrossWeight
+                                        </th>
+
+                                        <th>
+                                            @Resources.ResourceCommercialInvoice.LblWeightUnit
+                                        </th>
+
+
+                                        <th>
+                                            @Resources.ResourceCommon.LblAction
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat="aCommercialInvoiceDet in CommercialInvoiceDetails">
+                                        <td>
+                                            @*<select disabled style="width:110px;" data-ng-model="aCommercialInvoiceDet.ItemId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allItemFromDb | orderBy: 'Name'" name="ItemId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblItem</option>
+                                            </select>*@
+                                            <input style="width:150px;" class="form-control" type="text" name="ItemName" ng-model="aCommercialInvoiceDet.ItemName" ng-disabled="true" />
+
+                                        </td>
+                                        <td>
+                                            <input style="width:80px;text-align:right;" data-ng-class="form-control" type="number" class="form-control" ng-model="aCommercialInvoiceDet.Quantity" name="Quantity" min="0" ng-change="getTotal()">
+                                        </td>
+                                        <td>
+                                            @*<select  disabled style="width:108px;" data-ng-model="aCommercialInvoiceDet.UnitId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allUnitofMeasurementFromDb | orderBy: 'Name'" name="UnitId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblUnit</option>
+                                            </select>*@
+                                            <input style="width:60px;" class="form-control" type="text" name="UnitName" ng-model="aCommercialInvoiceDet.UnitName" ng-disabled="true" />
+
+                                        </td>
+                                        <td>
+                                            <input readonly style="width:100px; text-align:right;" data-ng-class="form-control" type="number" class="form-control" ng-model="aCommercialInvoiceDet.UnitPrice" name="UnitPrice" min="0" ng-change="getTotal()"> 
+                                        </td>
+
+                                        @*<td>
+                                            <select style="width:120px;" data-ng-model="aCommercialInvoiceDet.CurrencyId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allCurrencyFromDb | orderBy: 'Name'" name="CurrencyId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblCurrency</option>
+                                            </select>
+                                        </td>*@
+
+                                        <td>
+                                            @*<input style="width:100px; text-align:right;" readonly data-ng-class="form-control" type="text" class="form-control" ng-model="aCommercialInvoiceDet.Amount" name="Amount" min="0">*@ 
+                                            <input style="width:100px; text-align:right;" readonly data-ng-class="form-control" type="text" class="form-control" ng-model="aCommercialInvoiceDet.AmountString" name="Amount" min="0"> 
+                                            
+                                        </td>
+                                        <td>
+                                            <input style="text-align:right; width:100px;" data-ng-class="form-control" type="number" class="form-control" ng-model="aCommercialInvoiceDet.PackingQuantity" name="PackingQuantity" min="0">
+                                        </td>
+
+                                        <td>
+                                            <select style="width:100px;" data-ng-model="aCommercialInvoiceDet.PackingUnitId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allPackingUnitFromDb | orderBy: 'Name'" name="PackingUnitId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblPackingUnit</option>
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <input style="text-align:right; width:100px;" data-ng-class="form-control" type="number" class="form-control" ng-model="aCommercialInvoiceDet.NetWeight" name="NetWeight" min="0">
+                                        </td>
+
+                                        <td>
+                                            <input style="text-align:right; width:100px;" data-ng-class="form-control" type="number" class="form-control" ng-model="aCommercialInvoiceDet.GrossWeight" name="GrossWeight" min="0">
+                                        </td>
+
+                                        <td>
+                                            <select style="width:100px;" data-ng-model="aCommercialInvoiceDet.WeightUnitId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allUnitofMeasurementFromDb | orderBy: 'Name'" name="WeightUnitId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblWeightUnit</option>
+                                            </select>
+                                        </td>
+
+
+
+
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="CommercialInvoiceDetails.splice($index,1);getTotal();" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                    <input type="button" ng-click="addCommercialInvoice()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+</div>
+
+<script type="text/javascript">
+
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+
+
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('commercialInvoiceService', ['$http', function ($http) {
+        return {
+            saveCommercialInvoice: function (commercialInvoice,fileName,dueFreightCost) {
+                var parms = { commercialInvoice: commercialInvoice, fileName: fileName, dueFreightCost: dueFreightCost }
+                return $http({
+                    url: '/CommercialInvoice/CreateCommercialInvoice',
+                    method: 'POST',
+                    type:"JSON",
+                    data: JSON.stringify(parms)
+                })
+  
+            },
+
+
+
+
+            getCommercialInvoice: function (id) {
+                return $http.get('/CommercialInvoice/GetCommercialInvoice/?id=' + id);
+            },
+            getLCFinalItemById: function (id) {
+                return $http.get('/CommercialInvoice/GetLCFinalItemById/?id=' + id);
+            },
+
+            getAllItem: function () {
+                return $http.get('/Item/GetItemList');
+            },
+            getAllLC: function () {
+                return $http.get('/LC/GetLCList');
+            },
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getCiListByYear: function (year) {
+                return $http.get('/CommercialInvoice/GetCiListByYear',
+                {
+                    params: { year: year }
+                });
+            },
+
+            uploadFile: function (name,commercialInvoiceNo,file) {
+                var fdata = new FormData();
+                var url = '/CommercialInvoice/UpoladFile';
+                fdata.append('name', name);
+                fdata.append('commercialInvoiceNo', commercialInvoiceNo);
+                fdata.append('file', file);
+
+                return $http.post(url, fdata, {
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
+                });
+
+            },
+
+
+            getAllCommercialInvoice: function () {
+                return $http.get('/CommercialInvoice/GetCommercialInvoiceList');
+            },
+            getAllUnitOfMesurement: function () {
+                return $http.get('/UnitOfMeasurement/GetUnitOfMeasurementList');
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+            getAllPackingUnit: function () {
+                return $http.get('/PackingUnit/GetPackingUnitList');
+            }
+        };
+    }]);
+
+    app.controller('commercialInvoiceCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, commercialInvoiceService, $log, $ngBootbox) {
+        $scope.messageModalObj = {};
+        $scope.selectedYear = new Date();
+        $scope.InvoiceDate = new Date();
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        $scope.CurrencyName = '';
+      
+        $scope.CommercialInvoiceDetails = [];
+        $scope.CommercialInvoiceDetails.push({ Id: '', CommercialInvoiceId: '', ItemId: '', Quantity: '', UnitId: '', UnitPrice: '', CurrencyId: '', Amount: '', PackingUnitId: '', PackingQuantity: '', NetWeight: '', GrossWeight: '', WeightUnitId: '' });
+
+        $scope.addNewDetail = function ($event) {
+            $scope.CommercialInvoiceDetails.push({ Id: '', CommercialInvoiceId: '', ItemId: '', Quantity: '', UnitId: '', UnitPrice: '', CurrencyId: '', Amount: '', PackingUnitId: '', PackingQuantity: '', NetWeight: '', GrossWeight: '', WeightUnitId: '' });
+        }
+
+        $scope.addItem = function () {
+            var popup = window.open('/Item/Index', '', "width=1000, height=800, left=" + (screen.width - 1000) / 2 + ", top=" + (screen.height - 800) / 2 + "");
+
+            popup.onbeforeunload = function () {
+                loadAllItem();
+            }
+            return false;
+        }
+
+        $scope.getTotal = function () {
+            $scope.ItemTotalAmount = Object.keys($scope.CommercialInvoiceDetails).map(function (k) {
+                $scope.CommercialInvoiceDetails[k].Amount = $scope.CommercialInvoiceDetails[k].Quantity * $scope.CommercialInvoiceDetails[k].UnitPrice;
+                $scope.CommercialInvoiceDetails[k].Amount = $scope.CommercialInvoiceDetails[k].Amount.toFixed(2);
+                $scope.CommercialInvoiceDetails[k].Amount = parseFloat($scope.CommercialInvoiceDetails[k].Amount);
+                $scope.CommercialInvoiceDetails[k].AmountString = Intl.NumberFormat().format($scope.CommercialInvoiceDetails[k].Amount);
+                return +$scope.CommercialInvoiceDetails[k].Quantity * $scope.CommercialInvoiceDetails[k].UnitPrice;
+
+            }).reduce(function (a, b) { return a + b }, 0.00);
+
+            $scope.ItemTotalAmount = $scope.ItemTotalAmount.toFixed(2);
+            $scope.ItemTotalAmount = parseFloat($scope.ItemTotalAmount);
+            $scope.ItemTotalAmountString = Intl.NumberFormat().format($scope.ItemTotalAmount);
+        }
+
+        // Add a new commercialInvoice
+        $scope.addCommercialInvoice = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var commercialInvoice = {};
+                commercialInvoice["Id"] = $scope.Id;
+                commercialInvoice["LCId"] = $scope.LCId;
+                commercialInvoice["CommercialInvoiceNo"] = $scope.CommercialInvoiceNo;
+                commercialInvoice["InvoiceDate"] = new Date($scope.InvoiceDate).toDateString();
+                commercialInvoice["InvoiceFilePath"] = $scope.InvoiceFilePath;
+                commercialInvoice["ItemTotalAmount"] = $scope.ItemTotalAmount;
+                commercialInvoice["FreightCost"] = $scope.FreightCost;
+                commercialInvoice["DueFreightCost"] = $scope.DueFreightCost;
+                commercialInvoice["DueFreightCost2"] = $scope.DueFreightCost2;
+                commercialInvoice["InsurrenceCost"] = $scope.InsurrenceCost;
+                commercialInvoice["CurrencyId"] = $scope.CurrencyId;
+                commercialInvoice["ConversionRateInLocalCurrency"] = $scope.ConversionRateInLocalCurrency;
+              
+
+                commercialInvoice["CommercialInvoiceDetails"] = $scope.CommercialInvoiceDetails;
+                commercialInvoice["CommercialInvoiceRelatedDocs"] = $scope.CommercialInvoiceRelatedDocs;
+
+                if ($scope.CommercialInvoiceDetails != null && $scope.CommercialInvoiceDetails !== "" && $scope.CommercialInvoiceDetails != undefined) {
+                    if ($scope.CommercialInvoiceDetails.length > 0) {
+                        for (var i = 0; i < $scope.CommercialInvoiceDetails.length; i++) {
+                            if ($scope.CommercialInvoiceDetails[i].Quantity !== 0 && $scope.CommercialInvoiceDetails[i].Quantity !== null && $scope.CommercialInvoiceDetails[i].Quantity !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceCommercialInvoice.LblQuantityRequiredPIDetails');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('Need Commercial Invoice details.');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('Need Commercial Invoice details.');
+                    return;
+                }
+                var fileName = "";
+                if ($scope.myFile != null) {
+                    fileName =  $scope.myFile.name;
+                }
+
+               
+                commercialInvoiceService.saveCommercialInvoice(commercialInvoice, fileName, $scope.DueFreightCost2)
+                    .then(function onSuccess(response) {
+                        if ($scope.myFile != null) {
+                            $scope.UploadFile();
+                        }
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadCiListByYear();
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+              
+            } else {
+                $ngBootbox.alert('Fill up all required data.');
+            }
+        };
+
+        $scope.populateCommercialInvoice = function (rowvalue) {
+            $scope.Id = rowvalue.Id;
+            $scope.LCId = rowvalue.LCId;
+            //$scope.loadLCFinalItemById(rowvalue.LCId);
+            $scope.CommercialInvoiceNo = rowvalue.CommercialInvoiceNo;
+            $scope.InvoiceDate = new Date(rowvalue.InvoiceDate);
+            $scope.InvoiceFilePath = rowvalue.InvoiceFilePath;
+            $scope.ItemTotalAmount = rowvalue.ItemTotalAmount;
+
+            $scope.ItemTotalAmount = $scope.ItemTotalAmount.toFixed(2);
+            $scope.ItemTotalAmount = parseFloat($scope.ItemTotalAmount);
+            $scope.ItemTotalAmountString = Intl.NumberFormat().format($scope.ItemTotalAmount);
+            
+            $scope.FreightCost = rowvalue.FreightCost;
+            $scope.DueFreightCost = rowvalue.DueFreightCost;
+            $scope.DueFreightCost2 = rowvalue.DueFreightCost;
+          
+            $scope.InsurrenceCost = rowvalue.InsurrenceCost;
+            $scope.CurrencyId = rowvalue.CurrencyId;
+            $scope.CurrencyName = rowvalue.CurrencyName;
+            $scope.ConversionRateInLocalCurrency = rowvalue.ConversionRateInLocalCurrency;
+           
+            $scope.CommercialInvoiceDetails = rowvalue.CommercialInvoiceDetails;
+            for (k in rowvalue.CommercialInvoiceDetails) {
+                $scope.CommercialInvoiceDetails[k].Amount = $scope.CommercialInvoiceDetails[k].Amount.toFixed(2);
+                $scope.CommercialInvoiceDetails[k].Amount = parseFloat($scope.CommercialInvoiceDetails[k].Amount);
+                $scope.CommercialInvoiceDetails[k].AmountString = Intl.NumberFormat().format($scope.CommercialInvoiceDetails[k].Amount);
+            }
+            $scope.CommercialInvoiceRelatedDocs = rowvalue.CommercialInvoiceRelatedDocs;
+        }
+
+       
+
+
+        $scope.reset = function () {
+          
+            $scope.IsHidden = true;
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.LCId = '';
+            $scope.CommercialInvoiceNo = '';
+            $scope.InvoiceDate = new Date();
+            $scope.InvoiceFilePath = '';
+            $scope.ItemTotalAmount = '';
+            
+            $scope.ItemTotalAmountString = '';
+
+
+            $scope.DueFreightCost = '';
+            $scope.DueFreightCost2 = '';
+            $scope.FreightCost = '';
+            $scope.InsurrenceCost = '';
+            $scope.CurrencyId = '';
+            $scope.CurrencyName = '';
+            $scope.ConversionRateInLocalCurrency = '';           
+
+            $scope.CommercialInvoiceDetails = [];
+            $scope.CommercialInvoiceRelatedDocs = '';
+            $scope.CommercialInvoiceDetails.push({ Id: '', CommercialInvoiceId: '', ItemId: '', Quantity: '', UnitId: '', UnitPrice: '', CurrencyId: '', Amount: '', PackingUnitId: '', PackingQuantity: '', NetWeight: '', GrossWeight: '', WeightUnitId: '' });
+            
+           
+        }
+
+
+       
+        $scope.UpdateDueFreightCost = function () {
+            if ($scope.FreightCost <= $scope.DueFreightCost) {
+
+                $scope.DueFreightCost2 = $scope.DueFreightCost - $scope.FreightCost;
+            } else {
+                $ngBootbox.alert('Freight Cost must be smaller than Due Freight Cost ');
+                $scope.FreightCost = 0;
+                $scope.DueFreightCost2 = $scope.DueFreightCost - $scope.FreightCost;
+
+
+            }
+           
+           
+        }
+
+
+
+
+        loadAllEmployee();
+        function loadAllEmployee() {
+            $scope.allEmployeeFromDb = [];
+            commercialInvoiceService.getAllEmployee()
+                .then(function onSuccess(response) {
+                    $scope.allEmployeeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllLC();
+        function loadAllLC() {
+            $scope.allLCFromDb = [];
+            commercialInvoiceService.getAllLC()
+                .then(function onSuccess(response) {
+                    $scope.allLCFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllItem();
+        function loadAllItem() {
+            $scope.allItemFromDb = [];
+            commercialInvoiceService.getAllItem()
+                .then(function onSuccess(response) {
+                    $scope.allItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllUnitOfMesurement();
+        function loadAllUnitOfMesurement() {
+            $scope.allUnitofMeasurementFromDb = [];
+            commercialInvoiceService.getAllUnitOfMesurement()
+                .then(function onSuccess(response) {
+                    $scope.allUnitofMeasurementFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllCurrency();
+        function loadAllCurrency() {
+            $scope.allCurrencyFromDb = [];
+            commercialInvoiceService.getAllCurrency()
+                .then(function onSuccess(response) {
+                    $scope.allCurrencyFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllPackingunit();
+        function loadAllPackingunit() {
+            $scope.allPackingUnitFromDb = [];
+            commercialInvoiceService.getAllPackingUnit()
+                .then(function onSuccess(response) {
+                    $scope.allPackingUnitFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadCiDetailsById = function (ciId) {
+            if (ciId) {
+                commercialInvoiceService.getCommercialInvoice(ciId)
+                .then(function onSuccess(response) {
+                    $scope.populateCommercialInvoice(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+        }
+
+
+        $scope.loadLCFinalItemById = function (LCId) {
+            
+            commercialInvoiceService.getLCFinalItemById(LCId)
+                .then(function onSuccess(response) {
+                    $scope.CurrencyId = response.data.CurrencyId;
+                    $scope.CurrencyName = response.data.CurrencyName;
+                    $scope.ItemTotalAmount = response.data.ItemTotalAmount;
+                    $scope.ItemTotalAmount = $scope.ItemTotalAmount.toFixed(2);
+                    $scope.ItemTotalAmount = parseFloat($scope.ItemTotalAmount);
+                    $scope.ItemTotalAmountString = Intl.NumberFormat().format($scope.ItemTotalAmount);
+                    
+                    $scope.DueFreightCost = response.data.DueFreightCost;
+                    $scope.DueFreightCost2 = response.data.DueFreightCost;
+                  
+                    $scope.CommercialInvoiceDetails = response.data.CommercialInvoiceDetails;
+                    for (k in response.data.CommercialInvoiceDetails) {
+                        $scope.CommercialInvoiceDetails[k].Amount = $scope.CommercialInvoiceDetails[k].Amount.toFixed(2);
+                        $scope.CommercialInvoiceDetails[k].Amount = parseFloat($scope.CommercialInvoiceDetails[k].Amount);
+                        $scope.CommercialInvoiceDetails[k].AmountString = Intl.NumberFormat().format($scope.CommercialInvoiceDetails[k].Amount);
+                    }
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+       
+        $scope.loadCiListByYear = function () {
+            year = $scope.selectedYear;
+
+
+            $scope.allCiListByYearFromDb = [];
+            year = year.getFullYear();
+            commercialInvoiceService.getCiListByYear(year)
+                .then(function onSuccess(response) {
+                    $scope.allCiListByYearFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadCiListByYear();
+
+
+        $scope.UploadFile = function () {
+         
+                commercialInvoiceService.uploadFile($scope.myFile.name, $scope.CommercialInvoiceNo, $scope.myFile)
+                     .then(function onSuccess(response) {
+                         $scope.allCiFileFromDb = response.data;
+                     })
+                     .catch(function onError(response) {
+                         $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                     });
+               
+            }
+        
+
+
+        $scope.IsHidden = true;
+        $scope.ShowHide = function () {
+            //If DIV is hidden it will be visible 
+            $scope.IsHidden = $scope.IsHidden ? false : true;
+        }
+       
+   
+
+
+    });</script>

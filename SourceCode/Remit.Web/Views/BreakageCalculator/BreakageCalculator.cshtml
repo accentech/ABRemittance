@@ -1,0 +1,405 @@
+﻿@{
+    ViewBag.Title = "BreakageCalculator";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="breakageCalculatorCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceBreakageCalculator.Title
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker
+                                       data-container="body" data-min-view="2" data-autoclose="true" ng-change="loadAllSavedBreakage()" data-trigger="click">
+                            </div>
+
+                            @*<div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommissionCalculator.Type</label>
+                                <select data-ng-model="selectedType" class="form-control" name="selectedType" ng-change="loadAllSavedBreakage()">
+                                    <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.Monthly)">@Remit.Service.Enums.PeriodTypeEnum.Monthly</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.Quaterly)">@Remit.Service.Enums.PeriodTypeEnum.Quaterly</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.HalfYearly)">@Remit.Service.Enums.PeriodTypeEnum.HalfYearly</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.Yearly)">@Remit.Service.Enums.PeriodTypeEnum.Yearly</option>
+                                </select>
+                            </div>*@
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceBreakageCalculator.BCList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="selectedPeriodName" class="form-control listSelect"
+                                            data-ng-options="c as c for c in allPeriodName" name="selectedPeriodName"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="getPopulatedData(selectedPeriodName[0])"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommon.LblYear
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="Year" name="Year" data-date-format="yyyy" bs-datepicker ng-required="true"
+                                                   data-min-view="2" data-autoclose="true" data-trigger="click">
+                                            <b class="help-block" ng-if="form.Year.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommissionCalculator.Year)
+                                            </b>
+                                        </div>
+                                    </div>
+
+
+                                    @*<div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommissionCalculator.Type
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="Type" class="form-control" name="Type" ng-required="true" ng-change="whenSelectYearly(Type)">
+                                                <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.Monthly)">@Remit.Service.Enums.PeriodTypeEnum.Monthly</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.Quaterly)">@Remit.Service.Enums.PeriodTypeEnum.Quaterly</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.HalfYearly)">@Remit.Service.Enums.PeriodTypeEnum.HalfYearly</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.Yearly)">@Remit.Service.Enums.PeriodTypeEnum.Yearly</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.Type.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommissionCalculator.Type)
+                                            </b>
+                                        </div>
+                                    </div>*@
+
+
+                                    <div class="form-group" ng-show="Type == 3">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommissionCalculator.Period
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="PeriodNo" class="form-control" name="PeriodNo" @*ng-change="generateBreakageData()"*@>
+                                                <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                                <option value="@((int) Remit.Service.Enums.HalfYearlyPeriodEnum.FirstHalf)">@Resources.ResourceCommissionCalculator.JanToJun</option>
+                                                <option value="@((int) Remit.Service.Enums.HalfYearlyPeriodEnum.SecondHalf)">@Resources.ResourceCommissionCalculator.JulyToDec</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color"></label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="button" ng-click="generateBreakageData()" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblGenerate />
+                                            <input type="button" ng-click="printBreakageDetailData()" ng-disabled="!editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblPreview />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger" ng-show="isExist">
+                                    <p> @Resources.ResourceCommissionCalculator.IsExist {{breakageDetails[0].PeriodName}}, {{yearForMessageShow}}</p>
+                                </div>
+                            </div>
+                            @*<h3 class="heading">@Resources.ResourceItemDemand.LblItemDemandDetail</h3>*@
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>@Resources.ResourceCommissionCalculator.SN</th>
+                                        @*<th>@Resources.ResourceDivision.LblDivision</th>
+                                        <th>@Resources.ResourceCommissionCalculator.Zone</th>*@
+                                        <th>@Resources.ResourceCommissionCalculator.Dealer</th>
+                                        <th>@Resources.ResourceBreakageCalculator.InvoiceAmount</th>
+                                        <th>@Resources.ResourceBreakageCalculator.BreakageRate %</th>
+                                        <th>@Resources.ResourceBreakageCalculator.BreakageAmount</th>
+                                        <th>@Resources.ResourceBreakageCalculator.Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="aBreakageDet in breakageDetails">
+                                        <td>{{$index+1}}</td>
+                                        @*<td>{{aBreakageDet.DivisionName}}</td>
+                                        <td>
+                                            {{aBreakageDet.ZoneName}}
+                                        </td>*@
+                                        <td>
+                                            {{aBreakageDet.DealerName}}
+                                        </td>
+                                        <td style="text-align: right">{{aBreakageDet.InvoiceAmountCommaSeparate}}</td>
+                                        <td style ="text-align: right">
+                                            {{aBreakageDet.BreakageRate}}
+                                            </td>
+                                            <td style="text-align: right">
+                                                {{aBreakageDet.BreakageAmountCommaSeparate}}
+                                            </td>
+                                            <td style="color:blue">
+                                                {{aBreakageDet.PaidValue}}
+                                            </td>
+
+</tr>
+                                </tbody>
+                            </table>
+
+                        </form>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                    <div ng-show="!isExist">
+                                        <input type="button" ng-click="addBreakageCalculation()" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                    </div>
+                                    <div ng-show="isExist">
+                                        <input type="button" @*ng-click="addBreakageCalculation()"*@ ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave
+                                               ng-bootbox-confirm='@Resources.ResourceCommissionCalculator.IsSaveConfirm @Resources.ResourceCommissionCalculator.WantUpdate'
+                                               ng-bootbox-confirm-action="addBreakageCalculation()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                    </div>
+
+                                    @*<input type="button" ng-click="ApproveReject('approve')" ng-show="editmode && notApprovemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblApprove />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('breakageDetailService', ['$http', function ($http) {
+        return {
+            saveCommissionCalculation: function (breakageCalculatorList) {
+                return $http({
+                    url: '/BreakageCalculator/CreateBreakageCalculator',
+                    method: 'POST',
+                    data: breakageCalculatorList
+                });
+            },
+
+            getPeriodNameList: function (year, type) {
+                return $http.get('/BreakageCalculator/GetPeriodNameList', { params: { year: year, type: type } });
+            },
+            getAllValue: function (year, type, periodName) {
+                return $http.get('/BreakageCalculator/GetPeriodAllList', { params: { year: year, type: type, periodName: periodName } });
+            },
+            getAllBreakageCommissionData: function (year, type, periodFrom, periodTo) {
+                return $http.get('/BreakageCalculator/GetAllData?year=' + year + '&type=' + type + '&periodFrom=' + periodFrom + '&periodTo=' + periodTo);
+            }
+        };
+    }]);
+
+    app.controller('breakageCalculatorCtrl',
+        function ($scope, $timeout, $http, focus, $location, $anchorScroll, breakageDetailService, $log, $ngBootbox) {
+            $scope.selectedYear = new Date();
+            $scope.Year = new Date();
+            $scope.editmode = false;
+            $scope.notApprovemode = true;
+            $scope.isExist = false;
+            $scope.Type = 3;
+            $scope.selectedType = 3;
+            $scope.breakageDetails = [];
+
+            $scope.messageModalObj = {};
+            $scope.messageModalObj.message = '';
+            $scope.showModalforSearch = false;
+
+            // Add a new breakageCalculation
+            $scope.addBreakageCalculation = function () {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+                    var breakageCalculatorList = [];
+                    for (var i = 0; i < $scope.breakageDetails.length; i++) {
+                        var breakageCalculation = {};
+                        breakageCalculation["Id"] = $scope.breakageDetails[i].Id;
+                        breakageCalculation["DealerId"] = $scope.breakageDetails[i].DealerId;
+                        breakageCalculation["PeriodType"] = $scope.breakageDetails[i].PeriodType;
+                        breakageCalculation["PeriodName"] = $scope.breakageDetails[i].PeriodName;
+                        breakageCalculation["PeriodNumber"] = $scope.breakageDetails[i].PeriodNumber;
+                        breakageCalculation["Year"] = $scope.breakageDetails[i].Year;
+                        breakageCalculation["InvoiceAmount"] = $scope.breakageDetails[i].InvoiceAmount;
+                        breakageCalculation["BreakageRate"] = $scope.breakageDetails[i].BreakageRate;
+                        breakageCalculation["BreakageAmount"] = $scope.breakageDetails[i].BreakageAmount;
+                        breakageCalculatorList.push(breakageCalculation);
+                    }
+
+                    breakageDetailService.saveCommissionCalculation(breakageCalculatorList).then(function onSuccess(response) {
+                        if (response.data.isSuccess === true) {
+                            $ngBootbox.alert(response.data.message);
+                            $scope.reset();
+                            $scope.loadAllSavedBreakage();
+                        } else {
+                            $ngBootbox.alert(response.data.message);
+                        }
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.AllRequired');
+                }
+            };
+            
+            $scope.selectedRow = null;
+            $scope.populateCC = function (rowvalue) {
+                $scope.selectedRow = rowvalue;
+                $scope.editmode = true;
+                $scope.breakageDetails = rowvalue.breakageDetails;
+            }
+
+            $scope.reset = function () {
+                $scope.$broadcast('show-errors-reset');
+                $scope.editmode = false;
+                $scope.isExist = false;
+                $scope.notApprovemode = true;
+                $scope.isCreateNewMode = true;
+                $scope.selectedYear = new Date();
+                $scope.Year = new Date();
+                $scope.Type = 3;
+                $scope.selectedType = 3;
+                $scope.PeriodNo = null;
+                $scope.selectedPeriodName = "";
+                //$scope.allPeriodName = [];
+                $scope.breakageDetails = [];
+                $scope.yearForMessageShow = "";
+                $scope.loadAllSavedBreakage();
+            }
+
+            //for report.......
+            $scope.printBreakageDetailData = function () {
+                if ($scope.PeriodNo == null || $scope.PeriodNo == undefined || $scope.PeriodNo === "") {
+                    $ngBootbox.alert('@Resources.ResourceCommissionCalculator.PeriodNoRequired');
+                    $scope.breakageDetails = [];
+                    return;
+                }
+
+                var year = $scope.Year;
+                //year = year.getFullYear();
+
+                var periodFrom = 0;
+                var periodTo = 0;
+                if ($scope.Type === "3") {
+                    periodTo = parseFloat($scope.PeriodNo);
+                    periodFrom = periodTo - 5;
+                }
+               // alert("Report is Undone.");
+                window.open('/RDLCReport/BreakageCalculatorReport.Aspx?year=' + year + '&type=' + $scope.Type + '&periodFrom=' + periodFrom + '&periodTo=' + periodTo + " &width=1000, height=800, left=" + (screen.width - 1000) / 2 + ", top=" + (screen.height - 800) / 2 + "");
+
+            };
+            //for Generate......
+            $scope.generateBreakageData = function () {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+
+                    if ($scope.PeriodNo == null || $scope.PeriodNo == undefined || $scope.PeriodNo === "") {
+                        $ngBootbox.alert('@Resources.ResourceCommissionCalculator.PeriodNoRequired');
+                        $scope.breakageDetails = [];
+                        return;
+                    }
+
+                    var year = $scope.Year;
+                    year = year.getFullYear();
+                    $scope.yearForMessageShow = year;
+
+                    var periodFrom = 0;
+                    var periodTo = 0;
+                    periodTo = parseFloat($scope.PeriodNo);
+                    periodFrom = periodTo - 5;
+                   
+                    breakageDetailService
+                        .getAllBreakageCommissionData(year, $scope.Type, periodFrom, periodTo).then(
+                            function onSuccess(response) {
+                                $scope.breakageDetails = response.data.ccList;
+                                $scope.isExist = response.data.isExist;
+                            }).catch(function onError(xhr) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                            });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.AllRequired');
+                }
+            }
+
+            //Saved Breakage Information.....................................
+            $scope.loadAllSavedBreakage = function () {
+                var year = $scope.selectedYear;
+                $scope.allPeriodName = [];
+                year = year.getFullYear();
+
+                breakageDetailService.getPeriodNameList(year, $scope.selectedType).then(function onSuccess(response) {
+                    $scope.allPeriodName = response.data;//.periodNameList;
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+            $scope.loadAllSavedBreakage();
+
+            //Populate Saved Breakage Info.....................................
+            $scope.getPopulatedData = function (periodName) {
+                var year = $scope.selectedYear;
+                year = year.getFullYear();
+                breakageDetailService
+                    .getAllValue(year, $scope.selectedType, periodName).then(
+                        function onSuccess(response) {
+                            $scope.editmode = true;
+                            $scope.breakageDetails = response.data;
+                            if ($scope.breakageDetails.length > 0) {
+                                $scope.Year = $scope.breakageDetails[0].Year.toString();
+                                $scope.Type = $scope.breakageDetails[0].PeriodType.toString();
+                                $scope.PeriodNo = $scope.breakageDetails[0].PeriodNameType.toString();
+                            }
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+        });
+</script>
+
+

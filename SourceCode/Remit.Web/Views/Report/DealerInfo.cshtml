@@ -1,0 +1,123 @@
+﻿@using Remit.Web.Helpers
+
+@{
+    ViewBag.Title = Resources.ResourceReport.LblDealerWiseSizeWiseSalesReport;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="row" ng-controller="rctrl">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Resources.ResourceReport.DealerInfoReport
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-md-offset-2">
+                                
+
+                               
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                            @Resources.ResourceFGDealerZone.LblFGDealerZone
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <select data-ng-model="zoneId" class="form-control"
+                                                data-ng-options="c.Id as c.ZoneName for c in allZoneFromDb" name="zoneId">
+                                            <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGDealerZone.LblFGDealerZone</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-6 col-md-5 control-label default-color">
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-7">
+                                        <a ng-href="" class="btn btn-primary" ng-click="generateReport()" role="button">
+                                            @Resources.ResourceReport.LblVIewReport
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('rService', ['$http', function ($http) {
+        return {
+            getAllZone: function() {
+                return $http.get('/FGDealerZone/GetFGDealerZoneList');
+            }
+        };
+    }]);
+
+    app.controller('rctrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, rService, $log, $ngBootbox, $window ) {
+
+        //$scope.toDate = new Date();
+        //$scope.fromDate = new Date();
+
+        //$scope.formatDate = function () {
+        //    $scope.toDate = $scope.toDate;
+        //    $scope.fromDate = $scope.fromDate;
+        //}
+
+        var loadAllZone = function () {
+            $scope.allZoneFromDb = [];
+            rService.getAllZone()
+                .then(function onSuccess(response) {
+                    $scope.allZoneFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        };
+        loadAllZone();
+
+        $scope.generateReport = function () {
+            //var fromDate = $scope.fromDate.toDateString();
+            //var toDate = $scope.toDate.toDateString();
+            var zoneId = 0;
+            if ($scope.zoneId != undefined && $scope.zoneId != null && $scope.zoneId != "") {
+                zoneId = $scope.zoneId;
+            }
+            if ($scope.zoneId != null) {
+                var url = "/RDLCReport/DealerInfoReport.aspx?zoneId=" + zoneId;
+                $window.open(url, '_blank');
+            } else {
+                var url = "/RDLCReport/DealerInfoReport.aspx";
+                $window.open(url, '_blank');
+            }
+          
+
+            
+        };
+    });
+</script>

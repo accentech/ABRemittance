@@ -1,0 +1,145 @@
+﻿
+@using Remit.Web.Helpers
+
+@{
+    ViewBag.Title = "MonthlySizeWiseSalesAndUndelivery";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="row" ng-controller="rctrl">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Resources.ResourceReport.MnthlySizeWiseSalesAndUndelivery
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceCommon.LblMonthYear
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <input type="text" class="form-control" ng-model="YearMonth" name="YearMonth" data-date-format="MMM-yyyy" data-container="body" bs-datepicker data-min-view="1" data-autoclose="true" ng-change="changevalue()">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceReport.Reason
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <select data-ng-model="selectedReason" class="form-control" name="selectedReason">
+                                            <option value="1">@Resources.ResourceFGSale.Sales</option>
+                                            <option value="2">@Resources.ResourceFGSale.Sample</option>
+                                            <option value="3">@Resources.ResourceFGSale.FreeOfCost</option>
+                                            <option value="4">@Resources.ResourceFGSale.InternalUse</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class=" padding-right-zero">
+                                        <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                                            @Resources.ResourceReport.LblSalesUnit
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-5 col-md-5">
+                                        <select data-ng-model="salesUnit" class="form-control"
+                                                data-ng-options="c.Id as c.UnitName for c in allItemUnitFromDb" name="salesUnit">
+                                            @*<option value="">@Resources.ResourceReport.LblSelectUnit</option>*@
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                                        <a ng-href="" class="btn btn-primary" ng-click="generateReport()" role="button">
+                                            @Resources.ResourceReport.LblVIewReport
+                                        </a>
+                                        @*<a class="btn btn-primary" target="_blank" href="~/RDLCReport/MonthlyDelivery.aspx?Year={{Year}}&Month={{Month+1}}">@Resources.ResourceCommon.LblViewReport</a>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('rService', ['$http', function ($http) {
+        return {
+            getAllUnit: function () {
+                return $http.get('/FGUOM/GetFGUOMList');
+            }
+        };
+    }]);
+
+    app.controller('rctrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, rService, $log, $ngBootbox, $window) {
+        $scope.YearMonth = new Date();
+        $scope.Year = $scope.YearMonth.getFullYear();
+        $scope.Month = $scope.YearMonth.getMonth();
+        $scope.selectedReason = "1";
+        $scope.changevalue = function () {
+            $scope.Year = $scope.YearMonth.getFullYear();
+            $scope.Month = $scope.YearMonth.getMonth();
+        }
+
+        $scope.generateReport = function () {
+            var selectedReason = 1;
+            if ($scope.selectedReason != undefined && $scope.selectedReason != null && $scope.selectedReason != "") {
+                selectedReason = $scope.selectedReason;
+            }
+            //var fromDate = $scope.dwsfromDate.toDateString("yyyy-MM-dd");
+            //var toDate = $scope.dwstoDate.toDateString("yyyy-MM-dd");
+            //var dailyDate = $scope.dwsdailyDate.toDateString("yyyy-MM-dd");
+            var mnth = $scope.Month + 1;
+            var salesUnit = 0;
+            
+            if ($scope.salesUnit != undefined && $scope.salesUnit != null && $scope.salesUnit !== "") {
+                salesUnit = $scope.salesUnit;
+            }
+
+            var url = "/RDLCReport/MonthlySizeWiseSalesAndUndelivery.aspx?saleUnit=" + salesUnit + "&Year=" + $scope.Year
+                            + "&Month=" + mnth + "&selectedReason=" + selectedReason;
+            $window.open(url, '_blank');
+        };
+        
+        var loadAllUnit = function () {
+            $scope.allItemUnitFromDb = [];
+            rService.getAllUnit()
+                .then(function onSuccess(response) {
+                    $scope.allItemUnitFromDb = response.data;
+                    $scope.salesUnit = 3;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        };
+        loadAllUnit();
+    });
+</script>
+
+

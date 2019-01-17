@@ -1,0 +1,785 @@
+﻿@{
+    ViewBag.Title = "ItemReceiveByLC";
+    Layout = "~/Views/Shared/_MenuLayout.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="itemReceiveCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceItemReceive.LblItemReceive
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="filterYear" name="filterYear" data-date-format="yyyy" bs-datepicker
+                                       data-min-view="2" data-autoclose="true" ng-change="loadFilterLCByYear(filterYear)" data-trigger="click">
+                            </div>
+                            <div class="form-group">
+                                <label class ="control-label">@Resources.ResourceCommercialInvoice.LblLCNo</label>
+                                <select data-ng-model="filterLCId" class="form-control" focus-on="focusMe" data-ng-options="c.Id as c.LCNo for c in filterLCFromDb" name="filterLCId" ng-change="loadFilterCommercialInvoiceByLC(filterLCId);">
+                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblLCNo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo</label>
+                                <select data-ng-model="filterCommercialInvoiceId" class="form-control" required focus-on="focusMe"
+                                        data-ng-options="c.Id as c.CommercialInvoiceNo for c in filterCommercialInvoiceFromDb" name="filterCommercialInvoiceId" ng-change="loadReceiveListByCommercialInvoiceId(filterCommercialInvoiceId);">
+                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceItemReceive.LblReceiveList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="ReceiveId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.ReceivedDate for c in allReceiveListByCommercialInvoiceIdFromDb" name="ReceiveId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="loadIdDetailsById(ReceiveId)">
+                                        <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceItemReceive.LblSupplier
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="SupplierId" class="form-control" focus-on="focusMe" required data-ng-options="c.Id as c.Name for c in allSupplierFromDb | orderBy: 'Name'" name="SupplierId" ng-change="loadIncompleteLCBySupplier(SupplierId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblSupplier</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.SupplierId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItemReceive.LblSupplier)
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommercialInvoice.LblLCNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="LCId" class="form-control" required focus-on="focusMe" data-ng-options="c.Id as c.LCNo for c in incompleteLCFromDb" name="LCId" ng-change="loadNotReceivedCommercialInvoiceByLC(LCId);">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblLCNo</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.LCId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommercialInvoice.LblLCNo)
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="CommercialInvoiceId" class="form-control" required focus-on="focusMe"
+                                                    data-ng-options="c.Id as c.CommercialInvoiceNo for c in allCommercialInvoiceFromDb" name="CommercialInvoiceId" ng-change="loadNotReceivedItemByCommercialInvoiceId(CommercialInvoiceId);">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.CommercialInvoiceId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommercialInvoice.LblCommercialInvoiceNo)
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceItemReceive.LblReceivedDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="ReceivedDate" name="ReceivedDate" required data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="ReceivedDate" name="ReceivedDate" required data-date-format="HH:mm:ss" bs-timepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceItemReceive.LblVehicleNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="VehicleNo" name="VehicleNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceItemReceive.LblDriverName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="DriverName" name="DriverName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceItemReceive.LblTruckWeight
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input placeholder="@Resources.ResourceItemReceive.LblLoaded" style="text-align:right" type="number" step="any"  min="0" class="form-control" ng-model="LoadedTruckWeight" name="LoadedTruckWeight" ng-change="setReceivedQuantity()">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input placeholder="@Resources.ResourceItemReceive.LblEmpty" style="text-align:right" type="number" step="any"  min="0" class="form-control" ng-model="EmptyTruckWeight" name="EmptyTruckWeight" ng-change="setReceivedQuantity()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceItemReceive.LblReceiveDetails</h3>
+
+                            <table class="table table-bordered table-responsive slidable-table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblLCItem
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblCIQuantity
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblPrevReceivedQuantity
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblItem
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblReceivedQuantity
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblUnit
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblBinCard
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblExpiryDate
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblRemarks
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceItemReceive.LblIsReceived
+                                        </th>
+                                        <th>
+                                            @Resources.ResourceCommon.LblAction
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat="aItemReceiveDet in ItemReceiveDetails">
+                                        <td>
+                                            <select data-ng-model="aItemReceiveDet.LCItemId" class="form-control" style="width:200px"
+                                                    data-ng-options="c.ItemId as c.ItemName for c in allLCItemFromDb | orderBy: 'ItemName'" name="LCItemId" ng-change="setQuantity($index,aItemReceiveDet.LCItemId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input readonly data-ng-class="form-control" style="text-align:right" type="number" class="form-control" ng-model="aItemReceiveDet.CIQuantity" name="CIQuantity" min="0">
+                                        </td>
+                                        <td>
+                                            <input readonly data-ng-class="form-control" style="text-align:right" type="number" class="form-control" ng-model="aItemReceiveDet.PrevReceivedQuantity" name="PrevReceivedQuantity" min="0">
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="aItemReceiveDet.ItemId" class="form-control" style="width:200px"
+                                                    data-ng-options="c.Id as c.Name for c in aItemReceiveDet.allItemFromDb | orderBy: 'Name'" name="ItemId" ng-change="setPRQuantity($index,aItemReceiveDet.LCItemId,aItemReceiveDet.ItemId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" style="text-align:right" type="number" step="any" class="form-control" ng-model="aItemReceiveDet.ReceivedQuantity" name="ReceivedQuantity" min="0">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" readonly class="form-control" ng-model="aItemReceiveDet.UnitName" name="UnitName">
+                                        </td>
+                                        <td>
+                                            <select ng-model="aItemReceiveDet.BinCardId" class="form-control" style="width:70px"
+                                                    data-ng-options="c.Id as c.WarhouseName+'-'+c.CardNo for c in allBinCardFromDb | orderBy: ['WarhouseName', 'CardNo']" name="BinCardId">
+                                                <option value=" ">
+                                                    @Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblBinCard
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="aItemReceiveDet.ExpiryDate" name="ExpiryDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-container="body" data-min-view="0" data-autoclose="true">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="aItemReceiveDet.Remarks" name="Remarks">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="checkbox" class="form-control" ng-model="aItemReceiveDet.IsReceived" name="IsReceived">
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="ItemReceiveDetails.splice($index,1);" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <input type="button" ng-click="addItemReceive()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                    <input ng-disabled="!IsLast" type="button" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deleteItemReceive()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('itemReceiveService', ['$http', function ($http) {
+        return {
+            saveItemReceive: function (itemReceive, isReceivedList) {
+                return $http({
+                    url: '/ItemReceive/CreateItemReceive',
+                    method: 'POST',
+                    data: { itemReceive: itemReceive, isReceivedList: isReceivedList }
+                })
+            },
+            getItemReceive: function (id) {
+                return $http.get('/ItemReceive/GetItemReceive/?id=' + id);
+            },
+            deleteItemReceive: function (id) {
+                return $http.get('/ItemReceive/DeleteItemReceive/?id=' + id);
+            },
+            getAllItem: function () {
+                return $http.get('/Item/GetItemList');
+            },
+            getAllItemByCategoryId: function (id) {
+                return $http.get('/Item/GetItemListByCategoryId?id=' + id);
+            },
+            getAllItemCategory: function () {
+                return $http.get('/ItemCategory/GetItemCategoryList2');
+            },
+            getAllSupplier: function () {
+                return $http.get('/Supplier/GetSupplierList');
+            },
+            getLCListBySupplierAndYear: function (year, supplier, incomplete) {
+                return $http.get('/LC/GetLCListBySupplierAndYear',
+                {
+                    params: { year: year, supplierId: supplier, incomplete: incomplete }
+                });
+            },
+            getCommercialInvoiceListByLC: function (id) {
+                return $http.get('/CommercialInvoice/GetCommercialInvoiceByLC?id=' + id);
+            },
+            getNotReceivedCommercialInvoiceListByLC: function (id) {
+                return $http.get('/CommercialInvoice/GetNotReceivedCommercialInvoiceByLC?id=' + id);
+            },
+            getItemByCommercialInvoiceId: function (id) {
+                return $http.get('/ItemReceive/getItemByCommercialInvoiceId?id=' + id);
+            },
+            getNotReceivedItemByCommercialInvoiceId: function (id) {                
+                return $http.get('/ItemReceive/getNotReceivedItemByCommercialInvoiceId?id=' + id);
+            },
+            getPreviousReceivedQuantityByItemId: function (ciId, itemId) {
+                return $http.get('/ItemReceive/getPreviousReceivedQuantityByItemId?ciId=' + ciId + '&itemId=' + itemId);
+            },
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getReceiveListByCommercialInvoiceId: function (commercialInvoiceId) {
+                return $http.get('/ItemReceive/GetReceiveListByCommercialInvoiceId',
+                {
+                    params: { commercialInvoiceId: commercialInvoiceId }
+                });
+            },
+            getCompositeItem: function (itemid) {
+                return $http.get('/Item/GetCompositeItemForReceive/' + itemid);
+            },
+            getAllItemReceive: function () {
+                return $http.get('/ItemReceive/GetItemReceiveList');
+            },
+            getAllUnitOfMesurement: function () {
+                return $http.get('/UnitOfMeasurement/GetUnitOfMeasurementList');
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+            getAllBinCard: function () {
+                return $http.get('/BinCard/GetBinCardList');
+            }
+        };
+    }]);app.controller('itemReceiveCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, itemReceiveService, $log, $ngBootbox) {
+        $scope.filterYear = new Date();
+        $scope.ReceivedDate = new Date();
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+
+        $scope.ItemReceiveDetails = [];
+        $scope.ItemReceiveDetails.push({ Id: '', ItemReceiveId: '', LCItemId: '', ItemId: '', ReceivedQuantity: '', UnitId: '', UnitName: '', PerUnitPrice: '', CurrencyId: '', BinCardId: '', ExpiryDate: '', Remarks: '', IsReceived: false, allItemFromDb: [] });
+
+        $scope.setReceivedQuantity = function (index, itemId) {
+            $scope.ItemReceiveDetails[0].ReceivedQuantity = Math.round(1000*($scope.LoadedTruckWeight - $scope.EmptyTruckWeight))/1000;
+        }
+
+        $scope.setQuantity = function (index, itemId) {
+            $scope.ItemReceiveDetails[index].PrevReceivedQuantity = '';
+            if (itemId != null) {
+                angular.forEach($scope.allLCItemFromDb, function (value, key) {
+                    if (value.ItemId === itemId) {
+                        $scope.ItemReceiveDetails[index].CIQuantity = value.Quantity;
+                        $scope.ItemReceiveDetails[index].PrevReceivedQuantity = value.PrevReceivedQuantity;
+                        $scope.ItemReceiveDetails[index].UnitId = value.UnitId;
+                        $scope.ItemReceiveDetails[index].UnitName = value.UnitName;
+                    }
+                });
+                $scope.loadCompositeItemDetailsById(index, itemId);
+            }
+        }
+
+        $scope.loadCompositeItemDetailsById = function (index, itemId) {
+            $scope.ItemReceiveDetails[index].allItemFromDb = [];
+            if (itemId != null) {
+                itemReceiveService.getCompositeItem(itemId)
+                .then(function onSuccess(response) {
+                    $scope.ItemReceiveDetails[index].allItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+        }
+
+        $scope.setPRQuantity = function (index, lcItemId, itemId) {
+            var commercialInvoiceId = $scope.CommercialInvoiceId;
+            if (commercialInvoiceId && itemId && lcItemId != itemId)
+                itemReceiveService.getPreviousReceivedQuantityByItemId(commercialInvoiceId, itemId)
+                    .then(function onSuccess(response) {
+                        $scope.ItemReceiveDetails[index].PrevReceivedQuantity = parseFloat(response.data);
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.addNewDetail = function ($event) {
+            $scope.ItemReceiveDetails.push({ Id: '', ItemReceiveId: '', LCItemId: '', ItemId: '', ReceivedQuantity: '', UnitId: '', UnitName: '', PerUnitPrice: '', CurrencyId: '', BinCardId: '', ExpiryDate: '', Remarks: '', IsReceived: false, allItemFromDb: [] });
+        }
+
+        // Add a new itemReceive
+        $scope.addItemReceive = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var itemReceive = {};
+                var isReceivedList = $scope.ItemReceiveDetails;
+
+                itemReceive["Id"] = $scope.Id;
+
+                itemReceive["CommercialInvoiceId"] = $scope.CommercialInvoiceId;
+                itemReceive["InvoiceNo"] = $scope.InvoiceNo;
+                itemReceive["ReceivedDate"] = $scope.ReceivedDate;
+                itemReceive["VehicleNo"] = $scope.VehicleNo;
+                itemReceive["DriverName"] = $scope.DriverName;
+                itemReceive["LoadedTruckWeight"] = $scope.LoadedTruckWeight;
+                itemReceive["EmptyTruckWeight"] = $scope.EmptyTruckWeight;
+                itemReceive["SupplierId"] = $scope.SupplierId;
+                itemReceive["ReceivedBy"] = $scope.ReceivedBy;
+
+                itemReceive["ItemReceiveDetails"] = $scope.ItemReceiveDetails;
+
+                if ($scope.ItemReceiveDetails != null && $scope.ItemReceiveDetails !== "" && $scope.ItemReceiveDetails != undefined) {
+                    if ($scope.ItemReceiveDetails.length > 0) {
+                        var ishighqty = false;
+                        var iscompositereceive = false;
+                        for (var i = 0; i < $scope.ItemReceiveDetails.length; i++) {
+                            if ($scope.ItemReceiveDetails[i].ItemId !== 0 && $scope.ItemReceiveDetails[i].ItemId !== null && $scope.ItemReceiveDetails[i].ItemId !== "") {
+                                if ($scope.ItemReceiveDetails[i].ReceivedQuantity !== 0 && $scope.ItemReceiveDetails[i].ReceivedQuantity !== null && $scope.ItemReceiveDetails[i].ReceivedQuantity !== "") {
+                                    if ($scope.ItemReceiveDetails[i].ReceivedQuantity > $scope.ItemReceiveDetails[i].CIQuantity - $scope.ItemReceiveDetails[i].PrevReceivedQuantity) {
+                                        ishighqty = true;
+                                    }
+                                    if ($scope.ItemReceiveDetails[i].ItemId != $scope.ItemReceiveDetails[i].LCItemId && $scope.ItemReceiveDetails[i].IsReceived == true ) {
+                                        iscompositereceive = true;
+                                    }
+                            } else {
+                                    $ngBootbox.alert('@Resources.ResourceItemReceive.LblQuantityRequiredItemReceivedDetails');
+                                    return;
+                                }
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceItemReceive.LblItemRequiredItemReceivedDetails');
+                                return;
+                            }
+                        }
+                        if (ishighqty) {
+                            $ngBootbox.confirm('@Resources.ResourceItemReceive.MsgHighQtyCI')
+                                .then(function () {
+                                    itemReceiveService.saveItemReceive(itemReceive, isReceivedList)
+                                    .then(function onSuccess(response) {
+                                        $scope.messageModalObj.message = response.data.message;
+                                        $scope.showModalforSearch = true;
+                                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                        $scope.reset();
+                                        $scope.loadReceiveListByCommercialInvoiceId($scope.filterCommercialInvoiceId);
+                                    })
+                                    .catch(function onError(response) {
+                                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                                    });
+                                    return;
+                                },
+                                function () {
+                                    return;
+                                });
+                        }
+                        else if (iscompositereceive) {
+                            $ngBootbox.confirm('@Resources.ResourceItemReceive.MsgCompositeReceiveConfirmation')
+                                .then(function () {
+                                    itemReceiveService.saveItemReceive(itemReceive, isReceivedList)
+                                    .then(function onSuccess(response) {
+                                        $scope.messageModalObj.message = response.data.message;
+                                        $scope.showModalforSearch = true;
+                                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                        $scope.reset();
+                                        $scope.loadReceiveListByCommercialInvoiceId($scope.filterCommercialInvoiceId);
+                                    })
+                                    .catch(function onError(response) {
+                                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                                    });
+                                    return;
+                                },
+                                function () {
+                                    return;
+                                });
+                        }
+                        else {
+                            itemReceiveService.saveItemReceive(itemReceive, isReceivedList)
+                            .then(function onSuccess(response) {
+                                $scope.messageModalObj.message = response.data.message;
+                                $scope.showModalforSearch = true;
+                                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                $scope.reset();
+                                $scope.loadReceiveListByCommercialInvoiceId($scope.filterCommercialInvoiceId);
+                            })
+                            .catch(function onError(response) {
+                                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                            });
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgNeedDetails');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgNeedDetails');
+                    return;
+                }
+            } else {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgFillAll');
+            }
+        };
+
+        $scope.populateItemReceive = function (rowvalue) {
+            $scope.Id = rowvalue.Id;
+            $scope.IsLast = rowvalue.IsLast;
+            $scope.loadAllLCBySupplier(rowvalue.SupplierId);
+            $scope.LCId = rowvalue.LCId;
+            $scope.loadAllCommercialInvoiceByLC(rowvalue.LCId);
+            $scope.CommercialInvoiceId = rowvalue.CommercialInvoiceId;
+            $scope.loadItemByCommercialInvoiceId(rowvalue.CommercialInvoiceId);
+            $scope.InvoiceNo = rowvalue.InvoiceNo;
+            $scope.ReceivedDate = new Date(rowvalue.ReceivedDate);
+            $scope.VehicleNo = rowvalue.VehicleNo;
+            $scope.DriverName = rowvalue.DriverName;
+            $scope.LoadedTruckWeight = rowvalue.LoadedTruckWeight;
+            $scope.EmptyTruckWeight = rowvalue.EmptyTruckWeight;
+            $scope.SupplierId = rowvalue.SupplierId;
+            $scope.ReceivedBy = rowvalue.ReceivedBy;
+
+            $scope.ItemReceiveDetails = rowvalue.ItemReceiveDetails;
+            for (var i in $scope.ItemReceiveDetails) {
+                $scope.loadCompositeItemDetailsById(i, $scope.ItemReceiveDetails[i].LCItemId);
+            }
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.IsLast = false;
+            $scope.LCId = '';
+            $scope.CommercialInvoiceId = '';
+            $scope.InvoiceNo = '';
+            $scope.ReceivedDate = new Date();
+            $scope.VehicleNo = '';
+            $scope.DriverName = '';
+            $scope.LoadedTruckWeight = '';
+            $scope.EmptyTruckWeight = '';
+            $scope.SupplierId = '';
+            $scope.ReceivedBy = '';
+
+            $scope.ItemReceiveDetails = [];
+            $scope.ItemReceiveDetails.push({ Id: '', ItemReceiveId: '', LCItemId: '', ItemId: '', ReceivedQuantity: '', UnitId: '', UnitName: '', PerUnitPrice: '', CurrencyId: '', BinCardId: '', ExpiryDate: '', Remarks: '', IsReceived: false, allItemFromDb:[] });
+
+            $scope.allLCItemFromDb = [];
+
+            $scope.ReceiveId = '';
+        }
+
+        // Delete ItemReceive
+        $scope.deleteItemReceive = function () {
+            if ($scope.Id) {
+                itemReceiveService.deleteItemReceive($scope.Id)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadReceiveListByCommercialInvoiceId($scope.filterCommercialInvoiceId);
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInDeleting');
+                    });
+            }
+        };
+
+        loadAllSupplier();
+        function loadAllSupplier() {
+            $scope.allSupplierFromDb = [];
+            itemReceiveService.getAllSupplier()
+                .then(function onSuccess(response) {
+                    $scope.allSupplierFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadIncompleteLCBySupplier = function (supplierId) {
+            $scope.incompleteLCFromDb = [];
+            $scope.allCommercialInvoiceFromDb = [];
+            $scope.CommercialInvoiceId = '';
+            if (supplierId)
+            itemReceiveService.getLCListBySupplierAndYear(0, supplierId, true)
+                .then(function onSuccess(response) {
+                    $scope.incompleteLCFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadAllLCBySupplier = function (supplierId) {
+            $scope.incompleteLCFromDb = [];
+            $scope.allCommercialInvoiceFromDb = [];
+            $scope.CommercialInvoiceId = '';
+            if (supplierId)
+            itemReceiveService.getLCListBySupplierAndYear(0, supplierId, false)
+                .then(function onSuccess(response) {
+                    $scope.incompleteLCFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadFilterLCByYear = function (year) {
+            $scope.filterLCFromDb = [];
+            year = year.getFullYear();
+            if (year)
+            itemReceiveService.getLCListBySupplierAndYear(year, 0, false)
+                .then(function onSuccess(response) {
+                    $scope.filterLCFromDb = response.data;
+                    $scope.filterCommercialInvoiceFromDb = [];
+                    $scope.filterCommercialInvoiceId = '';
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadFilterLCByYear($scope.filterYear);
+
+        $scope.loadAllCommercialInvoiceByLC = function (lcId) {
+            $scope.allCommercialInvoiceFromDb = [];
+            if (lcId)
+            itemReceiveService.getCommercialInvoiceListByLC(lcId)
+                .then(function onSuccess(response) {
+                    $scope.allCommercialInvoiceFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadNotReceivedCommercialInvoiceByLC = function (lcId) {
+            $scope.allCommercialInvoiceFromDb = [];
+            if (lcId)
+                itemReceiveService.getNotReceivedCommercialInvoiceListByLC(lcId)
+                    .then(function onSuccess(response) {
+                        $scope.allCommercialInvoiceFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.loadFilterCommercialInvoiceByLC = function (lcId) {
+            $scope.filterCommercialInvoiceFromDb = [];
+            if (lcId)
+            itemReceiveService.getCommercialInvoiceListByLC(lcId)
+                .then(function onSuccess(response) {
+                    $scope.filterCommercialInvoiceFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadNotReceivedItemByCommercialInvoiceId = function (commercialInvoiceId) {
+            if (commercialInvoiceId)
+            itemReceiveService.getNotReceivedItemByCommercialInvoiceId(commercialInvoiceId)
+                .then(function onSuccess(response) {
+                    $scope.InvoiceNo = response.data.CommercialInvoiceNo;
+                    $scope.allLCItemFromDb = response.data.CommercialInvoiceDetails;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadItemByCommercialInvoiceId = function (commercialInvoiceId) {
+            if (commercialInvoiceId)
+            itemReceiveService.getItemByCommercialInvoiceId(commercialInvoiceId)
+                .then(function onSuccess(response) {
+                    $scope.InvoiceNo = response.data.CommercialInvoiceNo;
+                    $scope.allLCItemFromDb = response.data.CommercialInvoiceDetails;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllUnitOfMesurement();
+        function loadAllUnitOfMesurement() {
+            $scope.allUnitofMeasurementFromDb = [];
+            itemReceiveService.getAllUnitOfMesurement()
+                .then(function onSuccess(response) {
+                    $scope.allUnitofMeasurementFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllCurrency();
+        function loadAllCurrency() {
+            $scope.allCurrencyFromDb = [];
+            itemReceiveService.getAllCurrency()
+                .then(function onSuccess(response) {
+                    $scope.allCurrencyFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllBinCard();
+        function loadAllBinCard() {
+            $scope.allBinCardFromDb = [];
+            itemReceiveService.getAllBinCard()
+                .then(function onSuccess(response) {
+                    $scope.allBinCardFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadIdDetailsById = function (receiveId) {
+            if (receiveId) {
+                itemReceiveService.getItemReceive(receiveId)
+                .then(function onSuccess(response) {
+                    $scope.populateItemReceive(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+        }
+
+        $scope.loadReceiveListByCommercialInvoiceId = function (commercialInvoiceId) {
+            $scope.allReceiveListByCommercialInvoiceIdFromDb = [];
+            if (commercialInvoiceId)
+                itemReceiveService.getReceiveListByCommercialInvoiceId(commercialInvoiceId)
+                    .then(function onSuccess(response) {
+                        $scope.allReceiveListByCommercialInvoiceIdFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+        $scope.loadReceiveListByCommercialInvoiceId($scope.filterCommercialInvoiceId);
+    });
+</script>
+

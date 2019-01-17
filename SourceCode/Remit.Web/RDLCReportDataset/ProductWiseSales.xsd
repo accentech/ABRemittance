@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ProductWiseSales" targetNamespace="http://tempuri.org/ProductWiseSales.xsd" xmlns:mstns="http://tempuri.org/ProductWiseSales.xsd" xmlns="http://tempuri.org/ProductWiseSales.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="DBConnection" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="DBConnection (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.DBConnection.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ProductWiseSalesTableAdapter" GeneratorDataComponentClassName="ProductWiseSalesTableAdapter" Name="ProductWiseSales" UserDataComponentName="ProductWiseSalesTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="DBConnection (Web.config)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>select p.Code, g.Grade, p.PcsPerCartoon, p.PackageToSalesRatio, a.QuantityInCTN, a.QuantityInPCs, a.QuantityInSFT, a.QuantityInSMT 
+from FGSalesDetail as a
+inner join FGSales as b on a.FGSalesInvoiceNo = b.InvoiceNo 
+inner join FGItem as p on a.FGItemId = p.Id 
+inner join FGGrade as g on a.FGGradeId = g.Id </CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Code" DataSetColumn="Code" />
+              <Mapping SourceColumn="Grade" DataSetColumn="Grade" />
+              <Mapping SourceColumn="PcsPerCartoon" DataSetColumn="PcsPerCartoon" />
+              <Mapping SourceColumn="PackageToSalesRatio" DataSetColumn="PackageToSalesRatio" />
+              <Mapping SourceColumn="QuantityInCTN" DataSetColumn="QuantityInCTN" />
+              <Mapping SourceColumn="QuantityInPCs" DataSetColumn="QuantityInPCs" />
+              <Mapping SourceColumn="QuantityInSFT" DataSetColumn="QuantityInSFT" />
+              <Mapping SourceColumn="QuantityInSMT" DataSetColumn="QuantityInSMT" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ProductWiseSales" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ProductWiseSales" msprop:Generator_UserDSName="ProductWiseSales">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ProductWiseSales" msprop:Generator_TableClassName="ProductWiseSalesDataTable" msprop:Generator_TableVarName="tableProductWiseSales" msprop:Generator_RowChangedName="ProductWiseSalesRowChanged" msprop:Generator_TablePropName="_ProductWiseSales" msprop:Generator_RowDeletingName="ProductWiseSalesRowDeleting" msprop:Generator_RowChangingName="ProductWiseSalesRowChanging" msprop:Generator_RowEvHandlerName="ProductWiseSalesRowChangeEventHandler" msprop:Generator_RowDeletedName="ProductWiseSalesRowDeleted" msprop:Generator_RowClassName="ProductWiseSalesRow" msprop:Generator_UserTableName="ProductWiseSales" msprop:Generator_RowEvArgName="ProductWiseSalesRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Code" msprop:Generator_ColumnVarNameInTable="columnCode" msprop:Generator_ColumnPropNameInRow="Code" msprop:Generator_ColumnPropNameInTable="CodeColumn" msprop:Generator_UserColumnName="Code">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Grade" msprop:Generator_ColumnVarNameInTable="columnGrade" msprop:Generator_ColumnPropNameInRow="Grade" msprop:Generator_ColumnPropNameInTable="GradeColumn" msprop:Generator_UserColumnName="Grade">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="5" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PcsPerCartoon" msprop:Generator_ColumnVarNameInTable="columnPcsPerCartoon" msprop:Generator_ColumnPropNameInRow="PcsPerCartoon" msprop:Generator_ColumnPropNameInTable="PcsPerCartoonColumn" msprop:Generator_UserColumnName="PcsPerCartoon" type="xs:int" />
+              <xs:element name="PackageToSalesRatio" msprop:Generator_ColumnVarNameInTable="columnPackageToSalesRatio" msprop:Generator_ColumnPropNameInRow="PackageToSalesRatio" msprop:Generator_ColumnPropNameInTable="PackageToSalesRatioColumn" msprop:Generator_UserColumnName="PackageToSalesRatio" type="xs:double" />
+              <xs:element name="QuantityInCTN" msprop:Generator_ColumnVarNameInTable="columnQuantityInCTN" msprop:Generator_ColumnPropNameInRow="QuantityInCTN" msprop:Generator_ColumnPropNameInTable="QuantityInCTNColumn" msprop:Generator_UserColumnName="QuantityInCTN" type="xs:double" minOccurs="0" />
+              <xs:element name="QuantityInPCs" msprop:Generator_ColumnVarNameInTable="columnQuantityInPCs" msprop:Generator_ColumnPropNameInRow="QuantityInPCs" msprop:Generator_ColumnPropNameInTable="QuantityInPCsColumn" msprop:Generator_UserColumnName="QuantityInPCs" type="xs:int" minOccurs="0" />
+              <xs:element name="QuantityInSFT" msprop:Generator_ColumnVarNameInTable="columnQuantityInSFT" msprop:Generator_ColumnPropNameInRow="QuantityInSFT" msprop:Generator_ColumnPropNameInTable="QuantityInSFTColumn" msprop:Generator_UserColumnName="QuantityInSFT" type="xs:double" minOccurs="0" />
+              <xs:element name="QuantityInSMT" msprop:Generator_ColumnVarNameInTable="columnQuantityInSMT" msprop:Generator_ColumnPropNameInRow="QuantityInSMT" msprop:Generator_ColumnPropNameInTable="QuantityInSMTColumn" msprop:Generator_UserColumnName="QuantityInSMT" type="xs:double" minOccurs="0" />
+              <xs:element name="Rate" msprop:Generator_ColumnVarNameInTable="columnRate" msprop:Generator_ColumnPropNameInRow="Rate" msprop:Generator_ColumnPropNameInTable="RateColumn" msprop:Generator_UserColumnName="Rate" type="xs:string" minOccurs="0" />
+              <xs:element name="Amount" msprop:Generator_ColumnVarNameInTable="columnAmount" msprop:Generator_ColumnPropNameInRow="Amount" msprop:Generator_ColumnPropNameInTable="AmountColumn" msprop:Generator_UserColumnName="Amount" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

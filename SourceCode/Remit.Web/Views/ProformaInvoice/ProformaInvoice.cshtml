@@ -1,0 +1,990 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceProformaInvoice.LblProformaInvoice;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="proformaInvoiceCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceProformaInvoice.LblProformaInvoice
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker
+                                       data-min-view="2" data-autoclose="true" ng-change="loadPiListBySupplierAndYear()" data-trigger="click">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceProformaInvoice.LblSupplier</label>
+                                <select data-ng-model="selectedSupplierId" class="form-control" focus-on="focusMe"
+                                        required data-ng-options="c.Id as c.Name for c in allSupplierFromDb | orderBy: 'Name'" name="selectedSupplierId" ng-change="loadPiListBySupplierAndYear()">
+                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblSupplier</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceProformaInvoice.LblPIList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="PiId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.PINo for c in allPiListBySupplierAndYearFromDb" name="PiId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-click="loadPiDetailsById(PiId)">
+                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblSupplier</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceProformaInvoice.LblSupplier
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <select data-ng-model="SupplierId" class="form-control" focus-on="focusMe" required data-ng-options="c.Id as c.Name for c in allSupplierFromDb | orderBy: 'Name'" name="SupplierId" ng-change="setCurrency(SupplierId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblSupplier</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.SupplierId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceProformaInvoice.LblSupplier)
+                                            </b>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-2 col-md-2">
+                                            <input type="button" ng-click="newCreatelSup()" class="btn btn-primary" value="@Resources.ResourceCommon.LblCreateNew" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceProformaInvoice.LblPINo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <input class="form-control" ng-disabled="ParentPIId || Id" type="text" name="PINo" ng-model="PINo" required ng-maxlength="50" />
+                                            <b class="help-block" ng-if="form.PINo.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceProformaInvoice.LblPINo)
+                                            </b>
+                                            <b class="help-block" ng-if="form.PINo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-2 col-md-2">
+                                            <input type="button" ng-disabled="!Id" ng-click="ProformaInvoiceRevise()" class="btn btn-primary" value="@Resources.ResourceCommon.LblRevise" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblRevisedPINo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" ng-disabled="!ParentPIId || Id" type="text" name="RevisedPINo" ng-model="RevisedPINo" ng-maxlength="50" />
+                                            <b class="help-block" ng-if="form.RevisedPINo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="Date" name="Date" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceProformaInvoice.LblCurrency
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select ng-model="CurrencyId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allCurrencyFromDb | orderBy: 'Name'" name="CurrencyId" ng-change="getCurrencyName()">
+                                                <option value=" ">
+                                                    @Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblCurrency
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceProformaInvoice.FreightCost
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align:right" class="form-control" type="number" name="FreightCost" ng-model="FreightCost" ng-change="getTotal()" />
+                                        </div>
+                                    </div>
+
+
+                                    
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceItemReceive.LblPurchaseRequisition
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select multiple data-ng-model="PurchaseRequisitionIds" class="form-control" focus-on="focusMe" data-ng-options="c.Id as c.RequisitionNo for c in allPurchaseRequisitionFromDb" name="PurchaseRequisitionIds" ng-click="loadPRItemByPRIDs(PurchaseRequisitionIds)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblPurchaseRequisition</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblShipFrom
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="ShipFrom" ng-model="ShipFrom" ng-maxlength="50" />
+                                            <b class="help-block" ng-if="form.ShipFrom.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblShipToAddress
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="ShipToAddress" ng-model="ShipToAddress" ng-maxlength="50" />
+                                            <b class="help-block" ng-if="form.ShipToAddress.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblLastDateOfShipment
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="LastDateOfShipment" ng-model="LastDateOfShipment" data-date-format="dd-MMM-yyyy" data-placement="auto" data-container="body" bs-datepicker autoclose="true" data-use-native="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblPIValidityInDays
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" style="text-align:right" type="number" name="PIValidityInDays" ng-model="PIValidityInDays" ng-maxlength="50" />
+                                            <b class="help-block" ng-if="form.PIValidityInDays.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblBeneficiaryBankInfo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="BeneficiaryBankInfo" ng-model="BeneficiaryBankInfo" ng-maxlength="500" />
+                                            <b class="help-block" ng-if="form.BeneficiaryBankInfo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceProformaInvoice.LblNegotiatingBankInfo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" name="NegotiatingBankInfo" ng-model="NegotiatingBankInfo" ng-maxlength="500" />
+                                            <b class="help-block" ng-if="form.NegotiatingBankInfo.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceProformaInvoice.LblTotalAmount
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align:right" class="form-control" type="number" readonly name="TotalAmount" ng-model="TotalAmount" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group" show-errors="true">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceProformaInvoice.TotalAmountWithFreightCost
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input style="text-align:right" class="form-control" type="number" readonly name="TotalAmountWithFreightCost" ng-model="TotalAmountWithFreightCost" />
+                                        </div>
+                                    </div>  
+                                    
+                                    
+                                    
+                                    
+
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceProformaInvoice.LblItemDetails</h3>
+
+                            <table class="table table-bordered slidable-table ">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceItem.LblItemCategory
+                                        </th>
+                                        <th class="col-md-3">
+                                            @Resources.ResourceProformaInvoice.LblItem
+                                            <input style="float: right" type="button" ng-click="newCreatelItem()" class="btn btn-primary btn-sm" value="+" />
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceProformaInvoice.LblQuantity
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceProformaInvoice.LblUnit
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceProformaInvoice.LblUnitPrice ({{CurrencyName}})
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceProformaInvoice.LblAmount ({{CurrencyName}})
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceCommon.LblAction
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat="aProformaInvoiceDet in ProformaInvoiceDetails">
+                                        <td>
+                                            <select data-ng-model="aProformaInvoiceDet.ItemCategoryId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allItemCategoryFromDb | orderBy: 'Name'" name="ItemCategoryId" ng-change="getAllItemByCategoryId($index,aProformaInvoiceDet.ItemCategoryId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblItemCategory</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="aProformaInvoiceDet.ItemId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in aProformaInvoiceDet.allItemFromDb | orderBy: 'Name'" name="ItemId" ng-change="setUnitId($index,aProformaInvoiceDet.ItemId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceProformaInvoice.LblItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" style="text-align:right" type="number" class="form-control" ng-model="aProformaInvoiceDet.Quantity" name="Quantity" min="0" ng-change="getTotal()">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" readonly class="form-control" ng-model="aProformaInvoiceDet.UnitName" name="UnitName">
+                                        </td>
+                                        <td>
+                                            <input style="text-align:right" data-ng-class="form-control" type="number" step="any"  class="form-control" ng-model="aProformaInvoiceDet.UnitPrice" name="UnitPrice" min="0" ng-change="getTotal()">
+                                        </td>
+                                        <td>
+                                            <input style="text-align:right" data-ng-class="form-control" type="text" class="form-control" ng-model="aProformaInvoiceDet.Amount" name="Amount" min="0" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="ProformaInvoiceDetails.splice($index,1);getTotal();" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <input type="button" ng-show="!ParentPIId || Id" ng-click="addProformaInvoice()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                    <input type="button" ng-show="ParentPIId && !Id" ng-click="addProformaInvoiceRevision()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                    <input type="button" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                           ng-bootbox-confirm-action="deleteProformaInvoice()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+
+    <div class="col-xs-12 col-md-4 col-md-offset-4">
+        <modal title='@Resources.ResourceItem.LblItem' visible="modalalertItem">
+            <form name="form.update" role="form">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 form-control-label">
+                                @Resources.ResourceItem.LblItemCategory
+                            </label>
+                            <div class="col-sm-6">
+                                <select  data-ng-model="modalObj.ItemCatId" class="form-control"
+                                        data-ng-options="c.Id as c.Name for c in allItemCategoryFromDb | orderBy: 'Name'" name="ItemCatId">
+                                    <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItem.LblItemCategory</option>
+                                </select>
+                                @*<input class="form-control" type="text" name="ItemCatId" ng-model="ItemCatId" required/>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 form-control-label">
+                               @Resources.ResourceItem.LblItemName
+                            </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" type="text" name="ItemName" ng-model="modalObj.ItemName" placeholder="Name" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 form-control-label"></label>
+                            <div class="col-sm-6">
+                                <button class="btn btn-info" type="button" ng-click="saveItem()">@Resources.ResourceCommon.LblSave</button>
+                                <button class="btn btn-danger" type="button" ng-click="cancelItem()">@Resources.ResourceCommon.LblCancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <div class="alert alert-success" ng-show="sucessSaveItem">
+                                <strong>@Resources.ResourceCommon.CMsg_defaultSave!</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </modal>
+    </div>
+    <div class="col-xs-12 col-md-4 col-md-offset-4">
+        <modal title='@Resources.ResourceSupplier.LblSupplier' visible="modalalertSupplier">
+            <form name="form.update" role="form">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 form-control-label">
+                                @Resources.ResourceSupplier.LblSupplier
+                            </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" type="text" name="SupplierName" ng-model="modalObj.SupplierName" placeholder="Name" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+
+                            <label class="col-sm-4 form-control-label">
+                                @Resources.ResourceSupplier.LblLocalSupplier
+                            </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" type="checkbox" name="IsLocalSup" ng-model="modalObj.IsLocalSup" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 form-control-label"></label>
+                            <div class="col-sm-6">
+                                <button class="btn btn-info" type="button" ng-click="saveSupplier()">@Resources.ResourceCommon.LblSave</button>
+                                <button class="btn btn-danger" type="button" ng-click="cancelSup()">@Resources.ResourceCommon.LblCancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <div class="alert alert-success" ng-show="sucessSaveSup">
+                                <strong>@Resources.ResourceCommon.CMsg_defaultSave!</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </modal>
+    </div>
+</div>
+
+
+@* ************ SCRIPT - SECTION (Start) *************** *@
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('proformaInvoiceService', ['$http', function ($http) {
+        return {
+            saveProformaInvoice: function (proformaInvoice) {
+                return $http({
+                    url: '/ProformaInvoice/CreateProformaInvoice',
+                    method: 'POST',
+                    data: proformaInvoice
+                })
+            },
+            getProformaInvoice: function (id) {
+                return $http.get('/ProformaInvoice/GetProformaInvoice/?id=' + id);
+            },
+            deleteProformaInvoice: function (id) {
+                return $http.get('/ProformaInvoice/DeleteProformaInvoice/?id=' + id);
+            },
+            getAllItem: function () {
+                return $http.get('/Item/GetItemList');
+            },
+            getAllItemByCategoryId: function (id) {
+                return $http.get('/Item/GetItemListByCategoryId?id=' + id);
+            },
+            getAllItemCategory: function () {
+                return $http.get('/ItemCategory/GetItemCategoryListWithGroupType?groupType=' + 1);
+            },
+            getAllSupplier: function () {
+                return $http.get('/Supplier/GetSupplierList');
+            },
+            getPRItemByPRIDs: function (ids) {
+                return $http.get('/ProformaInvoice/getPRItemByPRIDs',
+                    {
+                        params: { ids: ids }
+                    });
+            },
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getAllPurchaseRequisition: function () {
+                return $http.get('/PurchaseRequisition/GetPurchaseRequisitionLCList');
+            },
+            getNotReceivedPurchaseRequisition: function () {
+                return $http.get('/PurchaseRequisition/GetNotReceivedPurchaseRequisitionLCList');
+            },
+            getPiListBySupplierAndYear: function (year, supplier) {
+                return $http.get('/ProformaInvoice/GetPiListBySupplierAndYear',
+                {
+                    params: { year: year, supplierId: supplier }
+                });
+            },
+            getAllProformaInvoice: function () {
+                return $http.get('/ProformaInvoice/GetProformaInvoiceList');
+            },
+            getAllUnitOfMesurement: function () {
+                return $http.get('/UnitOfMeasurement/GetUnitOfMeasurementList');
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+            saveSupplier: function (supplier, componentList) {
+                var parameters = { supplier: supplier, componentList: componentList }
+                return $http({
+                    url: '/Supplier/CreateSupplier',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(parameters)
+                });
+            },
+            saveItem: function (item) {
+                return $http({
+                    url: '/Item/CreateItem',
+                    method: 'POST',
+                    data: item
+                });
+            },
+
+        };
+    }]);
+
+    app.controller('proformaInvoiceCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, proformaInvoiceService, $log, $ngBootbox, $filter) {
+        $scope.selectedYear = new Date();
+        $scope.Date = new Date();
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        $scope.modalalertSupplier = false;
+        $scope.modalalertItem = false;
+        $scope.sucessSaveItem = false;
+        $scope.sucessSaveSup = false;
+        $scope.modalObj = {};
+
+        $scope.ProformaInvoiceDetails = [];
+        $scope.ProformaInvoiceDetails.push({ Id: '', ProformaInvoiceId: '', ItemId: '', Quantity: '', UnitId: '', UnitName: '', UnitPrice: '', Amount: '' });
+
+        $scope.setCurrency = function (supplierId) {
+            if (supplierId != null) {
+                angular.forEach($scope.allSupplierFromDb, function (value, key) {
+                    if (value.Id === supplierId) {
+                        $scope.CurrencyId = value.CurrencyId;
+                    }
+                });
+            }
+        }
+
+        $scope.setUnitId = function (index, itemId) {
+            if (itemId != null) {
+                var allitem = $scope.ProformaInvoiceDetails[index].allItemFromDb;
+                for (i in allitem) {
+                    if (allitem[i].Id == itemId) {
+                        $scope.ProformaInvoiceDetails[index].UnitId = allitem[i].PurchaseunitId;
+                        $scope.ProformaInvoiceDetails[index].UnitName = allitem[i].Purchaseunit;
+                    }
+                }
+            }
+        }
+
+        $scope.addNewDetail = function ($event) {
+            $scope.ProformaInvoiceDetails.push({ Id: '', ProformaInvoiceId: '', ItemId: '', Quantity: '', UnitId: '', UnitName: '', UnitPrice: '', Amount: '' });
+        }
+
+        $scope.addItem = function () {
+            var popup = window.open('/Item/Index', '', "width=1000, height=800, left=" + (screen.width - 1000) / 2 + ", top=" + (screen.height - 800) / 2 + "");
+
+            popup.onbeforeunload = function () {
+                loadAllItem();
+            }
+            return false;
+        }
+
+        $scope.getTotal = function () {
+            $scope.TotalAmount = Object.keys($scope.ProformaInvoiceDetails).map(function (k) {
+                $scope.ProformaInvoiceDetails[k].Amount = $scope.ProformaInvoiceDetails[k].Quantity * $scope.ProformaInvoiceDetails[k].UnitPrice;
+
+                $scope.ProformaInvoiceDetails[k].Amount = $scope.ProformaInvoiceDetails[k].Amount.toFixed(2);
+                $scope.ProformaInvoiceDetails[k].Amount = parseFloat($scope.ProformaInvoiceDetails[k].Amount);
+                $scope.ProformaInvoiceDetails[k].AmountString = Intl.NumberFormat().format($scope.ProformaInvoiceDetails[k].Amount);
+                
+                return +$scope.ProformaInvoiceDetails[k].Quantity * $scope.ProformaInvoiceDetails[k].UnitPrice;
+            }).reduce(function (a, b) { return a + b }, 0.00);
+            
+            $scope.TotalAmountWithFreightCost = $scope.TotalAmount + $scope.FreightCost;
+
+            $scope.TotalAmount = $scope.TotalAmount.toFixed(2);
+            $scope.TotalAmount = parseFloat($scope.TotalAmount);
+            $scope.TotalAmountString = Intl.NumberFormat().format($scope.TotalAmount);
+
+            $scope.TotalAmountWithFreightCost = $scope.TotalAmountWithFreightCost.toFixed(2);
+            $scope.TotalAmountWithFreightCost = parseFloat($scope.TotalAmountWithFreightCost);
+            $scope.TotalAmountWithFreightCostString = Intl.NumberFormat().format($scope.TotalAmountWithFreightCost);
+
+        }
+
+        $scope.ProformaInvoiceRevise = function () {
+            if (!$scope.ParentPIId)
+                $scope.ParentPIId = $scope.Id;
+            $scope.Id = '';
+            $scope.RevisedPINo = $scope.PINo;
+            RevisedPINo.focus();
+        }
+
+        // Add a new proformaInvoice Revision
+        $scope.addProformaInvoiceRevision = function () {
+            $scope.PINo = $scope.RevisedPINo;
+            $scope.addProformaInvoice();
+        }
+
+        // Add a new proformaInvoice
+        $scope.addProformaInvoice = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var proformaInvoice = {};
+                proformaInvoice["Id"] = $scope.Id;
+                proformaInvoice["ParentPIId"] = $scope.ParentPIId;
+                proformaInvoice["PINo"] = $scope.PINo;
+                proformaInvoice["Date"] = new Date($scope.Date).toDateString();
+                proformaInvoice["SupplierId"] = $scope.SupplierId;
+                proformaInvoice["FreightCost"] = $scope.FreightCost;
+                proformaInvoice["TotalAmount"] = $scope.TotalAmount;
+                proformaInvoice["DueFreightCost"] = $scope.FreightCost;
+                proformaInvoice["TotalAmountWithFreightCost"] = $scope.TotalAmountWithFreightCost;
+                proformaInvoice["CurrencyId"] = $scope.CurrencyId;
+                proformaInvoice["ShipFrom"] = $scope.ShipFrom;
+                proformaInvoice["LastDateOfShipment"] = new Date($scope.LastDateOfShipment).toDateString();
+                proformaInvoice["ShipToAddress"] = $scope.ShipToAddress;
+                proformaInvoice["PIValidityInDays"] = $scope.PIValidityInDays;
+                proformaInvoice["CreatedBy"] = $scope.CreatedBy;
+                proformaInvoice["BeneficiaryBankInfo"] = $scope.BeneficiaryBankInfo;
+                proformaInvoice["NegotiatingBankInfo"] = $scope.NegotiatingBankInfo;
+
+                proformaInvoice["ProformaInvoiceDetails"] = $scope.ProformaInvoiceDetails;
+
+                var ProformaInvoicePurchaseRequisitionMappings = [];
+
+                for (var pr in $scope.PurchaseRequisitionIds) {
+                    ProformaInvoicePurchaseRequisitionMappings.push({ Id: '', ProformaInvoiceId: $scope.Id, PurchaseRequisitionId: $scope.PurchaseRequisitionIds[pr] });
+                }
+
+                proformaInvoice["ProformaInvoicePurchaseRequisitionMappings"] = ProformaInvoicePurchaseRequisitionMappings;
+
+                if ($scope.ProformaInvoiceDetails != null && $scope.ProformaInvoiceDetails !== "" && $scope.ProformaInvoiceDetails != undefined) {
+                    if ($scope.ProformaInvoiceDetails.length > 0) {
+                        for (var i = 0; i < $scope.ProformaInvoiceDetails.length; i++) {
+                            if ($scope.ProformaInvoiceDetails[i].Quantity !== 0 && $scope.ProformaInvoiceDetails[i].Quantity !== null && $scope.ProformaInvoiceDetails[i].Quantity !== "") {
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceProformaInvoice.LblQuantityRequiredPIDetails');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgNeedDetails');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgNeedDetails');
+                    return;
+                }
+
+                proformaInvoiceService.saveProformaInvoice(proformaInvoice)
+                .then(function onSuccess(response) {
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+                    $scope.loadPiListBySupplierAndYear();
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            } else {
+                $ngBootbox.alert('Fill up all required data.');
+            }
+        };
+
+        $scope.populateProformaInvoice = function (rowvalue) {
+            $scope.Id = rowvalue.Id;
+            $scope.ParentPIId = rowvalue.ParentPIId;
+            $scope.PINo = rowvalue.PINo;
+            $scope.RevisedPINo = '';
+
+            $scope.loadAllPurchaseRequisition();
+
+            $scope.PurchaseRequisitionIds = [];
+            var ProformaInvoicePurchaseRequisitionMappings = [];
+            ProformaInvoicePurchaseRequisitionMappings = rowvalue.ProformaInvoicePurchaseRequisitionMappings;
+            for (var pr in ProformaInvoicePurchaseRequisitionMappings) {
+                $scope.PurchaseRequisitionIds.push(ProformaInvoicePurchaseRequisitionMappings[pr].PurchaseRequisitionId);
+            }
+            $scope.Date = new Date(rowvalue.Date);
+            $scope.SupplierId = rowvalue.SupplierId;
+            $scope.FreightCost = rowvalue.FreightCost;
+            $scope.TotalAmount = rowvalue.TotalAmount;
+            $scope.TotalAmountWithFreightCost = rowvalue.TotalAmountWithFreightCost;
+
+            if ($scope.TotalAmountWithFreightCost !== null) {
+                $scope.TotalAmount = $scope.TotalAmount.toFixed(2);
+                $scope.TotalAmount = parseFloat($scope.TotalAmount);
+                $scope.TotalAmountString = Intl.NumberFormat().format($scope.TotalAmount);
+            }
+
+            if ($scope.TotalAmountWithFreightCost !== null) {
+                $scope.TotalAmountWithFreightCost = $scope.TotalAmountWithFreightCost.toFixed(2);
+                $scope.TotalAmountWithFreightCost = parseFloat($scope.TotalAmountWithFreightCost);
+                $scope.TotalAmountWithFreightCostString = Intl.NumberFormat().format($scope.TotalAmountWithFreightCost);
+            }
+            
+            $scope.CurrencyId = rowvalue.CurrencyId;
+            $scope.CurrencyName = rowvalue.CurrencyName;
+            $scope.ShipFrom = rowvalue.ShipFrom;
+            $scope.LastDateOfShipment = new Date(rowvalue.LastDateOfShipment);
+            $scope.ShipToAddress = rowvalue.ShipToAddress;
+            $scope.PIValidityInDays = rowvalue.PIValidityInDays;
+            $scope.CreatedBy = rowvalue.CreatedBy;
+            $scope.BeneficiaryBankInfo = rowvalue.BeneficiaryBankInfo;
+            $scope.NegotiatingBankInfo = rowvalue.NegotiatingBankInfo;
+
+            $scope.ProformaInvoiceDetails = rowvalue.ProformaInvoiceDetails;
+            for (x in rowvalue.ProformaInvoiceDetails) {
+                $scope.getAllItemByCategoryId(x, rowvalue.ProformaInvoiceDetails[x].ItemCategoryId);
+
+                $scope.ProformaInvoiceDetails[x].Amount = $scope.ProformaInvoiceDetails[x].Amount.toFixed(2);
+                $scope.ProformaInvoiceDetails[x].Amount = parseFloat($scope.ProformaInvoiceDetails[x].Amount);
+                $scope.ProformaInvoiceDetails[x].AmountString = Intl.NumberFormat().format($scope.ProformaInvoiceDetails[x].Amount);
+            }
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.ParentPIId = '';
+            $scope.PINo = '';
+            $scope.RevisedPINo = '';
+            $scope.PurchaseRequisitionIds = [];
+            $scope.Date = new Date();
+            $scope.SupplierId = '';
+            $scope.FreightCost = '';
+            $scope.TotalAmount = '';
+            $scope.TotalAmountWithFreightCost = '';
+            $scope.CurrencyId = '';
+            $scope.CurrencyName = '';
+            $scope.ShipFrom = '';
+            $scope.LastDateOfShipment = '';
+            $scope.ShipToAddress = '';
+            $scope.PIValidityInDays = '';
+            $scope.CreatedBy = '';
+            $scope.BeneficiaryBankInfo = '';
+            $scope.NegotiatingBankInfo = '';
+
+            $scope.ProformaInvoiceDetails = [];
+            $scope.ProformaInvoiceDetails.push({ Id: '', ProformaInvoiceId: '', ItemId: '', Quantity: '', UnitId: '', UnitName: '', UnitPrice: '', Amount: '' });
+            $scope.modalObj = {};
+            $scope.PiId = '';
+        }
+
+        $scope.newCreatelItem = function () {
+            $scope.modalalertItem = true;
+            $scope.modalObj.IsLocalSup = 1;
+            $scope.modalObj.SupIsActive = 1;
+        }
+        $scope.newCreatelSup = function () {
+            $scope.modalalertSupplier = true;
+        }
+
+        $scope.saveSupplier = function () {
+            if ($scope.modalObj.SupplierName != null && $scope.modalObj.SupplierName != undefined && $scope.modalObj.SupplierName !== "") { } else { return null; }
+            var supplier = {};
+            supplier["Name"] = $scope.modalObj.SupplierName;
+            supplier["IsLocalSupplier"] = $scope.modalObj.IsLocalSup;
+            supplier["IsActive"] = 1;
+            proformaInvoiceService.saveSupplier(supplier, null).then(function onSuccess(response) {
+                $scope.sucessSaveSup = true;
+                loadAllSupplier();
+                $scope.modalObj = {};
+            }).catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+
+        $scope.saveItem = function () {
+            if ($scope.modalObj.ItemCatId != null && $scope.modalObj.ItemCatId != undefined && $scope.modalObj.ItemCatId !== "") { } else { return null; }
+            var item = {};
+            item["Name"] = $scope.modalObj.ItemName;
+            item["ItemCategoryId"] = $scope.modalObj.ItemCatId;
+            proformaInvoiceService.saveItem(item).then(function onSuccess(response) {
+                for (var i in $scope.ProformaInvoiceDetails) {
+                    $scope.getAllItemByCategoryId(i, $scope.ProformaInvoiceDetails[i].ItemCategoryId);
+                }
+                $scope.sucessSaveItem = true;
+                $scope.modalObj = {};
+            }).catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+
+        $scope.cancelItem = function () {
+            $scope.sucessSaveItem = false;
+            $scope.modalalertItem = false;
+        }
+        $scope.cancelSup = function () {
+            $scope.sucessSaveSup = false;
+            $scope.modalalertSupplier = false;
+        }
+
+        // Delete ProformaInvoice
+        $scope.deleteProformaInvoice = function () {
+            if ($scope.Id) {
+                proformaInvoiceService.deleteProformaInvoice($scope.Id)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadPiListBySupplierAndYear();
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInDeleting');
+                    });
+            }
+        };
+
+        loadAllEmployee();
+        function loadAllEmployee() {
+            $scope.allEmployeeFromDb = [];
+            proformaInvoiceService.getAllEmployee()
+                .then(function onSuccess(response) {
+                    $scope.allEmployeeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllSupplier();
+        function loadAllSupplier() {
+            $scope.allSupplierFromDb = [];
+            proformaInvoiceService.getAllSupplier()
+                .then(function onSuccess(response) {
+                    $scope.allSupplierFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllItemCategory();
+        function loadAllItemCategory() {
+            $scope.allItemCategoryFromDb = [];
+            proformaInvoiceService.getAllItemCategory()
+                .then(function onSuccess(response) {
+                    $scope.allItemCategoryFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.getAllItemByCategoryId = function (index, categoryId) {
+            $scope.ProformaInvoiceDetails[index].allItemFromDb = [];
+            if (categoryId != null)
+                proformaInvoiceService.getAllItemByCategoryId(categoryId)
+                    .then(function onSuccess(response) {
+                        $scope.ProformaInvoiceDetails[index].allItemFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        loadAllUnitOfMesurement();
+        function loadAllUnitOfMesurement() {
+            $scope.allUnitofMeasurementFromDb = [];
+            proformaInvoiceService.getAllUnitOfMesurement()
+                .then(function onSuccess(response) {
+                    $scope.allUnitofMeasurementFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllCurrency();
+        function loadAllCurrency() {
+            $scope.allCurrencyFromDb = [];
+            proformaInvoiceService.getAllCurrency()
+                .then(function onSuccess(response) {
+                    $scope.allCurrencyFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadNotReceivedPurchaseRequisition = function () {
+            $scope.allPurchaseRequisitionFromDb = [];
+            proformaInvoiceService.getNotReceivedPurchaseRequisition()
+                .then(function onSuccess(response) {
+                    $scope.allPurchaseRequisitionFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadNotReceivedPurchaseRequisition();
+
+        $scope.loadAllPurchaseRequisition = function () {
+            proformaInvoiceService.getAllPurchaseRequisition()
+                .then(function onSuccess(response) {
+                    $scope.allPurchaseRequisitionFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadPRItemByPRIDs = function (prIds) {
+            if (prIds && prIds.length > 0)
+                proformaInvoiceService.getPRItemByPRIDs(prIds)
+                    .then(function onSuccess(response) {
+                        $scope.ProformaInvoiceDetails = response.data.ProformaInvoiceDetails;
+                        for (x in response.data.ProformaInvoiceDetails) {
+                            $scope.getAllItemByCategoryId(x, response.data.ProformaInvoiceDetails[x].ItemCategoryId);
+                        }
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.loadPiDetailsById = function (piId) {
+            proformaInvoiceService.getProformaInvoice(piId)
+                .then(function onSuccess(response) {
+                    $scope.populateProformaInvoice(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadPiListBySupplierAndYear = function () {
+            year = $scope.selectedYear;
+            supplier = $scope.selectedSupplierId;
+
+            if (!supplier)
+                supplier = 0;
+
+            $scope.allPiListBySupplierAndYearFromDb = [];
+            year = year.getFullYear();
+            proformaInvoiceService.getPiListBySupplierAndYear(year, supplier)
+                .then(function onSuccess(response) {
+                    $scope.allPiListBySupplierAndYearFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadPiListBySupplierAndYear();
+    });
+</script>

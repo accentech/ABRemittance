@@ -1,0 +1,256 @@
+﻿@{
+    ViewBag.Title = Resources.ResourceFGSalesDelivery.TitleFGSalesDelivery;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="deliveryChallan">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceFGSalesDelivery.TitleDeliveryChallan
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.TruckNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="TruckNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.DriverName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="DriverName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.DriverPhone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="DriverPhone">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceFGSalesDelivery.DeliveryDate 
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="DeliveryDate" name="DeliveryDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                           
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control"  ng-model="DeliveryDate" name="DeliveryDate" data-date-format="HH:mm:ss" bs-timepicker data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceFGSalesDelivery.deliveryChallanDetails</h3>
+                            <table class="table table-bordered " style="width: 600px;">
+                                <thead>
+                                <tr>
+                                    <th>@Resources.ResourceFGSalesDelivery.DeliveryChallanNo</th>
+                                    <th>@Resources.ResourceFGSalesDelivery.VATChallanNo</th>
+                                    <th>@Resources.ResourceCommon.LblAction</th>   
+                                      
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="deliveryChallanDetail in deliveryChallanDetails">
+                                        <td>
+                                            <select data-ng-model="deliveryChallanDetail.DeliveryChallanNo" class="form-control" 
+                                                    data-ng-options="c.DeliveryChallanNo for c in allDChallanNoFromDb | orderBy: 'DeliveryChallanNo'" name="DeliveryChallanNo">
+                                                <option value="">@Resources.ResourceCommon.LblSelect </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" type="text" ng-model="deliveryChallanDetail.VATChallanNo">
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="deliveryChallanDetails.splice($index, 1)" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <input type="button" ng-click="updateDChallan()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                       <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('deliveryChallanService', ['$http', function ($http) {
+        return {
+
+            updateDeliveryChallan: function (deliveryChallanList) {
+                var params = { deliveryChallan: deliveryChallanList }
+                return $http({
+                    url: '/FGSalesDelivery/UpdateDeliveryChallan',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            getDeliveryChallanNo: function () {
+                return $http.get('/FGSalesDelivery/GetDeliveryChallanNoList');
+            }
+        };
+    }]);
+
+    app.controller('deliveryChallan', function ($scope, $timeout, $http, focus, $location, $anchorScroll, deliveryChallanService, $log, $ngBootbox, $filter) {
+        
+        $scope.DeliveryDate = new Date();
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        $scope.selectedRow = null;
+        $scope.deliveryChallanDetails = [];
+
+        $scope.deliveryChallanDetails.push({DeliveryChallanNo:null,VATChallanNo: null});
+        $scope.addNewDetail = function ($event) {
+            $scope.deliveryChallanDetails.push({
+                DeliveryChallanNo:null,
+                VATChallanNo: ''
+               });
+        }
+       
+        $scope.updateDChallan = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                 var deliveryChallanList = [];
+                for (i = 0; i < $scope.deliveryChallanDetails.length; i++)
+                {
+                    var deliveryChallan = {};
+                    deliveryChallan["DriverName"] = $scope.DriverName;
+                    deliveryChallan["DriverPhone"] = $scope.DriverPhone;
+                    deliveryChallan["TruckNo"] = $scope.TruckNo;
+                    deliveryChallan["DeliveryDate"] = $scope.DeliveryDate;
+                    deliveryChallan["DeliveryChallanNo"] = $scope.deliveryChallanDetails[i].DeliveryChallanNo.DeliveryChallanNo;
+                    deliveryChallan["VATChallanNo"] = $scope.deliveryChallanDetails[i].VATChallanNo;
+                    deliveryChallanList.push(deliveryChallan);
+                }
+               deliveryChallanService.updateDeliveryChallan(deliveryChallanList)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        loadDeliveryChallanNo();
+                       
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            }
+        };
+        
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.DriverName = '';
+            $scope.DriverPhone = '';
+            $scope.TruckNo = '';
+            $scope.deliveryChallanDetails = [];
+            $scope.deliveryChallanDetails.push({ DeliveryChallanNo: null, VATChallanNo: '' });
+        }
+        
+        loadDeliveryChallanNo();
+        function loadDeliveryChallanNo() {
+            $scope.allDChallanNoFromDb = [];
+            deliveryChallanService.getDeliveryChallanNo()
+                .then(function onSuccess(response) {
+                    $scope.allDChallanNoFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+    });
+</script>

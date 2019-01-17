@@ -1,0 +1,543 @@
+﻿@{
+    ViewBag.Title = "ItemDispose";
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="itemDisposeCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceItemDispose.LblItemDispose
+        </div>
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker
+                                       data-min-view="2" data-autoclose="true" ng-change="loadIdListByYear()" data-trigger="click">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceItemDispose.LblList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="DisposeId" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c.Id as c.Date for c in allIdListByYearFromDb" name="DisposeId"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="loadIdDetailsById(DisposeId)">
+                                        <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceItemDispose.LblDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-required="true" ng-model="Date" name="Date" data-date-format="dd-MMM-yyyy " bs-datepicker data-autoclose="1">
+                                            <b class="help-block" ng-if="form.Date.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceItemDispose.LblDate)
+                                            </b>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" size="8" ng-model="Date" name="Date" bs-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group" show-errors ng-show="DisposeId">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceItemDispose.LblAuthorisedBy
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="AuthorisedBy" class="form-control"
+                                                    data-ng-options="c.Id as c.FullName for c in allEmployeeFromDb | orderBy: 'FullName'" name="AuthorisedBy">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemDispose.LblPerson</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors ng-show="DisposeId">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle"></b> @Resources.ResourceItemDispose.LblAuthorisedDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="AuthorisedDate" name="AuthorisedDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-autoclose="true">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" size="8" ng-model="AuthorisedDate" name="AuthorisedDate" bs-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="heading">@Resources.ResourceItemDispose.LblDisposeDetails</h3>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceItemDispose.LblItemCategory
+                                        </th>
+                                        <th class="col-md-3">
+                                            @Resources.ResourceItemDispose.LblItem
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceItemDispose.LblQuantity
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceItemDispose.LblUnit
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceItemDispose.LblBinCardNo
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceItemDispose.LblBinCardQuantity
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceItemDispose.LblDisposeReason
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceCommon.LblAction
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat="aItemDisposeDet in ItemDisposeDetails">
+                                        <td>
+                                            <select data-ng-model="aItemDisposeDet.ItemCategoryId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allItemCategoryFromDb" name="ItemCategoryId" data-ng-change="getAllItemByCategoryId($index, aItemDisposeDet.ItemCategoryId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemDispose.LblItemCategory</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="aItemDisposeDet.ItemId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in aItemDisposeDet.allItemFromDb" name="ItemId" data-ng-change="setUnitId($index, aItemDisposeDet.ItemId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemDispose.LblItem</option>
+                                            </select>
+                                        </td>                                           
+                                        <td>
+                                            <input data-ng-class="form-control" type="number" class="form-control" ng-model="aItemDisposeDet.Quantity" name="Quantity" min="0">
+                                        </td>
+                                        <td>
+                                            <select data-ng-model="aItemDisposeDet.UnitId" class="form-control"
+                                                    data-ng-options="c.Id as c.Name for c in allUnitofMeasurementFromDb | orderBy: 'Name'" name="UnitId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceItemDispose.LblUnit</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select ng-model="aItemDisposeDet.BinCardId" class="form-control"
+                                                    data-ng-options="c.Id as c.CardNo for c in allBinCardFromDb | orderBy: ['CardNo']" name="BinCardId" data-ng-change="setBinQty($index, aItemDisposeDet.BinCardId)">
+                                                <option value=" ">
+                                                    @Resources.ResourceCommon.LblSelect @Resources.ResourceItemReceive.LblBinCard
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>                                               
+                                            <input data-ng-class="form-control" type="number" readonly class="form-control" ng-model="aItemDisposeDet.BinCardQty" name="BinCardQty">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="aItemDisposeDet.DisposeReason" name="DisposeReason">
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger" ng-click="ItemDisposeDetails.splice($index,1);" title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails" value="@Resources.ResourceCommon.LblRemove" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-2 padding-left-zero">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                    <input type="button" ng-click="addItemDispose()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+                                    <input type="button" value=@Resources.ResourceCommon.LblDelete class="btn btn-danger " ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                            ng-bootbox-confirm-action="deleteItemDispose(itemDispose)" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+</div>
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('itemDisposeService', ['$http', function ($http) {
+        return {
+            saveItemDispose: function (itemDispose) {
+                return $http({
+                    url: '/ItemDispose/CreateItemDispose',
+                    method: 'POST',
+                    data: itemDispose
+                });
+            },
+            getItemDispose: function (id) {
+                return $http.get('/ItemDispose/GetItemDispose/?id=' + id);
+            },
+            getAllItem: function () {
+                return $http.get('/Item/GetItemList');
+            },
+           
+
+            getAllSupplier: function () {
+                return $http.get('/Supplier/GetSupplierList');
+            },
+            getAllEmployee: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getIdListByYear: function (year) {
+                return $http.get('/ItemDispose/GetPiListByYear',
+                {
+                    params: { year: year }
+                });
+            },
+            getAllItemByCategoryId: function (id) {
+                return $http.get('/Item/GetItemListByCategoryId?id=' + id);
+            },
+            getAllItemCategory: function (groupType) {
+                if (groupType === "" || groupType === undefined || groupType === null) {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithoutGroupType');
+                } else {
+                    return $http.get('/ItemCategory/GetItemCategoryListWithGroupType?groupType=' + groupType);
+                }
+            },
+            getAllItemDispose: function () {
+                return $http.get('/ItemDispose/GetItemDisposeListByGroupType');
+            },
+            getAllUnitOfMesurement: function () {
+                return $http.get('/UnitOfMeasurement/GetUnitOfMeasurementList');
+            },
+            getAllCurrency: function () {
+                return $http.get('/Currency/GetCurrencyList');
+            },
+            getAllBinCard: function () {
+                return $http.get('/BinCard/GetBinCardList');
+            },
+            deleteItemDispose: function (itemDispose) {
+                return $http({
+                    url: '/ItemDispose/DeleteItemDispose',
+                    method: 'POST',
+                    data: itemDispose
+                });
+            },
+        };
+    }]);app.controller('itemDisposeCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, itemDisposeService, $log, $ngBootbox) {
+        $scope.editmode = false;
+        $scope.selectedYear = new Date();
+        $scope.Date = new Date();
+        $scope.doit = function (index) {
+            alert(index);
+        }
+
+        $scope.ItemDisposeDetails = [];
+
+        $scope.ItemDisposeDetails.push({ Id: '', ItemDisposeId: '', ItemId: '',ItemCategoryId:'', Quantity: '', UnitId: '', BinCardId: '', DisposeReason: '' });
+
+        $scope.addNewDetail = function ($event) {
+            $scope.ItemDisposeDetails.push({ Id: '', ItemDisposeId: '', ItemId: '', ItemCategoryId:'',Quantity: '', UnitId: '', BinCardId: '', DisposeReason: '' });
+        }
+
+        $scope.getTotal = function () {
+            $scope.TotalCost = Object.keys($scope.ItemDisposeDetails).map(function (k) {
+                $scope.ItemDisposeDetails[k].TotalPrice = $scope.ItemDisposeDetails[k].Quantity * $scope.ItemDisposeDetails[k].UnitPrice;
+                return +$scope.ItemDisposeDetails[k].Quantity * $scope.ItemDisposeDetails[k].UnitPrice;
+            }).reduce(function (a, b) { return a + b }, 0.00);
+        }
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+
+        $scope.showModalforSearch = false;
+
+        // Add a new itemDispose
+        $scope.addItemDispose = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var itemDispose = {};
+                itemDispose["Id"] = $scope.Id;
+               
+                itemDispose["Date"] = $scope.Date;
+                itemDispose["AuthorisedBy"] = $scope.AuthorisedBy;
+                itemDispose["AuthorisedDate"] = $scope.AuthorisedDate;                
+
+                itemDispose["ItemDisposeDetails"] = $scope.ItemDisposeDetails;
+
+                if ($scope.ItemDisposeDetails != null && $scope.ItemDisposeDetails !== "" && $scope.ItemDisposeDetails != undefined) {
+                    if ($scope.ItemDisposeDetails.length > 0) {
+                        for (var i = 0; i < $scope.ItemDisposeDetails.length; i++) {
+                            if ($scope.ItemDisposeDetails[i].Quantity !== 0 && $scope.ItemDisposeDetails[i].Quantity !== null && $scope.ItemDisposeDetails[i].Quantity !== "") {
+
+                                if ($scope.ItemDisposeDetails[i].BinCardId != null || $scope.ItemDisposeDetails[i].BinCardId != "") {
+                                    if ($scope.ItemDisposeDetails[i].Quantity <= $scope.ItemDisposeDetails[i].BinCardQty) {
+                                        
+                                    }
+                                    else {
+                                        $ngBootbox.alert('quantity is more than bin card quantity.');
+                                        return;
+                                    }
+
+                                } else {
+                                    $ngBootbox.alert('select BinCardId.');
+                                    return;
+                                }
+                            } else {
+                                $ngBootbox.alert('@Resources.ResourceItemDispose.LblQuantityRequiredIDDetails');
+                                return;
+                            }
+                        }
+                    } else {
+                        $ngBootbox.alert('Need Item Dispose details.');
+                        return;
+                    }
+                } else {
+                    $ngBootbox.alert('Need Item Dispose details.');
+                    return;
+                }
+
+                itemDisposeService.saveItemDispose(itemDispose)
+                .then(function onSuccess(response) {
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+                    $scope.loadIdListByYear();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            } else {
+                $ngBootbox.alert('Fill up all required data.');
+            }
+        };
+
+        // Delete Item Dispose.............
+        $scope.deleteItemDispose = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var itemDispose = {};
+                itemDispose["Id"] = $scope.Id;
+               
+                itemDispose["ItemDisposeDetails"] = $scope.ItemDisposeDetails;
+
+
+                itemDisposeService.deleteItemDispose(itemDispose)
+                    .then(function onSuccess(response) {
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                        $scope.reset();
+                        $scope.loadIdListByYear();
+                    });
+            }
+        };
+
+        $scope.getAllItemByCategoryId = function (index, categoryId) {
+            $scope.ItemDisposeDetails[index].allItemFromDb = [];
+            if (categoryId != null)
+                itemDisposeService.getAllItemByCategoryId(categoryId)
+                    .then(function onSuccess(response) {
+                        $scope.ItemDisposeDetails[index].allItemFromDb = response.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+        }
+
+        $scope.populateItemDispose = function (rowvalue) {
+            $scope.isCreateNewMode = false;
+            $scope.Id = rowvalue.Id;
+          
+            $scope.Date = new Date(rowvalue.Date);
+            $scope.AuthorisedBy = rowvalue.AuthorisedBy;
+            $scope.AuthorisedDate = new Date(rowvalue.AuthorisedDate);
+
+            $scope.ItemDisposeDetails = rowvalue.ItemDisposeDetails;
+            for (x in rowvalue.ItemDisposeDetails) {             
+                $scope.getAllItemByCategoryId(x, rowvalue.ItemDisposeDetails[x].ItemCategoryId);
+            }
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = '';
+            $scope.Date = new Date();
+            $scope.AuthorisedBy = '';
+            $scope.AuthorisedDate = '';
+            $scope.ItemDisposeDetails = [];
+            $scope.ItemDisposeDetails.push({ Id: '', ItemDisposeId: '', ItemId: '',ItemCategoryId:'', Quantity: '', UnitId: '', BinCardId: '', DisposeReason: '' });
+
+            $scope.DisposeId = '';
+        }
+
+        $scope.setUnitId = function (index, itemId) {
+            $scope.ItemDisposeDetails[index].UnitId = '';
+            $scope.ItemDisposeDetails[index].IntemInventoryList = [];
+            if (itemId != null)
+                angular.forEach($scope.ItemDisposeDetails[index].allItemFromDb, function (value, key) {
+                    if (value.Id === itemId) {
+                        $scope.ItemDisposeDetails[index].UnitId = value.PurchaseunitId;
+                        $scope.ItemDisposeDetails[index].IntemInventoryList = value.ItemInventorys;
+                    }
+                });
+        }
+
+        $scope.setBinQty = function (index,binCardId) {
+            if (binCardId != null)
+                angular.forEach($scope.ItemDisposeDetails[index].IntemInventoryList, function (value, key) {
+                    if (value.BinCardId === binCardId) {
+                        $scope.ItemDisposeDetails[index].BinCardQty = value.Quantity;
+                    }
+                });
+        }
+
+        loadAllEmployee();
+        function loadAllEmployee() {
+            $scope.allEmployeeFromDb = [];
+            itemDisposeService.getAllEmployee()
+                .then(function onSuccess(response) {
+                    $scope.allEmployeeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllBinCard();
+        function loadAllBinCard() {
+            $scope.allBinCardFromDb = [];
+            itemDisposeService.getAllBinCard()
+                .then(function onSuccess(response) {
+                    $scope.allBinCardFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+
+        loadAllItem();
+        function loadAllItem() {
+            $scope.allItemFromDb = [];
+            itemDisposeService.getAllItem()
+                .then(function onSuccess(response) {
+                    $scope.allItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllUnitOfMesurement();
+        function loadAllUnitOfMesurement() {
+            $scope.allUnitofMeasurementFromDb = [];
+            itemDisposeService.getAllUnitOfMesurement()
+                .then(function onSuccess(response) {
+                    $scope.allUnitofMeasurementFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+
+
+        $scope.loadIdDetailsById = function (disposeId) {
+            $scope.allIdDetail = [];
+            itemDisposeService.getItemDispose(disposeId)
+                .then(function onSuccess(response) {
+                    $scope.allIdDetail = response.data;
+                    $scope.populateItemDispose(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllItemCategory();
+        function loadAllItemCategory() {
+            $scope.allItemCategoryFromDb = [];
+            itemDisposeService.getAllItemCategory(@ViewBag.GroupType)
+                .then(function onSuccess(response) {
+                    $scope.allItemCategoryFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadIdListByYear = function () {
+            var year = $scope.selectedYear;
+            
+            $scope.allIdListByYearFromDb = [];
+            year = year.getFullYear();
+            itemDisposeService.getIdListByYear(year)
+                .then(function onSuccess(response) {
+                    $scope.allIdListByYearFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadIdListByYear();        
+    });
+</script>

@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DeliveryChallanReport" targetNamespace="http://tempuri.org/DeliveryChallanReport.xsd" xmlns:mstns="http://tempuri.org/DeliveryChallanReport.xsd" xmlns="http://tempuri.org/DeliveryChallanReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="DBConnection" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="DBConnection (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.DBConnection.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="FGDeliveryDataSetTableAdapter" GeneratorDataComponentClassName="FGDeliveryDataSetTableAdapter" Name="FGDeliveryDataSet" UserDataComponentName="FGDeliveryDataSetTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="DBConnection (Web.config)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        FGItem.Code, FGSize.Size, FGGrade.Grade, FGSalesDeliveryDetail.Lot, FGItem.PcsPerCartoon, FGSalesDeliveryDetail.DeliveryQuantityInSFT, FGSalesDeliveryDetail.DeliveryQuantityInCTN, 
+                         FGSalesDelivery.DeliveryChallanNo, FGSalesDelivery.InvoiceNo, FGSales.InvoiceDate, FGSalesDelivery.DeliveryDate, FGSalesDelivery.CustomerType, FGSalesDelivery.DealerId, FGSalesDelivery.Name, 
+                         FGSalesDelivery.ContactPersonName, FGSalesDelivery.ContactPhone, FGSalesDelivery.Address, FGSalesDelivery.DeliverySite, FGSalesDelivery.DeliveryOption, FGItem.SalesUnitId, 
+                         UnitOfMeasurement.Name AS UnitName
+FROM            FGSales INNER JOIN
+                         FGSalesDelivery ON FGSales.InvoiceNo = FGSalesDelivery.InvoiceNo INNER JOIN
+                         FGSalesDeliveryDetail ON FGSalesDelivery.DeliveryChallanNo = FGSalesDeliveryDetail.DeliveryChallanNo INNER JOIN
+                         FGItem ON FGSalesDeliveryDetail.FGItemId = FGItem.Id INNER JOIN
+                         FGSize ON FGSalesDeliveryDetail.FGSizeId = FGSize.Id AND FGItem.SizeId = FGSize.Id INNER JOIN
+                         FGGrade ON FGSalesDeliveryDetail.FGGradeId = FGGrade.Id INNER JOIN
+                         UnitOfMeasurement ON FGItem.Id = UnitOfMeasurement.Id</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Code" DataSetColumn="Code" />
+              <Mapping SourceColumn="Size" DataSetColumn="Size" />
+              <Mapping SourceColumn="Grade" DataSetColumn="Grade" />
+              <Mapping SourceColumn="Lot" DataSetColumn="Lot" />
+              <Mapping SourceColumn="PcsPerCartoon" DataSetColumn="PcsPerCartoon" />
+              <Mapping SourceColumn="DeliveryQuantityInSFT" DataSetColumn="DeliveryQuantityInSFT" />
+              <Mapping SourceColumn="DeliveryChallanNo" DataSetColumn="DeliveryChallanNo" />
+              <Mapping SourceColumn="InvoiceNo" DataSetColumn="InvoiceNo" />
+              <Mapping SourceColumn="DeliveryDate" DataSetColumn="DeliveryDate" />
+              <Mapping SourceColumn="CustomerType" DataSetColumn="CustomerType" />
+              <Mapping SourceColumn="DealerId" DataSetColumn="DealerId" />
+              <Mapping SourceColumn="Name" DataSetColumn="Name" />
+              <Mapping SourceColumn="ContactPersonName" DataSetColumn="ContactPersonName" />
+              <Mapping SourceColumn="ContactPhone" DataSetColumn="ContactPhone" />
+              <Mapping SourceColumn="Address" DataSetColumn="Address" />
+              <Mapping SourceColumn="DeliverySite" DataSetColumn="DeliverySite" />
+              <Mapping SourceColumn="DeliveryOption" DataSetColumn="DeliveryOption" />
+              <Mapping SourceColumn="SalesUnitId" DataSetColumn="SalesUnitId" />
+              <Mapping SourceColumn="UnitName" DataSetColumn="UnitName" />
+              <Mapping SourceColumn="DeliveryQuantityInCTN" DataSetColumn="DeliveryQuantityInCTN1" />
+              <Mapping SourceColumn="InvoiceDate" DataSetColumn="InvoiceDate" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DeliveryChallanReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DeliveryChallanReport" msprop:Generator_UserDSName="DeliveryChallanReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="FGDeliveryDataSet" msprop:Generator_TableClassName="FGDeliveryDataSetDataTable" msprop:Generator_TableVarName="tableFGDeliveryDataSet" msprop:Generator_TablePropName="FGDeliveryDataSet" msprop:Generator_RowDeletingName="FGDeliveryDataSetRowDeleting" msprop:Generator_RowChangingName="FGDeliveryDataSetRowChanging" msprop:Generator_RowEvHandlerName="FGDeliveryDataSetRowChangeEventHandler" msprop:Generator_RowDeletedName="FGDeliveryDataSetRowDeleted" msprop:Generator_UserTableName="FGDeliveryDataSet" msprop:Generator_RowChangedName="FGDeliveryDataSetRowChanged" msprop:Generator_RowEvArgName="FGDeliveryDataSetRowChangeEvent" msprop:Generator_RowClassName="FGDeliveryDataSetRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Code" msprop:Generator_ColumnVarNameInTable="columnCode" msprop:Generator_ColumnPropNameInRow="Code" msprop:Generator_ColumnPropNameInTable="CodeColumn" msprop:Generator_UserColumnName="Code">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Size" msprop:Generator_ColumnVarNameInTable="columnSize" msprop:Generator_ColumnPropNameInRow="Size" msprop:Generator_ColumnPropNameInTable="SizeColumn" msprop:Generator_UserColumnName="Size">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Grade" msprop:Generator_ColumnVarNameInTable="columnGrade" msprop:Generator_ColumnPropNameInRow="Grade" msprop:Generator_ColumnPropNameInTable="GradeColumn" msprop:Generator_UserColumnName="Grade">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="5" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Lot" msprop:Generator_ColumnVarNameInTable="columnLot" msprop:Generator_ColumnPropNameInRow="Lot" msprop:Generator_ColumnPropNameInTable="LotColumn" msprop:Generator_UserColumnName="Lot" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="10" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PcsPerCartoon" msprop:Generator_ColumnVarNameInTable="columnPcsPerCartoon" msprop:Generator_ColumnPropNameInRow="PcsPerCartoon" msprop:Generator_ColumnPropNameInTable="PcsPerCartoonColumn" msprop:Generator_UserColumnName="PcsPerCartoon" type="xs:int" />
+              <xs:element name="DeliveryQuantityInSFT" msprop:Generator_ColumnVarNameInTable="columnDeliveryQuantityInSFT" msprop:Generator_ColumnPropNameInRow="DeliveryQuantityInSFT" msprop:Generator_ColumnPropNameInTable="DeliveryQuantityInSFTColumn" msprop:Generator_UserColumnName="DeliveryQuantityInSFT" type="xs:double" minOccurs="0" />
+              <xs:element name="DeliveryQuantityInCTN" msprop:Generator_ColumnVarNameInTable="columnDeliveryQuantityInCTN" msprop:Generator_ColumnPropNameInRow="DeliveryQuantityInCTN" msprop:Generator_ColumnPropNameInTable="DeliveryQuantityInCTNColumn" msprop:Generator_UserColumnName="DeliveryQuantityInCTN" type="xs:int" minOccurs="0" />
+              <xs:element name="DeliveryChallanNo" msprop:Generator_ColumnVarNameInTable="columnDeliveryChallanNo" msprop:Generator_ColumnPropNameInRow="DeliveryChallanNo" msprop:Generator_ColumnPropNameInTable="DeliveryChallanNoColumn" msprop:Generator_UserColumnName="DeliveryChallanNo">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="InvoiceNo" msprop:Generator_ColumnVarNameInTable="columnInvoiceNo" msprop:Generator_ColumnPropNameInRow="InvoiceNo" msprop:Generator_ColumnPropNameInTable="InvoiceNoColumn" msprop:Generator_UserColumnName="InvoiceNo" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DeliveryDate" msprop:Generator_ColumnVarNameInTable="columnDeliveryDate" msprop:Generator_ColumnPropNameInRow="DeliveryDate" msprop:Generator_ColumnPropNameInTable="DeliveryDateColumn" msprop:Generator_UserColumnName="DeliveryDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="CustomerType" msprop:Generator_ColumnVarNameInTable="columnCustomerType" msprop:Generator_ColumnPropNameInRow="CustomerType" msprop:Generator_ColumnPropNameInTable="CustomerTypeColumn" msprop:Generator_UserColumnName="CustomerType" type="xs:int" minOccurs="0" />
+              <xs:element name="DealerId" msprop:Generator_ColumnVarNameInTable="columnDealerId" msprop:Generator_ColumnPropNameInRow="DealerId" msprop:Generator_ColumnPropNameInTable="DealerIdColumn" msprop:Generator_UserColumnName="DealerId" type="xs:int" minOccurs="0" />
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ContactPersonName" msprop:Generator_ColumnVarNameInTable="columnContactPersonName" msprop:Generator_ColumnPropNameInRow="ContactPersonName" msprop:Generator_ColumnPropNameInTable="ContactPersonNameColumn" msprop:Generator_UserColumnName="ContactPersonName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ContactPhone" msprop:Generator_ColumnVarNameInTable="columnContactPhone" msprop:Generator_ColumnPropNameInRow="ContactPhone" msprop:Generator_ColumnPropNameInTable="ContactPhoneColumn" msprop:Generator_UserColumnName="ContactPhone" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Address" msprop:Generator_ColumnVarNameInTable="columnAddress" msprop:Generator_ColumnPropNameInRow="Address" msprop:Generator_ColumnPropNameInTable="AddressColumn" msprop:Generator_UserColumnName="Address" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DeliverySite" msprop:Generator_ColumnVarNameInTable="columnDeliverySite" msprop:Generator_ColumnPropNameInRow="DeliverySite" msprop:Generator_ColumnPropNameInTable="DeliverySiteColumn" msprop:Generator_UserColumnName="DeliverySite" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="200" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DeliveryOption" msprop:Generator_ColumnVarNameInTable="columnDeliveryOption" msprop:Generator_ColumnPropNameInRow="DeliveryOption" msprop:Generator_ColumnPropNameInTable="DeliveryOptionColumn" msprop:Generator_UserColumnName="DeliveryOption" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SalesUnitId" msprop:Generator_ColumnVarNameInTable="columnSalesUnitId" msprop:Generator_ColumnPropNameInRow="SalesUnitId" msprop:Generator_ColumnPropNameInTable="SalesUnitIdColumn" msprop:Generator_UserColumnName="SalesUnitId" type="xs:int" />
+              <xs:element name="UnitName" msprop:Generator_ColumnVarNameInTable="columnUnitName" msprop:Generator_ColumnPropNameInRow="UnitName" msprop:Generator_ColumnPropNameInTable="UnitNameColumn" msprop:Generator_UserColumnName="UnitName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DeliveryQuantityInCTN1" msdata:Caption="DeliveryQuantityInCTN" msprop:Generator_ColumnVarNameInTable="columnDeliveryQuantityInCTN1" msprop:Generator_ColumnPropNameInRow="DeliveryQuantityInCTN1" msprop:Generator_ColumnPropNameInTable="DeliveryQuantityInCTN1Column" msprop:Generator_UserColumnName="DeliveryQuantityInCTN1" type="xs:double" minOccurs="0" />
+              <xs:element name="InvoiceDate" msprop:Generator_ColumnVarNameInTable="columnInvoiceDate" msprop:Generator_ColumnPropNameInRow="InvoiceDate" msprop:Generator_ColumnPropNameInTable="InvoiceDateColumn" msprop:Generator_UserColumnName="InvoiceDate" type="xs:dateTime" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:FGDeliveryDataSet" />
+      <xs:field xpath="mstns:DeliveryChallanNo" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

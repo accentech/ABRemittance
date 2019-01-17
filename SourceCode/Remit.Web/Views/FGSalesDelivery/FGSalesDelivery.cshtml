@@ -1,0 +1,1145 @@
+﻿@{
+    ViewBag.Title = Resources.ResourceFGSalesDelivery.TitleFGSalesDelivery;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+<style>
+    .grn {
+        /*min-width: 74px;*/
+        background-color: green;
+    }
+
+    .yellow {
+        background-color: yellow;
+        color: black;
+    }
+</style>
+
+
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgSaleCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceFGSalesDelivery.TitleFGSalesDelivery
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <form name="form" novalidate>
+                <div class="row">
+                    @*<div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">*@
+                    <div class="col-lg-2 col-md-2  col-sm-2 col-xs-12 selector-container-div sales-left-panel">
+                        <div class="panel panel-default selector-container">
+                            <div class="panel-body" style="padding: 0;">
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.ResourceFGSalesDelivery.DeliveryDate</label>
+                                    <input type="text" class="form-control" ng-model="filterDate" name="filterDate" data-trigger="click" data-date-format="@System.Web.Configuration.WebConfigurationManager.AppSettings["DateFormat"]" bs-datepicker data-min-view="0" data-autoclose="true" ng-change="loadAllFGSalesDeliveryList()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.ResourceFGSale.InvoiceNo</label>
+                                    <input type="text" class="form-control" ng-model="FilterInvoiceNo" name="FilterInvoiceNo" ng-blur="loadFGSalesDeliveryListByInvoice()" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.ResourceFGSalesDelivery.LblDeliveryList</label>
+                                    <div class="" style="height: 150px;">
+                                        <select multiple data-ng-model="DeliveryChallanNo" class="form-control listSelect" focus-on="focusMe"
+                                                data-ng-options="c.DeliveryChallanNo as c.DeliveryChallanNo for c in allFGSalesDelivery" name="DeliveryChallanNo"
+                                                style="height: 100%; overflow-y: auto; padding: 0;" ng-change="loadFGSalesDeliveryByChallanNo(DeliveryChallanNo)"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="col-md-10 col-sm-8 col-xs-8">*@
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 sales-right-panel">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGSale.InvoiceNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8" ng-show="!editmode">
+                                            <select data-ng-model="InvoiceNo" class="form-control" focus-on="focusMe" data-ng-options="c.InvoiceNo as c.InvoiceNo for c in incompleteFGSalesFromDb" name="InvoiceNo" ng-change="getFGSalesForDelivery(InvoiceNo)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGSale.InvoiceNo</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8" ng-show="editmode">
+                                            <input type="text" class="form-control" ng-model="InvoiceNo2" ng-disabled="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGSalesDelivery.DeliveryChallanNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-required="true" ng-model="DeliveryChallanNo" ng-disabled="true" />
+                                            <b class="help-block" ng-if="form.DeliveryChallanNo.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGSalesDelivery.DeliveryChallanNo)
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*======================================================================*@
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b>@Resources.ResourceFGSale.InvoiceDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8" @*ng-show="!editmode"*@>
+                                            <div class="col-xs-12 col-sm-6 col-md-6" style="padding: 0">
+                                                <input type="text" class="form-control" ng-disabled="true" ng-required="true" ng-model="InvoiceDate" name="InvoiceDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6" style="padding: 0">
+                                                <input type="text" class="form-control" size="8" ng-disabled="true" ng-model="InvoiceDate" name="InvoiceDate" bs-timepicker>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-xs-12 col-sm-8 col-md-8" ng-show="editmode">
+                                                <input type="text" class="form-control" ng-model="InvoiceNo2" ng-disabled="true" />
+                                            </div>*@
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGSalesDelivery.DeliveryDate
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-required="true" ng-model="DeliveryDate" name="DeliveryDate" data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0" data-autoclose="true">
+                                            <b class="help-block" ng-if="form.DeliveryDate.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGSalesDelivery.DeliveryDate)
+                                            </b>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-required="true" ng-model="DeliveryDate" name="DeliveryDate" data-date-format="HH:mm:ss" bs-timepicker data-min-view="0" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*======================================================================*@
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.CustomerType
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4 ">
+                                                        <input type="radio" class="pull-right" ng-model="CustomerType" ng-disabled="true" value="1">
+                                                    </div>
+                                                    <div class=" padding-right-zero">
+                                                        <label class="pull-left" style="padding-top: 5px;">
+                                                            @Resources.ResourceFGSale.Regular
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4 ">
+                                                        <input type="radio" class="pull-right" ng-model="CustomerType" ng-disabled="true" value="2">
+                                                    </div>
+                                                    <div class=" padding-right-zero">
+                                                        <label class="pull-left" style="padding-top: 5px;">
+                                                            @Resources.ResourceFGSale.Irregular
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.Name
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="Name" ng-disabled="true">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.ContactPhone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="ContactPhone" ng-disabled="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.ContactName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="ContactPersonName" ng-disabled="true">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.DeliveryZone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="DeliverZoneId" class="form-control" ng-disabled="true"
+                                                    data-ng-options="c.Id as c.ZoneName for c in allFGDealerZone | orderBy: 'ZoneName'" name="DeliverZoneId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.Address
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <textarea class="form-control" ng-model="Address" ng-disabled="true"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSale.DeliverySite
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <textarea class="form-control" type="text" ng-model="DeliverySite"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.DriverName
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="DriverName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.DriverPhone
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="DriverPhone">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.TruckNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="TruckNo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.VATChallanNo
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-model="VATChallanNo">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.DeliveryOption
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" type="text" ng-disabled="true" ng-model="DeliveryOption">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceFGSalesDelivery.WeightDelivered
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" ng-disabled="true" type="text" ng-model="WeightDelivered">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6" ng-show="editmode">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceItemIssue.LblStatus
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input class="form-control" ng-disabled="true" type="text" ng-model="StatusText">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6" ng-show="editmode">
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceItemIssue.LblRemarks
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <textarea class="form-control" ng-model="Remarks" name="Remarks"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h3 class="heading">@Resources.ResourceFGSale.SalesDetail</h3>
+                    <table class="table table-responsive slidable-table" border="1">
+                        <thead>
+                            <tr>
+                                <th>@Resources.ResourceFGSale.SN</th>
+                                <th>@Resources.ResourceFGSale.ProductType</th>
+                                <th>@Resources.ResourceFGSale.ProductCode</th>
+                                <th>@Resources.ResourceFGSale.Size</th>
+                                <th>@Resources.ResourceFGSale.Grade</th>
+                                <th>@Resources.ResourceFGSale.Lot</th>
+                                <th>@Resources.ResourceFGSalesDelivery.Unit</th>
+                                <th>@Resources.ResourceFGSale.SalesQuantity</th>
+                                <th>@Resources.ResourceFGSalesDelivery.RemainingQuantity</th>
+                                <th>@Resources.ResourceFGSalesDelivery.Inventory</th>
+                                <th>@Resources.ResourceFGSalesDelivery.LblDeliveryQuantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="itemSalesDelivery in FGSalesDeliveryDetails" ng-class="{'yellow': itemSalesDelivery.DeliveryQuantity != itemSalesDelivery.SalesQuantity- itemSalesDelivery.PrevDeliveryQuantity}">
+                                <td>{{$index+1}}</td>
+                                <td>{{itemSalesDelivery.TypeName}}</td>
+                                <td>{{itemSalesDelivery.FGItemCode}}</td>
+                                <td>
+                                    <input type="text" ng-model="itemSalesDelivery.FGSizeName" class="form-control" ng-disabled="true" name="FGSizeName" style="width: 70px" />
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="itemSalesDelivery.FGGradeName" class="form-control" ng-disabled="true" name="FGGradeName" style="width: 70px" />
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="itemSalesDelivery.Lot" class="form-control" ng-disabled="true" name="Lot" style="width: 70px" />
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="itemSalesDelivery.UnitName" class="form-control" ng-disabled="true" name="UnitName" style="width: 70px" />
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" ng-disabled="true" style="text-align: right" ng-model="itemSalesDelivery.SalesQuantity" name="SalesQuantity">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" ng-disabled="true" style="text-align: right" name="RemainingQuantity" value="{{itemSalesDelivery.SalesQuantity - itemSalesDelivery.PrevDeliveryQuantity}}">
+                                </td>
+                                <td>
+                                    <table class="table table-responsive table-bordered">
+                                        <tr>
+                                            <th style="width: 25%">@Resources.ResourceFGSalesDelivery.BinCard</th>
+                                            <th style="width: 25%">@Resources.ResourceFGSalesDelivery.BinCardQty</th>
+                                            <th style="width: 25%">@Resources.ResourceFGSalesDelivery.LblDeliveryQuantity</th>
+                                            <th style="width: 25%">@Resources.ResourceFGSalesDelivery.Weight</th>
+                                        </tr>
+                                        <tr ng-repeat="aInv in itemSalesDelivery.FGItemInventoryViewModels" ng-class="{'yellow': itemSalesDelivery.DeliveryQuantity != itemSalesDelivery.SalesQuantity- itemSalesDelivery.PrevDeliveryQuantity}">
+                                            <td style="width: 25%">
+                                                {{aInv.BinCardName}}
+                                            </td>
+                                            <td style="width: 25%">
+                                                {{aInv.Quantity}}
+                                            </td>
+                                            <td style="width: 25%">
+                                                <input class=" form-control" type="number" style="text-align: right" ng-model="aInv.DeliveryQuantity" ng-change="getTotal()" />
+                                            </td>
+                                            <td style="width: 25%">
+                                                {{(aInv.DeliveryQuantity/itemSalesDelivery.UnitPerCartoon)*(itemSalesDelivery.WeightPerCartoon)}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                @*ng-class="{'grn': itemSalesDelivery.SalesQuantity - itemSalesDelivery.PrevDeliveryQuantity == itemSalesDelivery.DeliveryQuantity, red: itemSalesDelivery.SalesQuantity - itemSalesDelivery.PrevDeliveryQuantity <> itemSalesDelivery.DeliveryQuantity }"*@
+                                <td>
+                                    <input type="number" class="form-control" ng-disabled="true" style="text-align: right" ng-model="itemSalesDelivery.DeliveryQuantity" name="DeliveryQuantity">
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>@Resources.ResourceFGSalesDelivery.Total</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th style="text-align: right">{{TotalSalesQty}}</th>
+                                <th style="text-align: right">{{TotalRemainingQty}}</th>
+                                <th style="text-align: right">{{TotalDeliveryQty}}</th>
+                                <th style="text-align: right">{{TotalDeliveryQty}}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <input type="button" ng-show="!editmode || Status == @((int) Remit.Service.Enums.CommonEnum.Pending) || Status == @((int) Remit.Service.Enums.CommonEnum.Review)" ng-click="addFGSalesDelivery()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                            <input type="button" ng-click="addFGSalesDelivery()" ng-show="HardApprove" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+
+                            <input type="button" ng-show="editmode &&  Status == @((int) Remit.Service.Enums.CommonEnum.Pending)" class="btn btn-danger" value=@Resources.ResourceCommon.LblDelete ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                   ng-bootbox-confirm-action="deleteFGSalesDelivery()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                            <input type="button" ng-click="buttonReset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                            <input type="button" ng-show="editmode && Status == @((int) Remit.Service.Enums.CommonEnum.Review)" class="btn btn-primary" value=@Resources.ResourceCommon.LblApprove ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Approve'
+                                   ng-bootbox-confirm-action="approveFGSalesDelivery()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                            <input type="button" ng-show="editmode &&  Status == @((int) Remit.Service.Enums.CommonEnum.Pending)" class="btn btn-primary" value=@Resources.ResourceCommon.LblReview ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Review'
+                                   ng-bootbox-confirm-action="reviewFGSalesDelivery()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                            <input type="button" ng-show="editmode &&  Status == @((int) Remit.Service.Enums.CommonEnum.Approved)" class="btn btn-primary" value=@Resources.ResourceCommon.LblPreview ng-click="printFGSalesDelivery()" />
+                            <input type="button" ng-show="editmode &&  Status == @((int) Remit.Service.Enums.CommonEnum.Approved)" class="btn btn-primary" value="@Resources.ResourceCommon.LblGatePass" ng-click="printChallanGatePass()" />
+                            <!--<input type="button" ng-show="editmode" class="btn btn-warning" value=@Resources.ResourceCommon.LblReject ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Delete'
+                                       ng-bootbox-confirm-action="rejectFGSalesDelivery()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)"/>-->
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.directive('fileModel', ['$parse',
+        function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }
+    ]);
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgSalesDeliveryService', ['$http', function ($http) {
+        return {
+            saveFGSalesDelivery: function (fgSalesDelivery, FGSalesDeliveryDetails, isDelivered) {
+                var params = { fgSalesDelivery: fgSalesDelivery, FGSalesDeliveryDetails: FGSalesDeliveryDetails, isDelivered: isDelivered }
+                return $http({
+                    url: '/FGSalesDelivery/CreateFGSalesDelivery',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            reviewFGSalesDelivery: function (fgSalesDelivery) {
+                var params = { fgSalesDelivery: fgSalesDelivery }
+                return $http({
+                    url: '/FGSalesDelivery/ReviewFGSalesDelivery',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            rejectFGSalesDelivery: function (fgSalesDelivery) {
+                var params = { fgSalesDelivery: fgSalesDelivery }
+                return $http({
+                    url: '/FGSalesDelivery/RejectFGSalesDelivery',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            approveFGSalesDelivery: function (fgSalesDelivery) {
+                var params = { fgSalesDelivery: fgSalesDelivery }
+                return $http({
+                    url: '/FGSalesDelivery/ApproveFGSalesDelivery',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            deleteFGSalesDelivery: function (fgSalesDelivery) {
+                var params = { fgSalesDelivery: fgSalesDelivery }
+                return $http({
+                    url: '/FGSalesDelivery/DeleteFGSalesDelivery',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            getAllFGType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getAllFGGrade: function () {
+                return $http.get('/FGGrade/GetFGGradeList');
+            },
+            getAllBinCard: function () {
+                return $http.get('/BinCard/GetBinCardList');
+            },
+            getAllFGSales: function () {
+                return $http.get('/FGSalesDelivery/GetFGSaleList');
+            },
+            getIncompleteFGSales: function () {
+                return $http.get('/FGSalesDelivery/GetIncompleteFGSale');
+            },
+            getFGSalesForDelivery: function (invoiceNo) {
+                return $http.get('/FGSalesDelivery/GetFGSalesForDelivery?invoiceNo=' + invoiceNo);
+            },
+            getFGSalesDelivery: function (challanNo) {
+                return $http.get('/FGSalesDelivery/GetFGSalesDelivery?challanNo=' + challanNo);
+            },
+            getFGSalesDeliveryList: function (filterdate) {
+                return $http.get('/FGSalesDelivery/GetFGSalesDeliveryListByDate', { params: { filterdate: filterdate } });
+            },
+            getFGSalesDeliveryListByInvoice: function (invoiceno) {
+                return $http.get('/FGSalesDelivery/GetFGSalesDeliveryListByInvoice', { params: { invoiceno: invoiceno } });
+            },
+            getAllFGDealerZone: function () {
+                return $http.get('/FGDealerZone/GetFGDealerZoneList');
+            },
+            getAllFGItemByTypeId: function (id) {
+                return $http.get('/FGItem/GetFgItemListInFgItemInventoryByType?typeId=' + id);
+            },
+            getFgItemGradeList: function () {
+                return $http.get('/FGItem/GetFgItemGradeList');
+            },
+            getItemFrmInventoryByItemGradeAndLot: function (itemId, gradeId, lot) {
+                return $http.get('/FGItem/GetItemFrmInventoryByItemGradeAndLot?itemId=' + itemId + '&gradeId=' + gradeId + '&lot=' + lot);
+            }
+        };
+    }]);
+
+    app.controller('fgSaleCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgSalesDeliveryService, $log, $ngBootbox, $filter) {
+        var filterDate = new Date();
+        filterDate.setHours(0, 0, 0, 0);
+        $scope.filterDate = filterDate;
+        $scope.type = "sales";
+        $scope.CustomerType = "1";
+        $scope.DeliveryDate = new Date();
+        $scope.editmode = false;
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+        $scope.showModalforSearch = false;
+        $scope.selectedRow = null;
+        $scope.HardApprove = false;
+        $scope.alertForLessDelivery = false;
+
+        $scope.getTotal = function () {
+            var totalSalesQty = 0;
+            var totalRemainingQty = 0;
+            var totalDeliveryQty = 0;
+            $scope.WeightDelivered = Object.keys($scope.FGSalesDeliveryDetails).map(function (k) {
+                var itemQty = Object.keys($scope.FGSalesDeliveryDetails[k].FGItemInventoryViewModels).map(function (x) {
+                    return +$scope.FGSalesDeliveryDetails[k].FGItemInventoryViewModels[x].DeliveryQuantity;
+                }).reduce(function (a, b) { return a + b }, 0.00);
+                $scope.FGSalesDeliveryDetails[k].DeliveryQuantity = itemQty;
+                totalSalesQty += $scope.FGSalesDeliveryDetails[k].SalesQuantity;
+                totalRemainingQty += $scope.FGSalesDeliveryDetails[k].SalesQuantity - $scope.FGSalesDeliveryDetails[k].PrevDeliveryQuantity;
+                totalDeliveryQty += itemQty;
+                $scope.FGSalesDeliveryDetails[k].ProductWeight = (itemQty / $scope.FGSalesDeliveryDetails[k].UnitPerCartoon) * ($scope.FGSalesDeliveryDetails[k].WeightPerCartoon);
+                return +$scope.FGSalesDeliveryDetails[k].ProductWeight;
+            }).reduce(function (a, b) { return a + b }, 0.00);
+            $scope.TotalSalesQty = totalSalesQty;
+            $scope.TotalRemainingQty = totalRemainingQty;
+            $scope.TotalDeliveryQty = totalDeliveryQty;
+        }
+
+        $scope.getFGSalesForDelivery = function (invoiceNo) {
+            $scope.DeliveryChallanNo = '';
+            $scope.DeliverZoneId = null;
+            $scope.Name = '';
+            $scope.ContactPersonName = '';
+            $scope.ContactPhone = '';
+            $scope.Address = '';
+            $scope.DeliverySite = '';
+            $scope.DealerId = null;
+            $scope.CustomerType = "1";
+            $scope.DeliveryOption = '';
+            $scope.Status = 1;
+            $scope.StatusText = '';
+            $scope.FGSalesDeliveryDetails = [];
+
+            if (invoiceNo != null && invoiceNo != undefined && invoiceNo !== "") {
+                fgSalesDeliveryService.getFGSalesForDelivery(invoiceNo)
+                    .then(function onSuccess(response) {
+                        if (response.data) {
+                            var isFirefox = typeof InstallTrigger !== 'undefined';
+                            $scope.DeliveryChallanNo = response.data.DeliveryChallanNo;
+                            if (isFirefox) {
+                                $scope.InvoiceDate = new Date(response.data.InvoiceDateStringForFireFox);
+                            } else {
+                                $scope.InvoiceDate = new Date(response.data.InvoiceDateString);
+                            }
+
+                            $scope.DeliverZoneId = response.data.DeliverZoneId;
+                            $scope.Name = response.data.Name;
+                            $scope.ContactPersonName = response.data.ContactPersonName;
+                            $scope.ContactPhone = response.data.ContactPhone;
+                            $scope.Address = response.data.Address;
+                            $scope.DeliverySite = response.data.DeliverySite;
+                            $scope.DealerId = response.data.DealerId;
+                            $scope.CustomerType = response.data.CustomerType.toString();
+                            $scope.DeliveryOption = response.data.DeliveryOption;
+
+                            $scope.FGSalesDeliveryDetails = response.data.FGSalesDeliveryDetails;
+
+                            $scope.getTotal();
+                        }
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+        }
+
+        $scope.addFGSalesDelivery = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            $scope.alertForLessDelivery = false;
+            if ($scope.form.$valid) {
+                var fgSales = {};
+
+                fgSales["DeliveryChallanNo"] = $scope.DeliveryChallanNo;
+                fgSales["InvoiceNo"] = $scope.editmode ? $scope.InvoiceNo2 : $scope.InvoiceNo;
+                fgSales["DeliveryDate"] = $scope.DeliveryDate;
+                fgSales["DealerId"] = $scope.DealerId;
+                fgSales["CustomerType"] = $scope.CustomerType;
+                fgSales["DeliveryOption"] = $scope.DeliveryOption;
+                fgSales["Name"] = $scope.Name;
+                fgSales["ContactPersonName"] = $scope.ContactPersonName;
+                fgSales["ContactPhone"] = $scope.ContactPhone;
+                fgSales["Address"] = $scope.Address;
+                fgSales["DeliverySite"] = $scope.DeliverySite;
+                fgSales["DeliverZoneId"] = $scope.DeliverZoneId;
+                fgSales["DriverName"] = $scope.DriverName;
+                fgSales["DriverPhone"] = $scope.DriverPhone;
+                fgSales["TruckNo"] = $scope.TruckNo;
+                fgSales["VATChallanNo"] = $scope.VATChallanNo;
+                fgSales["WeightDelivered"] = $scope.WeightDelivered;
+                fgSales["Status"] = $scope.Status;
+
+                var FGSalesDeliveryDetails = $scope.FGSalesDeliveryDetails;
+                var isDelivered = true;
+
+                for (var i = 0; i < $scope.FGSalesDeliveryDetails.length; i++) {
+                    var deliveryqty = 0;
+                    for (var j = 0; j < $scope.FGSalesDeliveryDetails[i].FGItemInventoryViewModels.length; j++) {
+                        deliveryqty += $scope.FGSalesDeliveryDetails[i].FGItemInventoryViewModels[j].DeliveryQuantity;
+                        if ($scope.FGSalesDeliveryDetails[i].FGItemInventoryViewModels[j].Quantity < $scope.FGSalesDeliveryDetails[i].FGItemInventoryViewModels[j].DeliveryQuantity) {
+                            $ngBootbox.alert('@Resources.ResourceFGSalesDelivery.MsgQtyDeliveryExceededChangePls');
+                            return;
+                        }
+                    }
+                    if (($scope.FGSalesDeliveryDetails[i].SalesQuantity - $scope.FGSalesDeliveryDetails[i].PrevDeliveryQuantity) < deliveryqty) {
+                        $ngBootbox.alert('@Resources.ResourceFGSalesDelivery.MsgQtyDeliveryExceededChangePls');
+                        return;
+                    }
+                    if ($scope.FGSalesDeliveryDetails[i].SalesQuantity > ($scope.FGSalesDeliveryDetails[i].PrevDeliveryQuantity + deliveryqty)) {
+                        isDelivered = false;
+                    }
+
+                    if (($scope.FGSalesDeliveryDetails[i].SalesQuantity - $scope.FGSalesDeliveryDetails[i].PrevDeliveryQuantity) > deliveryqty) {
+                        $scope.alertForLessDelivery = true;
+                    }
+                }
+
+                if ($scope.alertForLessDelivery === true) {
+                    $ngBootbox.confirm("Your Deliver Quantity is Less than Remaining Quantity. Do you want to proceed ?")
+                        .then(function () {
+                                fgSalesDeliveryService.saveFGSalesDelivery(fgSales, FGSalesDeliveryDetails, isDelivered)
+                                    .then(function onSuccess(response) {
+                                        $scope.messageModalObj.message = response.data.message;
+                                        $scope.showModalforSearch = true;
+                                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                                        $scope.reset();
+                                        $scope.loadAllFGSalesDeliveryList();
+                                    })
+                                    .catch(function onError(response) {
+                                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                                    });
+                            },
+                            function () {
+                                //Confirm was cancelled, don't delete customer
+                                return;
+                            });
+                    
+                    //var r = confirm("Your Deliver QUantity is Less than remaining Quantity. Do you Ok to proceed!");
+                    //if (r === true) {} else {return;}
+                }
+                else {
+                    fgSalesDeliveryService.saveFGSalesDelivery(fgSales, FGSalesDeliveryDetails, isDelivered)
+                        .then(function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadAllFGSalesDeliveryList();
+                        })
+                        .catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                }
+            }
+        };
+
+        $scope.reviewFGSalesDelivery = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgSales = {};
+
+                fgSales["DeliveryChallanNo"] = $scope.DeliveryChallanNo;
+                fgSales["InvoiceNo"] = $scope.InvoiceNo2;
+                fgSales["Remarks"] = $scope.Remarks;
+
+                if ($scope.DeliveryChallanNo) {
+                    fgSalesDeliveryService.reviewFGSalesDelivery(fgSales)
+                        .then(function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadAllFGSalesDeliveryList();
+                        })
+                        .catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                }
+            }
+        };
+
+        $scope.rejectFGSalesDelivery = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgSales = {};
+
+                fgSales["DeliveryChallanNo"] = $scope.DeliveryChallanNo;
+                fgSales["InvoiceNo"] = $scope.InvoiceNo2;
+                fgSales["Remarks"] = $scope.Remarks;
+
+                if ($scope.Remarks == '' || $scope.Remarks == undefined || $scope.Remarks == null) {
+                    $ngBootbox.alert('@Resources.ResourceFGSalesDelivery.MsgRemarksRequired');
+                    return;
+                }
+
+                if ($scope.DeliveryChallanNo) {
+                    fgSalesDeliveryService.rejectFGSalesDelivery(fgSales)
+                        .then(function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadAllFGSalesDeliveryList();
+                        })
+                        .catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                }
+            }
+        };
+
+        $scope.approveFGSalesDelivery = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgSales = {};
+
+                fgSales["DeliveryChallanNo"] = $scope.DeliveryChallanNo;
+                fgSales["InvoiceNo"] = $scope.InvoiceNo2;
+                fgSales["Remarks"] = $scope.Remarks;
+
+                if ($scope.DeliveryChallanNo) {
+                    fgSalesDeliveryService.approveFGSalesDelivery(fgSales)
+                        .then(function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadAllFGSalesDeliveryList();
+                        })
+                        .catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                }
+            }
+        };
+
+        $scope.deleteFGSalesDelivery = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgSales = {};
+
+                fgSales["DeliveryChallanNo"] = $scope.DeliveryChallanNo;
+                fgSales["InvoiceNo"] = $scope.InvoiceNo2;
+                fgSales["Remarks"] = $scope.Remarks;
+
+                if ($scope.Remarks == '' || $scope.Remarks == undefined || $scope.Remarks == null) {
+                    $ngBootbox.alert('@Resources.ResourceFGSalesDelivery.MsgRemarksRequired');
+                    return;
+                }
+
+                if ($scope.DeliveryChallanNo) {
+                    fgSalesDeliveryService.deleteFGSalesDelivery(fgSales)
+                        .then(function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadAllFGSalesDeliveryList();
+                        })
+                        .catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                }
+            }
+        };
+
+        $scope.printFGSalesDelivery = function () {
+
+            if ($scope.DeliveryChallanNo) {
+                var popup = window.open('/RDLCReport/ChallanReport.Aspx?challanNo=' + $scope.DeliveryChallanNo + '&status=' + $scope.Status + '&deliverOptionType=' + $scope.DeliveryOption, '', "width=1000, height=800, left=" + (screen.width - 1000) / 2 + ", top=" + (screen.height - 800) / 2 + "");
+            }
+        };
+
+        $scope.printChallanGatePass = function () {
+            if ($scope.DeliveryChallanNo) {
+                var popup = window.open('/RDLCReport/ChallanGatePass.Aspx?challanNo=' + $scope.DeliveryChallanNo,
+                    '',
+                    "width=1000, height=800, left=" +
+                    (screen.width - 1000) / 2 +
+                    ", top=" +
+                    (screen.height - 800) / 2 +
+                    "");
+            }
+        };
+
+        $scope.populateFGSalesDelivery = function (rowvalue) {
+            var isFirefox = typeof InstallTrigger !== 'undefined';
+
+            $scope.editmode = true;
+            $scope.DeliveryChallanNo = rowvalue.DeliveryChallanNo;
+            $scope.IsLast = rowvalue.IsLast;
+            $scope.InvoiceNo = rowvalue.InvoiceNo;
+            if (isFirefox) {
+                $scope.InvoiceDate = new Date(rowvalue.InvoiceDateStringForFireFox);
+                $scope.DeliveryDate = new Date(rowvalue.DeliveryDateStringForFireFox);
+            } else {
+                $scope.InvoiceDate = new Date(rowvalue.InvoiceDateString);
+                $scope.DeliveryDate = new Date(rowvalue.DeliveryDate);
+            }
+            $scope.InvoiceNo2 = rowvalue.InvoiceNo;
+            $scope.DealerId = rowvalue.DealerId;
+            $scope.CustomerType = rowvalue.CustomerType.toString();
+            $scope.DeliveryOption = rowvalue.DeliveryOption;
+            $scope.Name = rowvalue.Name;
+            $scope.ContactPersonName = rowvalue.ContactPersonName;
+            $scope.ContactPhone = rowvalue.ContactPhone;
+            $scope.Address = rowvalue.Address;
+            $scope.DeliverySite = rowvalue.DeliverySite;
+            $scope.DeliverZoneId = rowvalue.DeliverZoneId;
+            $scope.DriverName = rowvalue.DriverName;
+            $scope.DriverPhone = rowvalue.DriverPhone;
+            $scope.TruckNo = rowvalue.TruckNo;
+            $scope.VATChallanNo = rowvalue.VATChallanNo;
+            $scope.WeightDelivered = rowvalue.WeightDelivered;
+            $scope.Status = rowvalue.Status;
+            $scope.StatusText = rowvalue.StatusText;
+            $scope.Remarks = rowvalue.Remarks;
+            if (rowvalue.StatusText === "@Remit.Service.Enums.CommonEnum.Approved") {
+                $scope.HardApprove = rowvalue.HardApprove;
+            } else {
+                $scope.HardApprove = false;
+            }
+            $scope.FGSalesDeliveryDetails = rowvalue.FGSalesDeliveryDetails;
+
+            $scope.getTotal();
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.editmode = false;
+            $scope.alertForLessDelivery = false;
+            $scope.DeliveryChallanNo = '';
+            $scope.IsLast = false;
+            $scope.InvoiceNo = '';
+            $scope.InvoiceNo2 = '';
+            $scope.DeliveryDate = new Date();
+            $scope.CustomerType = "1";
+            $scope.DealerId = null;
+            $scope.Name = '';
+            $scope.ContactPhone = '';
+            $scope.ContactPersonName = '';
+            $scope.Address = '';
+            $scope.DeliverZoneId = null;
+            $scope.DeliverySite = '';
+            $scope.DriverName = '';
+            $scope.DriverPhone = '';
+            $scope.TruckNo = '';
+            $scope.VATChallanNo = '';
+            $scope.DeliveryOption = '';
+            $scope.WeightDelivered = '';
+            $scope.Status = 1;
+            $scope.StatusText = '';
+            $scope.Remarks = '';
+            $scope.HardApprove = false;
+            $scope.FGSalesDeliveryDetails = [];
+
+            $scope.DeliveryChallanNo = '';
+            $scope.TotalSalesQty = 0.00;
+            $scope.TotalRemainingQty = 0.00;
+            $scope.TotalDeliveryQty = 0.00;
+            loadIncompleteFGSales();
+        }
+
+        $scope.buttonReset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.editmode = false;
+            $scope.DeliveryChallanNo = '';
+            $scope.IsLast = false;
+            $scope.InvoiceNo = '';
+            $scope.InvoiceNo2 = '';
+            $scope.DeliveryDate = new Date();
+            $scope.CustomerType = "1";
+            $scope.DealerId = null;
+            $scope.Name = '';
+            $scope.ContactPhone = '';
+            $scope.ContactPersonName = '';
+            $scope.Address = '';
+            $scope.DeliverZoneId = null;
+            $scope.DeliverySite = '';
+            $scope.DriverName = '';
+            $scope.DriverPhone = '';
+            $scope.TruckNo = '';
+            $scope.VATChallanNo = '';
+            $scope.DeliveryOption = '';
+            $scope.WeightDelivered = '';
+            $scope.Status = 1;
+            $scope.StatusText = '';
+            $scope.Remarks = '';
+            $scope.FGSalesDeliveryDetails = [];
+            $scope.DeliveryChallanNo = '';
+            $scope.TotalSalesQty = 0.00;
+            $scope.TotalRemainingQty = 0.00;
+            $scope.TotalDeliveryQty = 0.00;
+            loadIncompleteFGSales();
+            $scope.HardApprove = false;
+            var filterDate = new Date();
+            filterDate.setHours(0, 0, 0, 0);
+            $scope.filterDate = filterDate;
+            $scope.loadAllFGSalesDeliveryList();
+        }
+
+
+        loadAllFgDealerZone();
+        function loadAllFgDealerZone() {
+            $scope.allFGDealerZone = [];
+            fgSalesDeliveryService.getAllFGDealerZone()
+                .then(function onSuccess(response) {
+                    $scope.allFGDealerZone = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllFgType();
+        function loadAllFgType() {
+            $scope.allFGTypeFromDb = [];
+            fgSalesDeliveryService.getAllFGType()
+                .then(function onSuccess(response) {
+                    $scope.allFGTypeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllFgGrade();
+        function loadAllFgGrade() {
+            $scope.allFGGradeFromDb = [];
+            fgSalesDeliveryService.getAllFGGrade()
+                .then(function onSuccess(response1) {
+                    $scope.allFGGradeFromDb = response1.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllBinCard();
+        function loadAllBinCard() {
+            $scope.allBinCardFromDb = [];
+            fgSalesDeliveryService.getAllBinCard()
+                .then(function onSuccess(response) {
+                    $scope.allBinCardFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadIncompleteFGSales();
+        function loadIncompleteFGSales() {
+            $scope.incompleteFGSalesFromDb = [];
+            fgSalesDeliveryService.getIncompleteFGSales()
+                .then(function onSuccess(response) {
+                    $scope.incompleteFGSalesFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.getAllFGItemByTypeId = function (index, fgTypeId) {
+            $scope.FGSalesDeliveryDetails[index].allFGItemFromDb = [];
+            if (fgTypeId != null)
+                fgSalesDeliveryService.getAllFGItemByTypeId(fgTypeId)
+                .then(function onSuccess(response) {
+                    $scope.FGSalesDeliveryDetails[index].allFGItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadFGSalesDeliveryByChallanNo = function (challanNo) {
+            $scope.FGSalesDeliveryDetails = [];
+            fgSalesDeliveryService.getFGSalesDelivery(challanNo)
+                .then(function onSuccess(response) {
+                    $scope.populateFGSalesDelivery(response.data);
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadFGSalesDeliveryListByInvoice = function () {
+            if ($scope.FilterInvoiceNo != null)
+                fgSalesDeliveryService.getFGSalesDeliveryListByInvoice($scope.FilterInvoiceNo)
+                .then(function onSuccess(response) {
+                    $scope.allFGSalesDelivery = response.data;
+                })
+                .catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadAllFGSalesDeliveryList = function () {
+            $scope.FilterInvoiceNo = null;
+            $scope.allFGSalesDelivery = [];
+            var filtereddate = new Date($scope.filterDate.getFullYear(), $scope.filterDate.getMonth(), $scope.filterDate.getDate());
+
+            fgSalesDeliveryService.getFGSalesDeliveryList(filtereddate)
+            .then(function onSuccess(response) {
+                $scope.allFGSalesDelivery = response.data;
+            })
+            .catch(function onError(xhr) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+            });
+        }
+        $scope.loadAllFGSalesDeliveryList();
+    });
+</script>

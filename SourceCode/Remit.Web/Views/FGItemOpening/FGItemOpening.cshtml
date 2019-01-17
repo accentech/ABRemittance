@@ -1,0 +1,548 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceFGItemOpening.LblFGItemOpening;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgItemOpeningCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceFGItemOpening.LblFGItemOpening
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker data-container="body"
+                                       data-min-view="2" data-autoclose="true" ng-change="loadOpeningDateListByYear()" data-trigger="click">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGItemOpening.LblOpeningDate</label>
+                                <div class="" style="height: 600px;">
+                                    <select multiple data-ng-model="OpeningDate" class="form-control listSelect" focus-on="focusMe"
+                                            required data-ng-options="c for c in allOpeningDateFromDb" name="OpeningDate"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="loadOpeningDetailsByDate(OpeningDate)">
+                                        <option value="">@Resources.ResourceCommon.LblSelect</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="row">
+                        <div class="col-md-4 pull-left" style="padding: 0 0 20px 0">
+                            <div class="panel panel-default selector-container">
+                                <div class="panel-body" style="padding: 0;">
+                                    <div class="form-group">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <label class="control-label">@Resources.ResourceFGItemOpening.LblType:</label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="FilterTypeId" class="form-control"
+                                                    data-ng-options="c.Id as c.TypeName for c in allFGTypeFromDb" name="FilterTypeId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemOpening.LblType</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 pull-right" style="padding: 0 0 20px 0">
+                            <div class="panel panel-default selector-container">
+                                <div class="panel-body" style="padding: 0;">
+                                    <div class="form-group">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <label class="control-label">@Resources.ResourceFGItemOpening.LblOpeningDate:</label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="TopOpeningDate" name="TopOpeningDate" data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-container="body" data-autoclose="true" ng-change="updateOpeningDate()">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <input type="text" class="form-control" ng-model="TopOpeningDate" name="TopOpeningDate" data-date-format="HH:mm:ss" bs-timepicker
+                                                   data-min-view="0" data-container="body" data-autoclose="true" ng-change="updateOpeningDate()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <table class="table table-responsive slidable-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblType
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblFGItem
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblFGGrade
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblLot
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblQuantity
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblUnit
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblQuantityInSalesUnit
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblBinCardNo
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblOpeningDate
+                                        </th>
+                                        <th class="col-md-2">
+                                            @Resources.ResourceFGItemOpening.LblOpeningTime
+                                        </th>
+                                        <th class="col-md-1" ng-if="OpeningDate">
+                                            @Resources.ResourceFGItemOpening.LblStatus
+                                        </th>
+                                        <th class="col-md-1">
+                                            @Resources.ResourceCommon.LblAction
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat="aFGItem in FGItemOpeningDetails  | filter : {TypeId : ((FilterTypeId === null) ? undefined:FilterTypeId)}">
+                                        <td>
+                                            <select ng-disabled="OpeningDate" data-ng-model="aFGItem.TypeId" class="form-control"
+                                                    data-ng-options="c.Id as c.TypeName for c in allFGTypeFromDb | orderBy: 'TypeName'" name="TypeId" ng-change="getAllFGItemByTypeId($index,aFGItem.TypeId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemOpening.LblType</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select ng-disabled="OpeningDate" data-ng-model="aFGItem.FGItemId" class="form-control"
+                                                    data-ng-options="c.Id as c.Code for c in aFGItem.allFGItemFromDb | orderBy: 'Name'" name="FGItemId" ng-change="changeUnit($index,aFGItem.FGItemId)">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemOpening.LblFGItem</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select ng-disabled="OpeningDate" data-ng-model="aFGItem.FGGradeId" class="form-control"
+                                                    data-ng-options="c.Id as c.Grade for c in allFGGradeFromDb | orderBy: 'Name'" name="FGGradeId">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemOpening.LblFGGrade</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input ng-disabled="OpeningDate" data-ng-class="form-control" type="text" class="form-control" ng-model="aFGItem.Lot" name="Lot">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="number" class="form-control" ng-model="aFGItem.Quantity" name="Quantity" min="0">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="aFGItem.UnitName" readonly name="UnitName">
+                                        </td>
+                                        <td>
+                                            <input data-ng-class="form-control" type="text" class="form-control" ng-model="aFGItem.Quantity2" readonly name="Quantity2" style="text-align:right;" value="{{(aFGItem.PackageToSalesRatio*aFGItem.Quantity).toFixed(3)}} {{aFGItem.SalesUnit}}">
+                                        </td>
+                                        <td>
+                                            <select ng-disabled="OpeningDate" ng-model="aFGItem.BinCardId" class="form-control"
+                                                    data-ng-options="c.Id as c.WarhouseName+'-'+c.CardNo for c in allBinCardFromDb | orderBy: ['WarhouseName', 'CardNo']" name="BinCardId">
+                                                <option value="">
+                                                    @Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemOpening.LblBinCard
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="aFGItem.OpeningDate" name="OpeningDate" required data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-container="body" data-autoclose="true" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="aFGItem.OpeningDate" name="OpeningDate" required data-date-format="HH:mm:ss" bs-timepicker
+                                                   data-min-view="0" data-container="body" data-autoclose="true">
+                                        </td>
+                                        <td ng-if="OpeningDate">
+                                            <label ng-if="aFGItem.Status != @((int)Remit.Service.Enums.CommonEnum.Approved)" class="label label-warning">Pending</label>
+                                            <label ng-if="aFGItem.Status == @((int)Remit.Service.Enums.CommonEnum.Approved)" class="label label-success">Approved</label>
+                                        </td>
+                                        <td>
+                                            <input type="button" class=" btn btn-danger"
+                                                   ng-click="FGItemOpeningDetails.splice($index, 1)"
+                                                   title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails"
+                                                   value="@Resources.ResourceCommon.LblRemove">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div ng-if="!OpeningDate" class="col-md-2 padding-left-zero">
+                                <input type="button" class=" btn btn-block btn-sm btn-info buttonaddfgItem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                            </div>
+                        </form>
+                        <br /><br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <input type="button" ng-click="addFGItemOpening()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave" />
+                                    <input type="button" ng-if="OpeningDate" class="btn btn-warning" value=@Resources.ResourceCommon.LblApprove ng-bootbox-confirm='@Resources.ResourceCommon.MsgConfirm_Approve'
+                                           ng-bootbox-confirm-action="approveFGItemOpening()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                    <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+</div>
+
+
+@* ************ SCRIPT - SECTION (Start) *************** *@
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgItemOpeningService', ['$http', function ($http) {
+        return {
+            saveFGItemOpening: function (fgItemOpeningList) {
+                return $http({
+                    url: '/FGItemOpening/CreateFGItemOpeningList',
+                    method: 'POST',
+                    data: fgItemOpeningList
+                });
+            },
+            approveFGItemOpening: function (fgItemOpeningList) {
+                return $http({
+                    url: '/FGItemOpening/ApproveFGItemOpeningList',
+                    method: 'POST',
+                    data: fgItemOpeningList
+                });
+            },
+            getFGItemOpening: function (openingdate) {
+                return $http.get('/FGItemOpening/GetFGItemOpening/?openingdate=' + openingdate);
+            },
+            getRemainingFGItemList: function () {
+                return $http.get('/FGItemOpening/GetRemainingFGItemList');
+            },
+            getOpeningDateListByYear: function (year) {
+                return $http.get('/FGItemOpening/GetOpeningDateListByYear',
+                    {
+                        params: { year: year }
+
+                    });
+            },
+            getAllFGItemByTypeId: function (id) {
+                return $http.get('/FGItem/GetFGItemListByTypeId?id=' + id);
+            },
+            getAllFGType: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getAllFGGrade: function () {
+                return $http.get('/FGGrade/GetFGGradeList');
+            },
+            getAllBinCard: function () {
+                return $http.get('/BinCard/GetBinCardList');
+            }
+        };
+    }]);
+
+    app.controller('fgItemOpeningCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgItemOpeningService, $log, $ngBootbox) {
+        $scope.editmode = false;
+        $scope.selectedYear = new Date();
+        $scope.TopOpeningDate = new Date();
+
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+
+        $scope.showModalforSearch = false;
+
+        $scope.FGItemOpeningDetails = [];
+        $scope.FGItemOpeningDetails.push({ Id: '', TypeId: $scope.FilterTypeId, FGItemId: null, FGGradeId: null, Lot: '', OpeningDate: $scope.TopOpeningDate, Quantity: 0, UnitId: null, UnitName: '', SalesUnit: '', PackageToSalesRatio: 1, BinCardId: null, Status: '' });
+
+        $scope.changeUnit = function (index, fgItemId) {
+            $scope.FGItemOpeningDetails[index].UnitId = null;
+            $scope.FGItemOpeningDetails[index].UnitName = '';
+            if (fgItemId != null) {
+                var allfgItem = $scope.FGItemOpeningDetails[index].allFGItemFromDb;
+                for (i in allfgItem) {
+                    if (allfgItem[i].Id == fgItemId) {
+                        $scope.FGItemOpeningDetails[index].UnitId = allfgItem[i].PackUnitId;
+                        $scope.FGItemOpeningDetails[index].UnitName = allfgItem[i].PackUnit; 
+                        $scope.FGItemOpeningDetails[index].SalesUnit = allfgItem[i].SalesUnit;
+                        $scope.FGItemOpeningDetails[index].PackageToSalesRatio = allfgItem[i].PackageToSalesRatio;
+                    }
+                }
+            }
+        }
+
+        $scope.addNewDetail = function ($event) {
+            $scope.FGItemOpeningDetails.push({ Id: '', TypeId: $scope.FilterTypeId, FGItemId: null, FGGradeId: null, Lot: '', OpeningDate: $scope.TopOpeningDate, Quantity: 0, UnitId: null, UnitName: '', SalesUnit: '', PackageToSalesRatio: 1, BinCardId: null, Status: '' });
+            var i = $scope.FGItemOpeningDetails.length - 1;
+            $scope.getAllFGItemByTypeId(i, $scope.FGItemOpeningDetails[i].TypeId);
+        }
+
+        // Add a new fgItemOpening
+        $scope.addFGItemOpening = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgItemOpening = {};
+
+                fgItemOpening["TopOpeningDate"] = $scope.TopOpeningDate;
+                fgItemOpening["FGItemOpeningDetails"] = $scope.FGItemOpeningDetails.filter(function (person) {
+                    return (person.TypeId == $scope.FilterTypeId || $scope.FilterTypeId === null || $scope.FilterTypeId === undefined);
+                });
+
+                if (fgItemOpening["FGItemOpeningDetails"].length > 0) {
+                    for (var i = 0; i < fgItemOpening["FGItemOpeningDetails"].length; i++) {
+                        if (fgItemOpening["FGItemOpeningDetails"][i].FGItemId === null || fgItemOpening["FGItemOpeningDetails"][i].FGItemId === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblItemRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].FGGradeId === null || fgItemOpening["FGItemOpeningDetails"][i].FGGradeId === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblGradeRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].Lot === "" || fgItemOpening["FGItemOpeningDetails"][i].Lot === null || fgItemOpening["FGItemOpeningDetails"][i].Lot === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblLotRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].Quantity === 0 || fgItemOpening["FGItemOpeningDetails"][i].Quantity === null || fgItemOpening["FGItemOpeningDetails"][i].Quantity === "") {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblQuantityRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].BinCardId === null || fgItemOpening["FGItemOpeningDetails"][i].BinCardId === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblBinCardRequiredItemOpeningdDetails');
+                            return;
+                        }
+                    }
+                    fgItemOpeningService.saveFGItemOpening(fgItemOpening["FGItemOpeningDetails"])
+                        .then(function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadOpeningDateListByYear();
+                        })
+                        .catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                }
+                else {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgNeedDetails');
+                    return;
+                }
+            }
+            else {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgFillAll');
+            }
+        };
+
+        // Approve fgItemOpening
+        $scope.approveFGItemOpening = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgItemOpening = {};
+
+                fgItemOpening["TopOpeningDate"] = $scope.TopOpeningDate;
+                fgItemOpening["FGItemOpeningDetails"] = $scope.FGItemOpeningDetails.filter(function (person) {
+                    return (person.TypeId === $scope.FilterTypeId || $scope.FilterTypeId === null || $scope.FilterTypeId === undefined);
+                });
+
+                if (fgItemOpening["FGItemOpeningDetails"].length > 0) {
+                    for (var i = 0; i < fgItemOpening["FGItemOpeningDetails"].length; i++) {
+                        if (fgItemOpening["FGItemOpeningDetails"][i].FGItemId === null || fgItemOpening["FGItemOpeningDetails"][i].FGItemId === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblItemRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].FGGradeId === null || fgItemOpening["FGItemOpeningDetails"][i].FGGradeId === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblGradeRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].Lot === "" || fgItemOpening["FGItemOpeningDetails"][i].Lot === null || fgItemOpening["FGItemOpeningDetails"][i].Lot === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblLotRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].Quantity === 0 || fgItemOpening["FGItemOpeningDetails"][i].Quantity === null || fgItemOpening["FGItemOpeningDetails"][i].Quantity === "") {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblQuantityRequiredItemOpeningdDetails');
+                            return;
+                        }
+                        if (fgItemOpening["FGItemOpeningDetails"][i].BinCardId === null || fgItemOpening["FGItemOpeningDetails"][i].BinCardId === undefined) {
+                            $ngBootbox.alert('@Resources.ResourceFGItemOpening.LblBinCardRequiredItemOpeningdDetails');
+                            return;
+                        }
+                    }
+                    fgItemOpeningService.approveFGItemOpening(fgItemOpening["FGItemOpeningDetails"])
+                        .then(function onSuccess(response) {
+                            $scope.messageModalObj.message = response.data.message;
+                            $scope.showModalforSearch = true;
+                            $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                            $scope.reset();
+                            $scope.loadOpeningDateListByYear();
+                        })
+                        .catch(function onError(response) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                        });
+                }
+                else {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgNeedDetails');
+                    return;
+                }
+            }
+            else {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgFillAll');
+            }
+        };
+
+        $scope.updateOpeningDate = function () {
+            for (var i in $scope.FGItemOpeningDetails) {
+                $scope.FGItemOpeningDetails[i].OpeningDate = $scope.TopOpeningDate;
+            }
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.TopOpeningDate = new Date();
+
+            $scope.FGItemOpeningDetails = [];
+            $scope.FGItemOpeningDetails.push({ Id: '', TypeId: $scope.FilterTypeId, FGItemId: null, FGGradeId: null, Lot: '', OpeningDate: $scope.TopOpeningDate, Quantity: 0, UnitId: null, UnitName: '', SalesUnit: '', PackageToSalesRatio: 1, BinCardId: null, Status: '' });
+
+            $scope.FilterTypeId = null;
+            $scope.loadRemainingFGItemList();
+            $scope.OpeningDate = null;
+        }
+
+        $scope.loadRemainingFGItemList = function () {
+            $scope.FGItemOpeningDetails = [];
+            fgItemOpeningService.getRemainingFGItemList()
+                .then(function (response) {
+                    if (response.data.isSuccess) {
+                        $scope.FGItemOpeningDetails = response.data.List;
+                        for (var i in $scope.FGItemOpeningDetails) {
+                            $scope.FGItemOpeningDetails[i].OpeningDate = $scope.TopOpeningDate;
+                            $scope.getAllFGItemByTypeId(i, $scope.FGItemOpeningDetails[i].TypeId)
+                        }
+                    }
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadRemainingFGItemList();
+
+        loadAllFGType();
+        function loadAllFGType() {
+            $scope.allFGTypeFromDb = [];
+            fgItemOpeningService.getAllFGType()
+                .then(function onSuccess(response) {
+                    $scope.allFGTypeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllFGGrade();
+        function loadAllFGGrade() {
+            $scope.allFGGradeFromDb = [];
+            fgItemOpeningService.getAllFGGrade()
+                .then(function onSuccess(response) {
+                    $scope.allFGGradeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.getAllFGItemByTypeId = function (index, fgTypeId) {
+            $scope.FGItemOpeningDetails[index].allFGItemFromDb = [];
+            if (fgTypeId != null)
+                fgItemOpeningService.getAllFGItemByTypeId(fgTypeId)
+                .then(function onSuccess(response) {
+                    $scope.FGItemOpeningDetails[index].allFGItemFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllBinCard();
+        function loadAllBinCard() {
+            $scope.allBinCardFromDb = [];
+            fgItemOpeningService.getAllBinCard()
+                .then(function onSuccess(response) {
+                    $scope.allBinCardFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        $scope.loadOpeningDetailsByDate = function (openingDate) {
+            if (openingDate != null) {
+                $scope.FGItemOpeningDetails = [];
+                fgItemOpeningService.getFGItemOpening(openingDate)
+                .then(function onSuccess(response) {
+                    $scope.FGItemOpeningDetails = response.data.List;
+                    for (var i in $scope.FGItemOpeningDetails) {
+                        $scope.FGItemOpeningDetails[i].OpeningDate = new Date($scope.FGItemOpeningDetails[i].OpeningDate);
+                        $scope.getAllFGItemByTypeId(i, $scope.FGItemOpeningDetails[i].TypeId)
+                    }
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+        }
+
+        $scope.loadOpeningDateListByYear = function () {
+            year = $scope.selectedYear.getFullYear();
+            $scope.allOpeningDateFromDb = [];
+            fgItemOpeningService.getOpeningDateListByYear(year)
+                .then(function onSuccess(response) {
+                    $scope.allOpeningDateFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadOpeningDateListByYear();
+    });
+</script>

@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountNo" xml:space="preserve">
+    <value>帐号＃</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>地址</value>
+  </data>
+  <data name="AdjustAmount" xml:space="preserve">
+    <value>调整金额</value>
+  </data>
+  <data name="AdjustmentName" xml:space="preserve">
+    <value>调整名称</value>
+  </data>
+  <data name="AdjustmentSetup" xml:space="preserve">
+    <value>调整设置</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>量</value>
+  </data>
+  <data name="AmountAfterDiscount" xml:space="preserve">
+    <value>折扣后金额</value>
+  </data>
+  <data name="ApplyMode" xml:space="preserve">
+    <value>应用模式</value>
+  </data>
+  <data name="AvailabelCreditLimit" xml:space="preserve">
+    <value>可用信用限额</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>银行</value>
+  </data>
+  <data name="CalculationOn" xml:space="preserve">
+    <value>计算在</value>
+  </data>
+  <data name="Cheque" xml:space="preserve">
+    <value>检查＃</value>
+  </data>
+  <data name="ContactName" xml:space="preserve">
+    <value>联系人姓名</value>
+  </data>
+  <data name="ContactPhone" xml:space="preserve">
+    <value>联系电话</value>
+  </data>
+  <data name="CustomType" xml:space="preserve">
+    <value>自定义类型</value>
+  </data>
+  <data name="Dealer" xml:space="preserve">
+    <value>零售商</value>
+  </data>
+  <data name="DefaultValue" xml:space="preserve">
+    <value>默认值</value>
+  </data>
+  <data name="DeliverySite" xml:space="preserve">
+    <value>交货地点</value>
+  </data>
+  <data name="DeliveryZone" xml:space="preserve">
+    <value>交货区</value>
+  </data>
+  <data name="DiscountAuthorization" xml:space="preserve">
+    <value>折扣授权</value>
+  </data>
+  <data name="DueAdvancedAdjustment" xml:space="preserve">
+    <value>到期/高级调整</value>
+  </data>
+  <data name="Grade" xml:space="preserve">
+    <value>年级</value>
+  </data>
+  <data name="InternalUse" xml:space="preserve">
+    <value>内部使用</value>
+  </data>
+  <data name="InvoiceDate" xml:space="preserve">
+    <value>发票日期</value>
+  </data>
+  <data name="InvoiceList" xml:space="preserve">
+    <value>发票清单</value>
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value>发票号码</value>
+  </data>
+  <data name="Irregular" xml:space="preserve">
+    <value>不规则</value>
+  </data>
+  <data name="Lot" xml:space="preserve">
+    <value>批量</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>注意</value>
+  </data>
+  <data name="PackQuantity" xml:space="preserve">
+    <value>包装数量</value>
+  </data>
+  <data name="PaymentDate" xml:space="preserve">
+    <value>付款日期</value>
+  </data>
+  <data name="PaymentMode" xml:space="preserve">
+    <value>付款方式</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>百分比</value>
+  </data>
+  <data name="ProductCode" xml:space="preserve">
+    <value>产品代码</value>
+  </data>
+  <data name="ProductType" xml:space="preserve">
+    <value>产品类别</value>
+  </data>
+  <data name="Regular" xml:space="preserve">
+    <value>定期</value>
+  </data>
+  <data name="Sales" xml:space="preserve">
+    <value>销售</value>
+  </data>
+  <data name="SalesDetail" xml:space="preserve">
+    <value>销售明细</value>
+  </data>
+  <data name="SalesPayment" xml:space="preserve">
+    <value>销售付款</value>
+  </data>
+  <data name="SalesQuantity" xml:space="preserve">
+    <value>销售数量</value>
+  </data>
+  <data name="Sample" xml:space="preserve">
+    <value>样品</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>尺寸</value>
+  </data>
+  <data name="SN" xml:space="preserve">
+    <value>小号</value>
+  </data>
+  <data name="SpecialDiscount" xml:space="preserve">
+    <value>特别折扣</value>
+  </data>
+  <data name="StockQuantity" xml:space="preserve">
+    <value>库存量</value>
+  </data>
+  <data name="TitleFGSale" xml:space="preserve">
+    <value>产品销售</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>单价</value>
+  </data>
+  <data name="UnitPriceDiscount" xml:space="preserve">
+    <value>单价折扣</value>
+  </data>
+  <data name="UpdateAuthorization" xml:space="preserve">
+    <value>更新授权</value>
+  </data>
+  <data name="TotalPayable" xml:space="preserve">
+    <value>应付总额</value>
+  </data>
+  <data name="GradeReq" xml:space="preserve">
+    <value>所有销售详细信息都需要等级</value>
+  </data>
+  <data name="ItemRequired" xml:space="preserve">
+    <value>所有销售详细信息所需的项目</value>
+  </data>
+  <data name="LotReq" xml:space="preserve">
+    <value>所有销售详细信息都必需</value>
+  </data>
+  <data name="PackQtyReq" xml:space="preserve">
+    <value>所有销售明细需要包装数量</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>总金额 ：</value>
+  </data>
+  <data name="FreeOfCost" xml:space="preserve">
+    <value>免费的</value>
+  </data>
+  <data name="BalanceExceed" xml:space="preserve">
+    <value>平衡超过。</value>
+  </data>
+  <data name="DuplicateData" xml:space="preserve">
+    <value>相同的物品和等级和批次已被选中。</value>
+  </data>
+  <data name="FGSaleDeleteFailed" xml:space="preserve">
+    <value>成品销售已删除失败</value>
+  </data>
+  <data name="FGSaleDeleteSuccess" xml:space="preserve">
+    <value>成功销售成功删除！</value>
+  </data>
+  <data name="FGSaleSaveFailed" xml:space="preserve">
+    <value>成品好销售保存失败！</value>
+  </data>
+  <data name="FGSaleSaveSuccess" xml:space="preserve">
+    <value>成品好销售成功保存！</value>
+  </data>
+  <data name="FGSaleUpdateFailed" xml:space="preserve">
+    <value>成品销售更新失败！</value>
+  </data>
+  <data name="FGSaleUpdateSuccess" xml:space="preserve">
+    <value>成功销售更新成功！</value>
+  </data>
+  <data name="LargeDiscount" xml:space="preserve">
+    <value>折扣大于单价。</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>公司</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>顾客</value>
+  </data>
+  <data name="DeliverBy" xml:space="preserve">
+    <value>交货选项</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>折扣</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>文件路径</value>
+  </data>
+  <data name="TotalDueAdvanceAmount" xml:space="preserve">
+    <value>总到期/预付金额</value>
+  </data>
+  <data name="TotalPayableAfterDiscount" xml:space="preserve">
+    <value>折扣后的应付总额</value>
+  </data>
+  <data name="FGSaleApproveFailed" xml:space="preserve">
+    <value>成品好销售批准失败</value>
+  </data>
+  <data name="FGSaleApproveSuccessful" xml:space="preserve">
+    <value>成品良好的销售批准成功！</value>
+  </data>
+  <data name="FGSaleReviewFailed" xml:space="preserve">
+    <value>成品销售回顾失败</value>
+  </data>
+  <data name="FGSaleReviewSuccessful" xml:space="preserve">
+    <value>成品好销售评论成功！</value>
+  </data>
+  <data name="CommissionPeriod" xml:space="preserve">
+    <value>佣金期间</value>
+  </data>
+  <data name="DeliveryByCustomerCheck" xml:space="preserve">
+    <value>Deliver Option must be Customer.(china Lang)</value>
+  </data>
+  <data name="BreakagePeriod" xml:space="preserve">
+    <value>Breakage Period(ch)</value>
+  </data>
+  <data name="UnitPriceReqPart1" xml:space="preserve">
+    <value>Unit price of Sl#</value>
+  </data>
+  <data name="UnitPriceReqPart2" xml:space="preserve">
+    <value> is zero</value>
+  </data>
+</root>

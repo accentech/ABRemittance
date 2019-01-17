@@ -1,0 +1,638 @@
+﻿@{
+    ViewBag.Title = Resources.ResourceCommissionCalculator.Title;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+<div class="col-xs-12 col-sm-12" ng-controller="commissionCalculatorCtrl">
+
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceCommissionCalculator.Title
+        </div>
+
+        <div class="panel-body  border-green pt pb">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 col-xs-4 selector-container-div">
+                    <div class="panel panel-default selector-container">
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommon.LblYear</label>
+                                <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear" data-date-format="yyyy" bs-datepicker
+                                       data-container="body" data-min-view="2" data-autoclose="true" @*ng-change="loadAllSavedCommission()"*@ data-trigger="click">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceFGSale.Grade</label>
+                                <select data-ng-model="selectedFGGradeId" class="form-control"
+                                        data-ng-options="c.Id as c.Grade for c in allFGGradeFromDb | orderBy: 'Grade'" name="selectedFGGradeId"></select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommissionCalculator.Type</label>
+                                <select data-ng-model="selectedType" class="form-control" name="selectedType" ng-change="loadAllSavedCommission()">
+                                    <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.Monthly)">@Remit.Service.Enums.PeriodTypeEnum.Monthly</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.Quaterly)">@Remit.Service.Enums.PeriodTypeEnum.Quaterly</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.HalfYearly)">@Remit.Service.Enums.PeriodTypeEnum.HalfYearly</option>
+                                    <option value="@((int)Remit.Service.Enums.PeriodTypeEnum.Yearly)">@Remit.Service.Enums.PeriodTypeEnum.Yearly</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">@Resources.ResourceCommissionCalculator.CCList</label>
+                                <div class="" style="height: 300px;">
+                                    <select multiple data-ng-model="selectedPeriodName" class="form-control listSelect" focus-on="focusMe"
+                                            data-ng-options="c as c for c in allPeriodName" name="selectedPeriodName"
+                                            style="height: 100%; overflow-y: auto; padding: 0;" ng-change="getPopulatedData(selectedPeriodName[0])"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-8 col-xs-8">
+                    <div class="form-horizontal">
+                        <form name="form" novalidate>
+                            <div class="row">
+                                <div class="col-xs-8 col-sm-8 col-md-8">
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommon.LblYear
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="text" class="form-control" ng-model="Year" name="Year" data-date-format="yyyy" bs-datepicker ng-required="true"
+                                                   data-min-view="2" data-autoclose="true" data-trigger="click">
+                                            <b class="help-block" ng-if="form.Year.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommissionCalculator.Year)
+                                            </b>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceFGSale.Grade
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="FGGradeId" class="form-control"
+                                                    data-ng-options="c.Id as c.Grade for c in allFGGradeFromDb | orderBy: 'Grade'" name="FGGradeId"></select>
+                                            <b class="help-block" ng-if="form.FGGradeId.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGSale.Grade)
+                                            </b>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group" show-errors>
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                <b class="starStyle">*</b> @Resources.ResourceCommissionCalculator.Type
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="Type" class="form-control" name="Type" ng-required="true" ng-change="whenSelectYearly(Type)">
+                                                <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.Monthly)">@Remit.Service.Enums.PeriodTypeEnum.Monthly</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.Quaterly)">@Remit.Service.Enums.PeriodTypeEnum.Quaterly</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.HalfYearly)">@Remit.Service.Enums.PeriodTypeEnum.HalfYearly</option>
+                                                <option value="@((int) Remit.Service.Enums.PeriodTypeEnum.Yearly)">@Remit.Service.Enums.PeriodTypeEnum.Yearly</option>
+                                            </select>
+                                            <b class="help-block" ng-if="form.Type.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceCommissionCalculator.Type)
+                                            </b>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group" ng-show="Type == 1">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommissionCalculator.Period
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="PeriodNo" class="form-control" name="PeriodNo" @*ng-change="loadCommissionDetailData()"*@>
+                                                <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.January)">@Remit.Service.Enums.MonthlyPeriodEnum.January</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.February)">@Remit.Service.Enums.MonthlyPeriodEnum.February</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.March)">@Remit.Service.Enums.MonthlyPeriodEnum.March</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.April)">@Remit.Service.Enums.MonthlyPeriodEnum.April</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.May)">@Remit.Service.Enums.MonthlyPeriodEnum.May</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.June)">@Remit.Service.Enums.MonthlyPeriodEnum.June</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.July)">@Remit.Service.Enums.MonthlyPeriodEnum.July</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.August)">@Remit.Service.Enums.MonthlyPeriodEnum.August</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.September)">@Remit.Service.Enums.MonthlyPeriodEnum.September</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.October)">@Remit.Service.Enums.MonthlyPeriodEnum.October</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.November)">@Remit.Service.Enums.MonthlyPeriodEnum.November</option>
+                                                <option value="@((int) Remit.Service.Enums.MonthlyPeriodEnum.December)">@Remit.Service.Enums.MonthlyPeriodEnum.December</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-show="Type == 2">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommissionCalculator.Period
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="PeriodNo" class="form-control" name="PeriodNo" @*ng-change="loadCommissionDetailData()"*@>
+                                                <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                                <option value="@((int) Remit.Service.Enums.QuaterlyPeriodEnum.JanuaryToMarch)">@Resources.ResourceCommissionCalculator.JanToMar</option>
+                                                <option value="@((int) Remit.Service.Enums.QuaterlyPeriodEnum.AprilToJune)">@Resources.ResourceCommissionCalculator.AprToJun</option>
+                                                <option value="@((int) Remit.Service.Enums.QuaterlyPeriodEnum.JulyToSeptember)">@Resources.ResourceCommissionCalculator.JulToSep</option>
+                                                <option value="@((int) Remit.Service.Enums.QuaterlyPeriodEnum.OctoberToNovember)">@Resources.ResourceCommissionCalculator.OctToDec</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-show="Type == 3">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommissionCalculator.Period
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="PeriodNo" class="form-control" name="PeriodNo" @*ng-change="loadCommissionDetailData()"*@>
+                                                <option value="">@Resources.ResourceCommissionCalculator.Select</option>
+                                                <option value="@((int) Remit.Service.Enums.HalfYearlyPeriodEnum.FirstHalf)">@Resources.ResourceCommissionCalculator.JanToJun</option>
+                                                <option value="@((int) Remit.Service.Enums.HalfYearlyPeriodEnum.SecondHalf)">@Resources.ResourceCommissionCalculator.JulyToDec</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-show="Type == 4">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                                                @Resources.ResourceCommissionCalculator.Period
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <select data-ng-model="PeriodNo" class="form-control" name="PeriodNo" @*ng-change="loadCommissionDetailData()"*@>
+                                                @*<option value="">@Resources.ResourceCommissionCalculator.Select</option>*@
+                                                <option value="@((int)Remit.Service.Enums.YearlyPeriodEnum.FullYear)">@Resources.ResourceCommissionCalculator.JanToDec</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class=" padding-right-zero">
+                                            <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color"></label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <input type="button" ng-click="loadCommissionDetailData('OldDealer')" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblGenerate />
+                                            <input type="button" ng-click="printCommissionDetailData()" ng-disabled="!editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblPreview />
+                                            <input type="button" ng-click="loadCommissionDetailData('NewDealer')" ng-hide="editmode" class="btn btn-primary" value='@Resources.ResourceCommon.LblGenFrNewDealer' />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger" ng-show="isExist">
+                                    <p> @Resources.ResourceCommissionCalculator.IsExist {{commissionDetails[0].PeriodName}}, {{yearForMessageShow}}</p>
+                                </div>
+                            </div>
+                            @*<h3 class="heading">@Resources.ResourceItemDemand.LblItemDemandDetail</h3>*@
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                <tr>
+                                    @*<th>Id</th>*@
+                                    <th>@Resources.ResourceCommissionCalculator.SN</th>
+                                    <th>@Resources.ResourceDivision.LblDivision</th>
+                                    <th>@Resources.ResourceCommissionCalculator.Zone</th>
+                                    <th>@Resources.ResourceCommissionCalculator.Dealer</th>
+                                    <th>@Resources.ResourceCommissionCalculator.SFT</th>
+                                    <th>@Resources.ResourceCommissionCalculator.SFTRate</th>
+                                    <th>@Resources.ResourceCommissionCalculator.MonthlyTarget</th>
+                                    <th>@Resources.ResourceCommissionCalculator.PCS</th>
+                                    <th>@Resources.ResourceCommissionCalculator.PCSRate</th>
+                                    <th>@Resources.ResourceCommissionCalculator.CTN</th>
+                                    <th>@Resources.ResourceCommissionCalculator.CTNRate</th>
+                                    <th>@Resources.ResourceCommissionCalculator.SMT</th>
+
+                                    <th>@Resources.ResourceCommissionCalculator.SMTRate</th>
+                                    <th>@Resources.ResourceCommissionCalculator.Total</th>
+                                    <th>@Resources.ResourceBreakageCalculator.Status</th>
+                                    @*<th class="col-md-1" ng-show="notApprovemode">
+                                                @Resources.ResourceCommon.LblAction
+                                            </th>*@
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="aCommissionDet in commissionDetails">
+                                    @*<td>{{aCommissionDet.DealerId}}</td>*@
+                                    <td>{{$index+1}}</td>
+                                    <td>{{aCommissionDet.DivisionName}}</td>
+                                    <td>
+                                        {{aCommissionDet.ZoneName}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td>
+                                        {{aCommissionDet.DealerName}}
+                                        @*<input type="number" class="form-control" ng-disabled="true" ng-model="aCommissionDet.Quantity" name="Quantity" min="0">*@
+                                    </td>
+                                    <td style="text-align: right">
+                                        {{aCommissionDet.SFTSaleCommaSeparate}}
+                                        @*<input type="text" class="form-control" ng-disabled="true" ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td style="text-align: right">
+                                        {{aCommissionDet.SFTRate}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"
+                                                ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td style="text-align: right">
+                                        {{aCommissionDet.MonthlyTargetCommaSeparate}}
+                                    </td>
+                                    <td>
+                                        {{aCommissionDet.PCSSale}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"
+                                                ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td>
+                                        {{aCommissionDet.PCSRate}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"
+                                                ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td>
+                                        {{aCommissionDet.CTNSale}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"
+                                                ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td>
+                                        {{aCommissionDet.CTNRate}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"
+                                                ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td>
+                                        {{aCommissionDet.SMTSale}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"
+                                                ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td>
+                                        {{aCommissionDet.SMTRate}}
+                                        @*<input type="text" class="form-control" ng-disabled="true"
+                                                ng-model="aCommissionDet.UnitIdName" name="UnitIdName">*@
+                                    </td>
+                                    <td style="text-align: right">{{aCommissionDet.TotalCommaSeparate}}</td>
+                                    <td style="color: blue">{{aCommissionDet.PaidValue}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            @*<div class="col-md-2 padding-left-zero">
+                                    <input type="button" ng-show="notApprovemode" class=" btn btn-block btn-sm btn-info buttonadditem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                                </div>*@
+                        </form>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                    <div ng-show="!isExist">
+                                        <input type="button" ng-click="addCommissionCalculation()" ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                    </div>
+                                    <div ng-show="isExist">
+                                        <input type="button" @*ng-click="addCommissionCalculation()"*@ ng-hide="editmode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave
+                                               ng-bootbox-confirm='@Resources.ResourceCommissionCalculator.IsSaveConfirm @Resources.ResourceCommissionCalculator.WantUpdate'
+                                               ng-bootbox-confirm-action="addCommissionCalculation()" ng-bootbox-confirm-action-cancel="confirmCallbackCancel(attr1, attr2)" />
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                                    </div>
+                                    @*<input type="button" ng-click="ApproveReject('approve')" ng-show="editmode && notApprovemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblApprove />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('commissionDetailService', ['$http', function ($http) {
+        return {
+            saveCommissionCalculation: function (commissionCalculatorList) {
+                return $http({
+                    url: '/CommissionCalculator/CreateCommissionCalculator',
+                    method: 'POST',
+                    data: commissionCalculatorList
+                });
+            },
+
+            getPeriodNameList: function (year, gradeId, type) {
+                return $http.get('/CommissionCalculator/GetPeriodNameList', { params: { year: year, gradeId: gradeId, type: type } });
+            },
+            getAllValue: function (year, gradeId, type, periodName) {
+                return $http.get('/CommissionCalculator/GetPeriodAllList', { params: { year: year, gradeId: gradeId, type: type, periodName: periodName } });
+            },
+            deleteItemDemand: function (commissionCalculation) {
+                return $http({
+                    url: '/ItemDemand/DeleteItemDemand',
+                    method: 'POST',
+                    data: commissionCalculation
+                });
+            },
+            getAllCalculatedCommissionData: function (year, type, gradeId, periodFrom, periodTo) {
+                return $http.get('/CommissionCalculator/GetAllData?year=' + year + '&type=' + type + '&gradeId=' + gradeId + '&periodFrom=' + periodFrom + '&periodTo=' + periodTo);
+            },
+            getAllCalculatedCommissionDataForNewDealer: function (year, type, gradeId, periodFrom, periodTo) {
+                return $http.get('/CommissionCalculator/GetAllDataForNewDealer?year=' + year + '&type=' + type + '&gradeId=' + gradeId + '&periodFrom=' + periodFrom + '&periodTo=' + periodTo);
+            },
+
+            getAllFGGrade: function () {
+                return $http.get('/FGGrade/GetFGGradeList');
+            }
+        };
+    }]);
+
+    app.controller('commissionCalculatorCtrl',
+        function ($scope, $timeout, $http, focus, $location, $anchorScroll, commissionDetailService, $log, $ngBootbox) {
+            $scope.selectedYear = new Date();
+            $scope.Year = new Date();
+            $scope.editmode = false;
+            $scope.notApprovemode = true;
+            $scope.isExist = false;
+            //$scope.ApprovedByName = "@Remit.Web.Helpers.UserSession.GetUserFromSession().Employee.FullName";
+            $scope.FGGradeId = 1;
+            $scope.selectedFGGradeId = 1;
+
+            $scope.commissionDetails = [];
+            //$scope.commissionDetails.push({ Id: '', DemandNo: '', ItemId: '', Quantity: '', UnitId: '' });
+            //$scope.addNewDetail = function($event) {
+            //    $scope.commissionDetails.push({ Id: '', DemandNo: '', ItemId: '', Quantity: '', UnitId: '' });
+            //}
+            $scope.messageModalObj = {};
+            $scope.messageModalObj.message = '';
+            $scope.showModalforSearch = false;
+
+            // Add a new commissionCalculation
+            $scope.addCommissionCalculation = function () {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+                    var commissionCalculatorList = [];
+                    for (var i = 0; i < $scope.commissionDetails.length; i++) {
+                        var commissionCalculation = {};
+                        commissionCalculation["Id"] = $scope.commissionDetails[i].Id;
+                        commissionCalculation["ZoneId"] = $scope.commissionDetails[i].ZoneId;
+                        commissionCalculation["DealerId"] = $scope.commissionDetails[i].DealerId;
+                        commissionCalculation["FGGradeId"] = $scope.commissionDetails[i].FGGradeId;
+                        commissionCalculation["PeriodType"] = $scope.commissionDetails[i].PeriodType;
+                        commissionCalculation["PeriodName"] = $scope.commissionDetails[i].PeriodName;
+                        commissionCalculation["PeriodNumber"] = $scope.commissionDetails[i].PeriodNumber;
+                        commissionCalculation["Year"] = $scope.commissionDetails[i].Year;
+                        commissionCalculation["SFTSale"] = $scope.commissionDetails[i].SFTSale;
+                        commissionCalculation["SFTRate"] = $scope.commissionDetails[i].SFTRate;
+                        commissionCalculation["PCSSale"] = $scope.commissionDetails[i].PCSSale;
+                        commissionCalculation["PCSRate"] = $scope.commissionDetails[i].PCSRate;
+                        commissionCalculation["SMTSale"] = $scope.commissionDetails[i].SMTSale;
+                        commissionCalculation["SMTRate"] = $scope.commissionDetails[i].SMTRate;
+                        commissionCalculation["CTNSale"] = $scope.commissionDetails[i].CTNSale;
+                        commissionCalculation["CTNRate"] = $scope.commissionDetails[i].CTNRate;
+                        commissionCalculation["Total"] = $scope.commissionDetails[i].Total;
+                        commissionCalculation["MonthlyTarget"] = $scope.commissionDetails[i].MonthlyTarget;
+
+                        commissionCalculatorList.push(commissionCalculation);
+                    }
+
+                    commissionDetailService.saveCommissionCalculation(commissionCalculatorList).then(function onSuccess(response) {
+                        if (response.data.isSuccess === true) {
+                            $ngBootbox.alert(response.data.message);
+                            //$scope.loadAllSavedCommission();
+                            $scope.reset();
+                        } else {
+                            $ngBootbox.alert(response.data.message);
+                        }
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.AllRequired');
+                }
+            };
+
+            $scope.Delete = function () {
+                if ($scope.Id !== undefined && $scope.Id !== null && $scope.Id !== "") {
+                    var commissionCalculation = {};
+                    commissionCalculation["Id"] = $scope.Id;
+                    commissionDetailService.deleteItemDemand(commissionCalculation).then(function onSuccess(response) {
+                        if (response.data.isSuccess === true) {
+                            $ngBootbox.alert(response.data.message);
+                            //$scope.loadAllSavedCommission();
+                            $scope.reset();
+                        } else {
+                            $ngBootbox.alert(response.data.message);
+                        }
+                    }).catch(function onError(xhr) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.Delete');
+                    return;
+                }
+            }
+            $scope.selectedRow = null;
+            $scope.populateCC = function (rowvalue) {
+                $scope.selectedRow = rowvalue;
+                //$scope.Id = rowvalue.Id;
+                $scope.editmode = true;
+                $scope.commissionDetails = rowvalue.commissionDetails;
+            }
+
+            $scope.reset = function () {
+                $scope.$broadcast('show-errors-reset');
+                $scope.editmode = false;
+                $scope.isExist = false;
+                $scope.notApprovemode = true;
+                $scope.isCreateNewMode = true;
+                //$scope.Id = '';
+                $scope.FGGradeId = 1;
+                $scope.selectedFGGradeId = 1;
+                $scope.selectedYear = new Date();
+                $scope.Year = new Date();
+                $scope.Type = null;
+                $scope.PeriodNo = null;
+                $scope.selectedType = null;
+                $scope.selectedPeriodName = "";
+                $scope.allPeriodName = [];
+                $scope.commissionDetails = [];
+                $scope.yearForMessageShow = "";
+            }
+
+            //for report.......
+            $scope.printCommissionDetailData = function () {
+                if ($scope.PeriodNo == null || $scope.PeriodNo == undefined || $scope.PeriodNo === "") {
+                    $ngBootbox.alert('@Resources.ResourceCommissionCalculator.PeriodNoRequired');
+                    $scope.commissionDetails = [];
+                    return;
+                }
+
+                var year = $scope.Year;
+                //year = year.getFullYear();
+
+                var periodFrom = 0;
+                var periodTo = 0;
+                if ($scope.Type === "1") {
+                    periodFrom = parseFloat($scope.PeriodNo);
+                    periodTo = parseFloat($scope.PeriodNo);
+                } else if ($scope.Type === "2") {
+                    periodTo = parseFloat($scope.PeriodNo);
+                    periodFrom = periodTo - 2;
+                } else if ($scope.Type === "3") {
+                    periodTo = parseFloat($scope.PeriodNo);
+                    periodFrom = periodTo - 5;
+                }
+                else if ($scope.Type === 4) {
+                    periodTo = $scope.PeriodNo;
+                    periodFrom = periodTo - 11;
+                }
+
+                window.open('/RDLCReport/CommissionCalculatorReport.Aspx?year=' + year + '&grade=' + $scope.FGGradeId + '&type=' + $scope.Type + '&periodFrom=' + periodFrom + '&periodTo=' + periodTo + " &width=1000, height=800, left=" + (screen.width - 1000) / 2 + ", top=" + (screen.height - 800) / 2 + "");
+
+            };
+
+            $scope.loadAllSavedCommission = function () {
+                var year = $scope.selectedYear;
+                $scope.allGetDataList = [];
+                $scope.allPeriodName = [];
+                year = year.getFullYear();
+
+                commissionDetailService.getPeriodNameList(year, $scope.selectedFGGradeId, $scope.selectedType).then(function onSuccess(response) {
+                    $scope.allPeriodName = response.data;//.periodNameList;
+
+                }).catch(function onError(xhr) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+            }
+
+
+            $scope.whenSelectYearly = function (type) {
+                $scope.PeriodNo = null;
+                if (type === "4") $scope.PeriodNo = "12";
+            }
+
+            $scope.loadCommissionDetailData = function (value) {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.form.$valid) {
+
+                    if ($scope.PeriodNo == null || $scope.PeriodNo == undefined || $scope.PeriodNo === "") {
+                        $ngBootbox.alert('@Resources.ResourceCommissionCalculator.PeriodNoRequired');
+                        $scope.commissionDetails = [];
+                        return;
+                    }
+
+                    var year = $scope.Year;
+                    year = year.getFullYear();
+                    $scope.yearForMessageShow = year;
+
+                    var periodFrom = 0;
+                    var periodTo = 0;
+                    if ($scope.Type === "1") {
+                        periodFrom = parseFloat($scope.PeriodNo);
+                        periodTo = parseFloat($scope.PeriodNo);
+                    } else if ($scope.Type === "2") {
+                        periodTo = parseFloat($scope.PeriodNo);
+                        periodFrom = periodTo - 2;
+                    } else if ($scope.Type === "3") {
+                        periodTo = parseFloat($scope.PeriodNo);
+                        periodFrom = periodTo - 5;
+                    }
+                    else if ($scope.Type === 4) {
+                        periodTo = $scope.PeriodNo;
+                        periodFrom = periodTo - 11;
+                    }
+
+                    if (value === "OldDealer") {
+                        commissionDetailService
+                            .getAllCalculatedCommissionData(year, $scope.Type, $scope.FGGradeId, periodFrom, periodTo).then(
+                                function onSuccess(response) {
+                                    $scope.commissionDetails = response.data.ccList;
+                                    $scope.isExist = response.data.isExist;
+                                }).catch(function onError(xhr) {
+                                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                                });
+                    } else if (value === "NewDealer") {
+                        commissionDetailService
+                            .getAllCalculatedCommissionDataForNewDealer(year, $scope.Type, $scope.FGGradeId, periodFrom, periodTo).then(
+                                function onSuccess(response) {
+                                    $scope.commissionDetails = response.data.ccList;
+                                    $scope.isExist = response.data.isExist;
+                                }).catch(function onError(xhr) {
+                                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                                });
+                    }
+
+
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceItemDemand.AllRequired');
+                }
+            }
+
+            $scope.getPopulatedData = function (periodName) {
+                var year = $scope.selectedYear;
+                year = year.getFullYear();
+                commissionDetailService
+                    .getAllValue(year, $scope.selectedFGGradeId, $scope.selectedType, periodName).then(
+                        function onSuccess(response) {
+                            $scope.editmode = true;
+                            $scope.commissionDetails = response.data;
+                            if ($scope.commissionDetails.length > 0) {
+                                $scope.Year = $scope.commissionDetails[0].Year;
+                                $scope.FGGradeId = $scope.commissionDetails[0].FGGradeId;
+                                $scope.Type = $scope.commissionDetails[0].PeriodType.toString();
+                                $scope.PeriodNo = $scope.commissionDetails[0].PeriodNameType.toString();
+                            }
+                        }).catch(function onError(xhr) {
+                            $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                        });
+            }
+
+            loadAllFgGrade();
+            function loadAllFgGrade() {
+                $scope.allFGGradeFromDb = [];
+                commissionDetailService.getAllFGGrade()
+                    .then(function onSuccess(response1) {
+                        $scope.allFGGradeFromDb = response1.data;
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+        });
+</script>

@@ -1,0 +1,25 @@
+﻿.ts-sidebar {
+    background: #1b002f !important;
+}
+
+.footer {
+
+    background-color: #1b002f !important;
+
+}
+
+.md-bodr-right {
+    border-right: 5px solid #1b002f !important;
+}
+
+.md-bodr-left {
+    border-left: 5px solid #1b002f !important;
+}
+
+.md-bodr-top {
+    border-top: 5px solid #1b002f !important;
+}
+
+.md-bodr-buttom {
+    border-bottom: 5px solid #1b002f !important;
+}

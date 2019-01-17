@@ -1,0 +1,524 @@
+﻿@{
+  ViewBag.Title = "Company";
+  Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+
+}
+
+
+
+<div class="col-xs-12 col-sm-12" ng-controller="companyCtrl">
+
+
+
+
+@* ************ FORM - SECTION (Start)*************** *@
+<div class="panel panel-default">
+  <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceCompany.Company</div>
+  <div class="panel-body  border-green pt pb">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-horizontal">
+          <form name="form" novalidate>
+
+              <div class="col-sm-6">
+                  
+                  <div class="form-group" show-errors id="searchdivid">
+                      <div class="padding-right-zero">
+                          <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                              <b class="starStyle">*</b>@Resources.ResourceCompany.Name
+                          </label>
+                      </div>
+                      <div class="col-xs-12 col-sm-8 col-md-8">
+                          <input class="form-control" type="text" name="Name" ng-model="Name" required ng-maxlength="50" focus-on="focusMe"/>
+                          <b class="help-block" ng-if="form.Name.$error.required">
+                              @Resources.ResourceCompany.CompanyNameRequired
+                          </b>
+
+                          <b class="help-block" ng-if="form.Name.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                      </div>
+                  </div>
+
+
+                  <div class="form-group">
+                      <div class="padding-right-zero">
+                          <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                            @Resources.ResourceCompany.HeadOfficeAddress
+                          </label>
+                      </div>
+                      <div class="col-xs-12 col-sm-8 col-md-8">
+                          <input class="form-control" name="Address1" ng-model="Address1" />
+                      </div>
+                  </div>
+                  
+                  <div class="form-group">
+                      <div class="padding-right-zero">
+                          <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                              @Resources.ResourceCompany.AddressLine2
+                          </label>
+                      </div>
+                      <div class="col-xs-12 col-sm-8 col-md-8">
+                          <input class="form-control" name="Address2" ng-model="Address2" />
+                      </div>
+                  </div>
+                  
+                  <div class="form-group">
+                      <div class="padding-right-zero">
+                          <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                              @Resources.ResourceCompany.AddressLine3
+                          </label>
+                      </div>
+                      <div class="col-xs-12 col-sm-8 col-md-8">
+                          <input class="form-control" name="Address3" ng-model="Address3" />
+                      </div>
+                  </div>
+
+
+                  @*<div class="form-group">
+                    <div class=" padding-right-zero">
+                        <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                            Address
+                        </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <textarea class="form-control" ng-model="Address" ng-list="&#10;" ng-trim="false" name="Address"></textarea>
+                    </div>
+                </div>*@
+
+
+
+                  <div class="form-group">
+                      <div class="padding-right-zero">
+                          <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                              @Resources.ResourceCompany.Phone
+                          </label>
+                      </div>
+                      <div class="col-xs-12 col-sm-8 col-md-8">
+                          <input class="form-control" type="text" name="Phone" ng-model="Phone"/>
+                          <b class="help-block" ng-if="form.Phone.$error.required">Phone Number Required</b>
+                          <b class="help-block" ng-if="form.Phone.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                      </div>
+                  </div>
+
+
+                  <div class="form-group">
+                      <div class="padding-right-zero">
+                          <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                              @Resources.ResourceCompany.Fax
+                          </label>
+                      </div>
+                      <div class="col-xs-12 col-sm-8 col-md-8">
+                          <input class="form-control" type="text" name="Fax" ng-model="Fax" ng-maxlength="50"/>
+                          <b class="help-block" ng-if="form.Fax.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="padding-right-zero">
+                          <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                              @Resources.ResourceCompany.Email
+                          </label>
+                      </div>
+                      <div class="col-xs-12 col-sm-8 col-md-8">
+                          <input class="form-control" type="text" name="Email" ng-model="Email" ng-maxlength="50"/>
+                          <b class="help-block" ng-if="form.Email.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                      </div>
+                  </div>
+              </div>
+
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="padding-right-zero">
+                  <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                    @Resources.ResourceCompany.ContactPerson
+                  </label>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-8">
+                  <input class="form-control" type="text" name="ContactPerson" ng-model="ContactPerson" ng-maxlength="50"/>
+
+                  <b class="help-block" ng-if="form.ContactPerson.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="padding-right-zero">
+                  <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                    @Resources.ResourceCompany.BaseCurrency
+                  </label>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-8">
+                  <select data-ng-model="BaseCurrency" class="form-control"
+                          data-ng-options="c.Id as c.Name for c in currencyInfoFromDb | orderBy: 'c.Name'" name="BaseCurrency">
+                    <option value="">@Resources.ResourceCompany.SelectCurrency</option>
+                  </select>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <div class="padding-right-zero">
+                  <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                    @Resources.ResourceCompany.LocalCurrency
+                  </label>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-8">
+                  <select data-ng-model="LocalCurrency" class="form-control"
+                          data-ng-options="c.Id as c.Name for c in currencyInfoFromDb | orderBy: 'c.Name'" name="LocalCurrency">
+                    <option value="">@Resources.ResourceCompany.SelectCurrency</option>
+                  </select>
+                </div>
+              </div>
+
+                @*<div class="form-group">
+                    <div class=" padding-right-zero">
+                        <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                            Shipment Address
+                        </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <input class="form-control" type="text" name="ShipmentAddress" ng-model="ShipmentAddress" ng-maxlength="50"/>
+
+                        <b class="help-block" ng-if="form.CompanyCode.$error.maxlength">@Resources.ResourceCommon.VMsgToo_Large</b>
+                    </div>
+                </div>*@
+                
+                
+                
+                
+                <div class="form-group">
+                    <div class="padding-right-zero">
+                        <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                            @Resources.ResourceCompany.FactoryAddress 
+                        </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <input class="form-control" name="ShipmentAddress1" ng-model="ShipmentAddress1" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="padding-right-zero">
+                        <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                            @Resources.ResourceCompany.FactoryPhoneNo
+                        </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <input class="form-control" name="ShipmentAddress2" ng-model="ShipmentAddress2" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="padding-right-zero">
+                        <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                            @Resources.ResourceCompany.FactoryFaxNo
+                        </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <input class="form-control" name="ShipmentAddress3" ng-model="ShipmentAddress3" />
+                    </div>
+                </div>
+                
+                
+
+
+
+                <div class="form-group">
+                <div class="padding-right-zero">
+                  <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                    @Resources.ResourceCompany.CompanyURL
+                  </label>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-8">
+                  <input class="form-control" type="text" name="CompanyUrl" ng-model="CompanyUrl"/>
+
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <div class="padding-right-zero">
+                  <label class="col-xs-12 col-sm-4 col-md-4 control-label default-color">
+                    @Resources.ResourceCompany.CompanyLogo
+                  </label>
+                </div>
+                  <div class="col-xs-12 col-sm-8 col-md-8">
+
+                      <input class="form-control-static" id="imgImp" type="file" file-model="myFile" accept="image/*" 
+                             onchange="angular.element(this).scope().fileNameChanged()"/>
+                      <div class="row" style="margin-top: 10px;">
+                          <div class="col-md-3" style="padding:0;">
+                              <a ng-href="~/CompanyLogo/{{ImageName}}" target="_blank" class="thumbnail">
+                                  <img id="preview" ng-src="~/CompanyLogo/{{ImageName}}" src="#" ng-show="ImageName">
+                              </a>
+                          </div>
+                         
+                      </div>
+                  </div>
+                  
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="form-group">
+              <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-6 col-md-6  padding-right-zero">
+                <input type="button" ng-click="addCompany()" class="btn btn-primary" value="@Resources.ResourceCommon.LblSave"/>
+                <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset"/>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@* ************ FORM - SECTION (End)*************** *@
+
+
+
+@* ************ POP-UP MODEL (Start)*************** *@
+<div class="row">
+  <div class="col-xs-12 col-sm-4 col-md-4">
+    <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+      <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+      <form name="form.update" role="form">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <span>{{messageModalObj.message}}</span>
+          </div>
+        </div>
+      </form>
+    </modal>
+  </div>
+</div>
+@* ************ POP-UP MODEL (End)*************** *@
+
+
+
+
+</div>
+
+<script type="text/javascript">
+  app.filter('startFrom', function () {
+    return function (input, start) {
+      if (input) {
+        start = +start; //parse to int
+        return input.slice(start);
+      }
+      return [];
+    }
+  });
+  app.factory('focus', function ($rootScope, $timeout) {
+    return function (name) {
+      $timeout(function () {
+        $rootScope.$broadcast('focusOn', name);
+      });
+    };
+  });
+  app.factory('companyService', ['$http', function ($http) {
+
+    return {
+      saveCompany: function (company) {
+        return $http({
+          url: '/Company/CreateCompany',
+          method: 'POST',
+          data: company
+        });
+      },
+      uploadSampleFile: function (file, configurationId) {
+        var fdata = new FormData();
+        var url = '/Company/UploadSampleFile';
+        fdata.append('file', file);
+        fdata.append('fileName', configurationId);
+        return $http.post(url, fdata, {
+          transformRequest: angular.identity,
+          headers: { 'Content-Type': undefined }
+        });
+      },
+      getCompany: function() {
+        return $http.get('/Company/GetCompanyList');
+      },
+      getCurrency : function() {
+        return $http.get('/Currency/GetCurrencyList');
+      }
+    };
+  }]);
+
+  app.controller('companyCtrl', function ($scope, $window, $timeout, $http, focus, $location, $anchorScroll, companyService, $log, $ngBootbox) {
+
+
+    if ('@ViewBag.permission' == "NO") {
+      $scope.NoPermission = true;
+    }
+    $scope.messageModalObj = {};
+    $scope.messageModalObj.message = '';
+    $scope.showModalforSearch = false;
+      $scope.ImageName = "";
+    loadCompany();
+    loadCurrency();
+
+
+    $scope.addCompany = function () {
+      $scope.$broadcast('show-errors-check-validity');
+      if ($scope.form.$valid) {
+
+
+        var company = {};
+        company["Id"] = $scope.Id;
+        company["Name"] = $scope.Name;
+        company["Address1"] = $scope.Address1;
+        company["Address2"] = $scope.Address2;
+        company["Address3"] = $scope.Address3;
+        company["Phone"] = $scope.Phone;
+        company["Fax"] = $scope.Fax;
+        company["Email"] = $scope.Email;
+        company["ContactPerson"] = $scope.ContactPerson;
+        company["LogoName"] = $scope.LogoName;
+        company["BaseCurrency"] = $scope.BaseCurrency;
+        company["LocalCurrency"] = $scope.LocalCurrency;
+        company["ShipmentAddress1"] = $scope.ShipmentAddress1;
+        company["ShipmentAddress2"] = $scope.ShipmentAddress2;
+        company["ShipmentAddress3"] = $scope.ShipmentAddress3;
+        company["CompanyUrl"] = $scope.CompanyUrl;
+        company["BaseCurrency"] = $scope.BaseCurrency;
+        company["LocalCurrency"] = $scope.LocalCurrency;
+        if ($scope.myFile != undefined && $scope.myFile!= null) {
+          company["LogoName"] = $scope.myFile.name;
+        }
+
+
+        companyService.saveCompany(company)
+        .then(function onSuccess(response) {
+          if (response.data.isSuccess === true) {
+
+            companyService.uploadSampleFile($scope.myFile, $scope.Name)
+              .then(function onSuccess(response) {
+              if (response.imgData === "True") {
+               
+              }
+
+              })
+			  .catch(function onError(response) {
+                $scope.messageModalObj.message = "Image Do Not Upload Successfully!!!";
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+              });
+
+            $scope.messageModalObj.message = response.data.message;
+            $scope.showModalforSearch = true;
+            $timeout(function() {
+                $scope.showModalforSearch = false;
+                $window.location.reload();
+            }, 3000);
+              //$window.location.reload();
+
+          } else {
+              $scope.messageModalObj.message = response.data.message;
+              $scope.showModalforSearch = true;
+              $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+          }
+
+        })
+        .catch(function onError(response) {
+          $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+        });
+      }
+    };
+
+
+    $scope.reset = function () {
+      $scope.$broadcast('show-errors-reset');
+      $scope.selectedRow = null;
+      $scope.Id = '';
+      $scope.Name = '';
+      $scope.Address1 = "";
+      $scope.Address2 = "";
+      $scope.Address3 = "";
+      $scope.Phone = '';
+      $scope.Fax = '';
+      $scope.Email = '';
+      $scope.ContactPerson = '';
+      $scope.LogoName = '';
+      $scope.BaseCurrency = '';
+      $scope.LocalCurrency = '';
+      $scope.ShipmentAddress1 = "";
+      $scope.ShipmentAddress2 = "";
+      $scope.ShipmentAddress3 = "";
+      $scope.CompanyUrl = '';
+      angular.element("input[type='file']").val(null);
+    }
+
+
+
+    $scope.populateCompany = function (rowvalue) {
+      $scope.Id = rowvalue.Id;
+      $scope.Name = rowvalue.Name;
+      $scope.Address1 = rowvalue.Address1;
+      $scope.Address2 = rowvalue.Address2;
+      $scope.Address3 = rowvalue.Address3;
+      $scope.Phone = rowvalue.Phone;
+      $scope.Fax = rowvalue.Fax;
+      $scope.Email = rowvalue.Email;
+      $scope.ContactPerson = rowvalue.ContactPerson;
+      $scope.BaseCurrency = rowvalue.BaseCurrency;
+      $scope.LocalCurrency = rowvalue.LocalCurrency;
+      $scope.ShipmentAddress1 = rowvalue.ShipmentAddress1;
+      $scope.ShipmentAddress2 = rowvalue.ShipmentAddress2;
+      $scope.ShipmentAddress3 = rowvalue.ShipmentAddress3;
+      $scope.CompanyUrl = rowvalue.CompanyUrl;
+      $scope.BaseCurrency = rowvalue.BaseCurrency;
+      $scope.LocalCurrency = rowvalue.LocalCurrency;
+      $scope.ImageName = rowvalue.LogoName;
+    }
+
+    $scope.currencyInfoFromDb = [];
+    function loadCurrency() {
+      companyService.getCurrency().then(function onSuccess(response) {
+        $scope.currencyInfoFromDb = response.data;
+      })
+	  .catch(function onError(response) {
+        $ngBootbox.alert('Error Loading Currency Information');
+      });
+    }
+
+   
+
+    function loadCompany() {
+     
+      companyService.getCompany()
+        .then(function onSuccess(response) {
+          $scope.populateCompany(response.data);
+        })
+        .catch(function onError(response) {
+          $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+        });
+    }
+
+      //$scope.fileNameChanged = function () {
+      //    $scope.imageFileName = $scope.myFile;
+      //    alert($scope.imageFileName);
+      //}
+
+      function readURL(input) {
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+
+              reader.onload = function (e) {
+                  $('#preview').attr('src', e.target.result);
+              }
+
+              reader.readAsDataURL(input.files[0]);
+          }
+      }
+
+      $("#imgImp").change(function () {
+          readURL(this);
+      });
+
+  });</script>

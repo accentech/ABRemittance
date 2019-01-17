@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html ng-app="app" ng-cloak block-ui="myBlockUI">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/JsFile/common-directives.js"></script>
+    <script src="~/Scripts/JsFile/angular-block-ui.js"></script>
+    <script src="~/Scripts/JsFile/ui-bootstrap-tpls-0.10.0.js"></script>
+    <script src="~/Scripts/JsFile/angular-base64-upload.js"></script>
+    <script src="~/Scripts/JsFile/bootbox.js"></script>
+    <script src="~/Scripts/JsFile/highcharts-ng.js"></script>
+    <script src="~/Scripts/JsFile/ngBootbox.js"></script>
+    <script src="~/Scripts/JsFile/sortable.js"></script>
+    <script src="~/Scripts/jquery-2.2.2.js"></script>
+    <script src="~/Scripts/angular-animate.min.js"></script>
+    <script src="~/Scripts/angular-sanitize.min.js"></script>
+    <script src="~/Scripts/angular-strap.js"></script>
+    <script src="~/Scripts/angular-strap.tpl.js"></script>
+    <script src="~/Scripts/angular-strap.docs.tpl.js"></script>
+    <script src="~/Scripts/JsFile/autocomplete.js"></script>
+
+    <link href="~/Content/angucomplete-alt.css" rel="stylesheet" />
+    <link href="~/Content/angular-strap_styles_libs_min.css" rel="stylesheet" />
+    <link href="~/Content/angular-block-ui.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-social.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Content/fileinput.min.css" rel="stylesheet" />
+    <link href="~/Content/awesome-bootstrap-checkbox.css" rel="stylesheet" />
+    <link href="~/Content/defaultStyle.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/languages.min.css" rel="stylesheet" />
+    <script src="~/Scripts/JsFile/multiple-select.js"></script>
+    <link href="~/Content/multiple-select.css" rel="stylesheet" />
+    <link media="print" href="~/Content/angularPrint.css" rel="stylesheet" />
+    <script src="~/Scripts/angularPrint.js"></script>  
+    <script src="~/Scripts/JsFile/angular-ui-bootstrap-modal.js"></script>
+    @* <<<<<< =========== new theme files (End) =============>>>>>>> *@
+
+  @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+
+    <div class="login-page bk-img">
+        <div class="form-content">
+            <div class="container " style="vertical-align:middle !important;">
+                <div class="row">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*@Scripts.Render("~/bundles/jquery")*@
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

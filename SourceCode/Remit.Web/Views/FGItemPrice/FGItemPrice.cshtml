@@ -1,0 +1,607 @@
+﻿@using Remit.Web.Helpers
+@{
+    ViewBag.Title = @Resources.ResourceFGItemPrice.LblItemPrice;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="fgItemPriceCtrl">
+    @* ************ FORM - SECTION (Start)*************** *@
+    <div class="panel panel-default">
+        <div class="panel-heading text-lg text-bold text-uppercase">
+            @Resources.ResourceFGItemPrice.LblItemPrice
+        </div>
+
+        <div class="panel-body border-green pt pb">
+            <form name="form" novalidate>
+                <div class="row">
+                    <div class="col-md-2 col-sm-4 selector-container-div ">
+                        <div class="panel panel-default selector-container">
+                            <div class="panel-body" style="padding: 0;">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        @Resources.ResourceCommon.LblMonthYear 
+                                    </label>
+                                    <input type="text" class="form-control" ng-model="selectedYear" name="selectedYear"
+                                           data-date-format="MMM-yyyy" bs-datepicker data-container="body"
+                                           data-min-view="1" data-autoclose="true" data-use-native="true" data-trigger="click"
+                                           data-ng-change="loadPriceDateListByMonthYear()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.ResourceFGItemPrice.LblItemPricingDate</label>
+                                    <div class="" style="height: 400px;">
+                                        <select multiple data-ng-model="ItemPriceId" class="form-control listSelect"
+                                                focus-on="focusMe"
+                                                data-ng-options="c.Id as c.PricingDate for c in allItemPricingDateFromDb |orderBy : '-Id' "
+                                                name="ItemPriceDate"
+                                                style="height: 100%; overflow-y: auto; padding: 0;" data-ng-change="loadFGItemPriceInfo(ItemPriceId)"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-10 col-sm-8">
+                        <div class="row">
+                            <div class="col-md-4 pull-left" style="padding: 0 0 20px 0">
+                                <div class="panel panel-default selector-container">
+                                    <div class="panel-body" style="padding: 0;">
+                                        <div class="form-group pb" show-errors>
+                                            <label class="control-label">
+                                                <b class="starStyle"></b> @Resources.ResourceFGItemPrice.LblCreatedBy
+                                            </label>
+                                            <select data-ng-model="PricingBy" required class="form-control"
+                                                    data-ng-options="c.Id as c.FullName for c in allEmployeeListFromDb" name="PricingBy">
+                                                <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemPrice.LblCreatedBy</option>
+                                            </select>
+                                            <p class="help-block" ng-if="form.PricingBy.$error.required">
+                                                @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceFGItemPrice.MsgApprovedFile)
+                                            </p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                <b class="starStyle"></b> @Resources.ResourceFGItemPrice.MsgApprovedFile
+                                            </label>
+                                            <input type="file" id="fileInput" file-model="approvedDoc" ng-model="approvedDoc" name="approvedDoc" data-autoclose="true">
+                                        </div>
+
+                                        <div class="form-group" ng-hide="hideFileDownloadBtn">
+                                            <a class="btn" href="{{ApproveDocumentPath}}" download target="_blank"> @Resources.ResourceFGItemPrice.LblDownloadDoc</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 pull-right" style="padding: 0 0 20px 0">
+                                <div class="panel panel-default selector-container">
+                                    <div class="panel-body" style="padding: 0;">
+                                        <div class="form-group">
+                                            <label class="control-label">@Resources.ResourceFGItemPrice.LblPricingDate</label>
+                                            <input type="text" class="form-control" ng-model="PricingDate" name="PricingDate"
+                                                   data-date-format="dd-MMM-yyyy" bs-datepicker
+                                                   data-min-view="0" data-container="body" data-autoclose="true">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">@Resources.ResourceFGItemPrice.LblPriceEffectiveFrom</label>
+                                            <input type="text" class="form-control" ng-model="EffectiveDate" name="EffectiveDate"
+                                                   data-date-format="dd-MMM-yyyy" bs-datepicker data-min-view="0"
+                                                   data-container="body" data-autoclose="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <form name="form" novalidate>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    @Resources.ResourceFGItemPrice.LblType
+                                                </th>
+                                                <th>
+                                                    @Resources.ResourceFGItemPrice.LblFGItem
+                                                </th>
+                                                <th>
+                                                    @Resources.ResourceFGItemPrice.LblUnit
+                                                </th>
+                                                <th>
+                                                    @Resources.ResourceFGItemPrice.LblGrade
+                                                </th>
+                                                <th>
+                                                    @Resources.ResourceFGItemPrice.LblSalesUnitPrice
+                                                </th>
+                                                <th>
+                                                    @Resources.ResourceFGItemPrice.Discount
+                                                </th>
+                                                <th>
+                                                    @Resources.ResourceFGItemPrice.LblPreviousEffectiveDate
+                                                </th>
+                                                <th>
+                                                    @Resources.ResourceCommon.LblAction
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr ng-repeat="aFGItemPrice in FGItemPriceDetails">
+                                                <td>
+                                                    <select data-ng-model="aFGItemPrice.TypeId"
+                                                            class="form-control"
+                                                            data-ng-options="c.Id as c.TypeName for c in typeListFromDb"
+                                                            name="TypeId" ng-change="getItemListByTypeId($index,aFGItemPrice.TypeId)">
+                                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemPrice.LblType</option>
+                                                    </select>
+                                                </td>
+
+                                                <td>
+                                                    <select ng-disabled="ItemIdField" data-ng-model="aFGItemPrice.FGItemId"
+                                                            class="form-control"
+                                                            data-ng-options="c.Id as c.Code for c in aFGItemPrice.itemListByTypeId"
+                                                            name="FgItemId" ng-change="getItemInfoByItemId($index,aFGItemPrice.FGItemId)">
+                                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemPrice.LblItem</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input data-ng-class="form-control" type="text" class="form-control" ng-model="aFGItemPrice.SalesUnitName" name="SalesUnitId">
+                                                </td>
+                                                <td>
+
+                                                    <select ng-disabled="OpeningDate" data-ng-model="aFGItemPrice.FGGradeId" class="form-control" ng-change="getUnitPrice($index,aFGItemPrice.FGGradeId)"
+                                                            data-ng-options="c.Id as c.Grade for c in allFGGradeFromDb | orderBy: 'Name'" name="FGGradeId">
+                                                        <option value="">@Resources.ResourceCommon.LblSelect @Resources.ResourceFGItemOpening.LblFGGrade</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input data-ng-class="form-control" type="number" class="form-control" ng-model="aFGItemPrice.SalesUnitPrice" name="SalesUnitPrice" min="0.0">
+                                                </td>
+                                                <td>
+                                                    <input data-ng-class="form-control" type="number" class="form-control" ng-model="aFGItemPrice.SpecialDiscount" name="SpecialDiscount" min="0.0">
+                                                </td>
+                                                <td>
+                                                    <input data-ng-class="form-control" type="text" class="form-control" ng-model="aFGItemPrice.PreviousEffectiveDate" name="PreviousEffectiveDate" ng-disabled="true">
+                                                </td>
+                                                <td>
+                                                    <input type="button" class=" btn btn-danger"
+                                                           ng-click="FGItemPriceDetails.splice($index, 1)"
+                                                           title="@Resources.ResourceCommon.MsgConfirmRemoveFromTheDetails"
+                                                           value="@Resources.ResourceCommon.LblRemove">
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div ng-if="!OpeningDate" class="col-md-2 padding-left-zero">
+                                    <input type="button" class=" btn btn-block btn-sm btn-info buttonaddfgItem" ng-click="addNewDetail($event)" value="@Resources.ResourceCommon.LblAddDetailItem" style="width: 100%;" />
+                                </div>
+                            </form>
+                            <br /><br />
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <input type="button" ng-click="addFGItemPrice('add')" ng-hide="approvemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                                        @*<input type="button" ng-click="addFGItemPrice('update')" ng-show="editmode && notApprovemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />*@
+                                        
+                                        <input type="button" ng-click="reset()" class="btn btn-default" value="@Resources.ResourceCommon.LblReset" />
+                                        <input type="button" ng-click="addFGItemPrice('approve')" ng-show="editmode && !approvemode" class="btn btn-primary" value=@Resources.ResourceCommon.LblApprove />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    @* ************ FORM - SECTION (End)*************** *@
+
+
+    @* ************ POP-UP MODEL (Start)*************** *@
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+            <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                <form name="form.update" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <span>{{messageModalObj.message}}</span>
+                        </div>
+                    </div>
+                </form>
+            </modal>
+        </div>
+    </div>
+    @* ************ POP-UP MODEL (End)*************** *@
+</div>
+
+
+@* ************ SCRIPT - SECTION (Start) *************** *@
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('fgItemPriceService', ['$http', function ($http) {
+        return {
+            saveFGItemPrice: function (itemPrice, insertType) {
+                var params = { itemPrice: itemPrice, insertType: insertType }
+                return $http({
+                    url: '/FGItemPrice/CreateFGItemPrice',
+                    method: 'POST',
+                    type: "json",
+                    data: JSON.stringify(params)
+                });
+            },
+            getFGItemPeice: function (itemPriceId) {
+                return $http.get('/FGItemPrice/GetFGItemPriceById?itemPriceId=' + itemPriceId);
+            },
+
+            getPricingDateListByMonthYear: function (month, year) {
+                return $http.get('/FGItemPrice/GetPricingDateListByMonthYear', {params : {month:month, year: year}});
+            },
+
+
+            getallEmployeeList: function () {
+                return $http.get('/Employee/GetEmployeeList');
+            },
+            getAllItemList: function (typeId) {
+                return $http.get('/FGItem/GetFgItemListBySelectedTypeId?typeId=' + typeId);
+            },
+            getAllTypeList: function () {
+                return $http.get('/FGType/GetFGTypeList');
+            },
+            getUnitInfoOfItem: function (itemId) {
+                return $http.get('/FGItem/GetUnitInfoOfItem?itemId=' + itemId);
+            },
+            getUnitPriceInfoOfItem: function (itemId, gradeId) {
+                return $http.get('/FGItem/GetUnitPriceInfoOfItem?itemId=' + itemId + '&gradeId=' + gradeId);
+            },
+            getAllFGGrade: function () {
+                return $http.get('/FGGrade/GetFGGradeList');
+            },
+            uploadFile: function (file) {
+                var fdata = new FormData();
+                var url = '/FGItemPrice/UpoladFile';
+                fdata.append('file', file);
+
+                return $http.post(url,
+                    fdata,
+                    {
+                        transformRequest: angular.identity,
+                        headers: { 'Content-Type': undefined }
+                    });
+
+            },
+            deleteFGItemPrice: function (fgitem) {
+                return $http({
+                    url: '/FGItemPrice/DeleteFGItemPrice',
+                    method: 'POST',
+                    data: fgitem
+                });
+            }
+        };
+    }]);
+
+    app.controller('fgItemPriceCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, fgItemPriceService, $log, $ngBootbox) {
+        $scope.editmode = false;
+        $scope.approvemode = false;
+        $scope.selectedYear = new Date;
+        $scope.TopOpeningDate = new Date();
+
+        $scope.PricingBy = @UserSession.GetUserFromSession().Employee.Id
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+
+        $scope.showModalforSearch = false;
+
+        $scope.FGItemPriceDetails = [];
+        $scope.PricingDate = new Date().toISOString();;
+        $scope.EffectiveDate = new Date().toISOString();;
+        $scope.hideFileDownloadBtn = true;
+        $scope.createMode = true;
+        
+        $scope.loadAllTypeList = function () {
+            fgItemPriceService.getAllTypeList()
+                .then(function onSuccess(response) {
+                    $scope.typeListFromDb = response.data;
+                }).catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadAllTypeList();
+        
+        // =======  Get All Grade List from DB  =============
+        $scope.loadAllFGGrade = function () {
+            $scope.allFGGradeFromDb = [];
+            fgItemPriceService.getAllFGGrade()
+                .then(function onSuccess(response) {
+                    $scope.allFGGradeFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadAllFGGrade();
+        
+        // =======  Load Finished Good Item Prieing Date List =============
+        $scope.loadPriceDateListByMonthYear = function () {
+            $scope.allItemPricingDateFromDb = [];
+            //var year = $scope.selectedYear.getFullYear();
+            //var month = $scope.selectedYear.getMonth() + 1;
+            var year = $scope.selectedYear;
+            var month = year.getMonth() + 1;
+            $scope.allFGItemInListByYearMonth = [];
+            year = year.getFullYear();
+
+            fgItemPriceService.getPricingDateListByMonthYear( month, year)
+                .then(function onSuccess(response) {
+                    $scope.allItemPricingDateFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadPriceDateListByMonthYear();
+        
+        // =======  Load Employee List =============
+        $scope.loadAllEmployeeList = function () {
+            $scope.allEmployeeListFromDb = [];
+            fgItemPriceService.getallEmployeeList()
+                .then(function onSuccess(response) {
+                    $scope.allEmployeeListFromDb = response.data;
+
+                    if ($scope.allEmployeeListFromDb.length === 0) {
+                        $ngBootbox.alert('@Resources.ResourceFGItemPrice.MsgNoEmployeeListFound');
+                    }
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        $scope.loadAllEmployeeList();
+
+        // =======  Add new row in FGItemPriceDetail list =============
+        $scope.addNewDetail = function ($event) {
+            $scope.FGItemPriceDetails.push({
+                Id: '',
+                FGTypeId: null,
+                FGItemPriceId: null,
+                FGItemId: null,
+                FGGradeId: null,
+                FGGradeName: '',
+                SalesUnitId: null,
+                SalesUnitName: '',
+                SalesUnitPrice: 0.0,
+                SpecialDiscount: 0.0,
+                EffectiveDate: null
+            });
+
+        }
+
+        $scope.addNewDetail();
+        
+        // =======  Get Item List by selecting Type  =============
+        $scope.getItemListByTypeId = function (index, typeId) {
+            if (typeId == null || typeId == undefined || typeId === "") {
+                $scope.FGItemPriceDetails[index].itemListByTypeId = [];
+                $scope.FGItemPriceDetails[index].FGItemId = null;
+                $scope.FGItemPriceDetails[index].SalesUnitId = "";
+                $scope.FGItemPriceDetails[index].SalesUnitName = "";
+                $scope.FGItemPriceDetails[index].PreviousEffectiveDate = "";
+                $scope.FGItemPriceDetails[index].SalesUnitPrice = 0.00;
+                $scope.FGItemPriceDetails[index].SpecialDiscount = 0.00;
+                return;
+            }
+
+            fgItemPriceService.getAllItemList(typeId)
+                .then(function onSuccess(response) {
+                    $scope.FGItemPriceDetails[index].itemListByTypeId = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        
+        // =======  Get Unit and Grade For Selected Item  =======
+        $scope.getItemInfoByItemId = function (index, itemId) {
+            if (itemId == null || itemId == undefined || itemId === "") {
+                $scope.FGItemPriceDetails[index].SalesUnitId = "";
+                $scope.FGItemPriceDetails[index].SalesUnitName = "";
+                $scope.FGItemPriceDetails[index].PreviousEffectiveDate = "";
+                $scope.FGItemPriceDetails[index].SalesUnitPrice = 0.00;
+                $scope.FGItemPriceDetails[index].SpecialDiscount = 0.00;
+                return;
+            }
+            fgItemPriceService.getUnitInfoOfItem(itemId)
+                .then(function onSuccess(response) {
+                    $scope.FGItemPriceDetails[index].SalesUnitId = response.data.uom.Id;
+                    $scope.FGItemPriceDetails[index].SalesUnitName = response.data.uom.Name;
+                    $scope.FGItemPriceDetails[index].PreviousEffectiveDate = response.data.ppd;
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        
+        //======= Get Latest Effective Dates Unit Price ========
+        $scope.getUnitPrice = function (index, gradeId) {
+            if (gradeId == null || gradeId == undefined || gradeId === "") {
+                $scope.FGItemPriceDetails[index].SalesUnitPrice = 0.00;
+                $scope.FGItemPriceDetails[index].SpecialDiscount = 0.00;
+                return;
+            }
+            
+            fgItemPriceService.getUnitPriceInfoOfItem($scope.FGItemPriceDetails[index].FGItemId, gradeId)
+                .then(function onSuccess(response) {
+                    $scope.FGItemPriceDetails[index].SalesUnitPrice = response.data.unitPrice;
+                    $scope.FGItemPriceDetails[index].SpecialDiscount = response.data.discount;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        // =======  Add Finished Good Item Price  =======
+        $scope.addFGItemPrice = function (insertType) {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                var fgItemPrice = {};
+                fgItemPrice["Id"] = $scope.Id;
+                fgItemPrice["EffectiveDate"] = $scope.EffectiveDate;
+                fgItemPrice["PricingBy"] = $scope.PricingBy;
+                fgItemPrice["PricingDate"] = $scope.PricingDate;
+
+                if ($scope.approvedDoc != null) {
+                    fgItemPrice["ApproveDocumentPath"] = $scope.approvedDoc.name;
+                }
+
+                if ($scope.FGItemPriceDetails.length > 0) {
+                    for (var i = $scope.FGItemPriceDetails.length; i > 0; i--) {
+                        if ($scope.FGItemPriceDetails[i - 1].SalesUnitPrice === 0.0 ||
+                            $scope.FGItemPriceDetails[i - 1].SalesUnitPrice === null) {
+                            $scope.FGItemPriceDetails.splice(i, 1);
+                        }
+                    }
+                }
+                if ($scope.FGItemPriceDetails.length > 0) {
+                    fgItemPrice["FGItemPriceDetails"] = $scope.FGItemPriceDetails;
+                } else {
+                    $ngBootbox.alert('@Resources.ResourceFGItemPrice.MsgNoPriceDetailListIsEmpty');
+                    return;
+                }
+
+
+                fgItemPriceService.saveFGItemPrice(fgItemPrice, insertType)
+                    .then(function onSuccess(response) {
+
+                        $scope.messageModalObj.message = response.data.message;
+                        $scope.showModalforSearch = true;
+                        $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+
+                        if ($scope.approvedDoc != null) {
+                            $scope.UploadFile();
+                        } else {
+                            $scope.reset();
+                        }
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                    });
+            }
+
+        }
+        
+        $scope.UploadFile = function () {
+            fgItemPriceService.uploadFile($scope.approvedDoc)
+                .then(function onSuccess(response) {
+                    $scope.reset();
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+        
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.Id = 0;
+            $scope.editmode = false;
+            $scope.approvemode = false;
+            $scope.FGItemPriceDetails = [];
+            $scope.loadPriceDateListByMonthYear();
+            $scope.loadAllTypeList();
+            $scope.loadAllFGGrade();
+            //$scope.PricingBy = null;
+            $scope.PricingBy = @UserSession.GetUserFromSession().Employee.Id
+            $scope.hideFileDownloadBtn = true;
+            $scope.PricingDate = new Date().toISOString();;
+            $scope.EffectiveDate = new Date().toISOString();;
+            $scope.hideFileDownloadBtn = true;
+            $scope.createMode = true;
+            $scope.IsApproved = 0;
+            $scope.selectedYear = new Date();
+            $scope.addNewDetail();
+            angular.forEach(
+                angular.element("input[type='file']"),
+                function (inputElem) {
+                    angular.element(inputElem).val(null);
+                });
+        }
+
+        $scope.loadFGItemPriceInfo = function (itemPriceId) {
+            if (itemPriceId.length > 0) {
+                fgItemPriceService.getFGItemPeice(itemPriceId)
+                    .then(function onSuccess(response) {
+                        $scope.FgItemPriceInfo = response.data;
+                        $scope.populateFgItemPriceInfo(response.data);
+                    })
+                    .catch(function onError(response) {
+                        $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                    });
+            }
+
+        }
+        
+        $scope.populateFgItemPriceInfo = function (itemPriceInfo) {
+            $scope.loadAllTypeList();
+            $scope.editmode = true;
+            $scope.Id = itemPriceInfo.Id;
+            $scope.FGItemPriceDetails = itemPriceInfo.FgItemPriceDetails;
+            $scope.EffectiveDate = new Date(itemPriceInfo.EffectiveDate);
+            $scope.PricingDate = new Date(itemPriceInfo.PricingDate);
+            $scope.PricingBy = itemPriceInfo.PricingBy;
+            $scope.approvedDoc = null;
+
+            if (itemPriceInfo.IsApproved === true) {
+                $scope.approvemode = true;
+            } else {
+                $scope.approvemode = false;
+            }
+
+
+            $scope.hideFileDownloadBtn = false;
+            if (itemPriceInfo.DocName == null) {
+                $scope.hideFileDownloadBtn = true;
+            }
+            $scope.ApproveDocumentPath = itemPriceInfo.ApproveDocumentPath;
+            $scope.createMode = false;
+            for (var i in itemPriceInfo.FgItemPriceDetails) {
+                $scope.getItemListByTypeId(i, itemPriceInfo.FgItemPriceDetails[i].TypeId);
+            }
+
+        }
+        @*$scope.deleteItemPrice = function () {
+            var fgItemPrice = {};
+            fgItemPrice["Id"] = $scope.Id;
+
+            fgItemPriceService.deleteFGItemPrice(fgItemPrice)
+                .then(function onSuccess(response) {
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function() { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+                });
+        }*@
+
+    });
+</script>

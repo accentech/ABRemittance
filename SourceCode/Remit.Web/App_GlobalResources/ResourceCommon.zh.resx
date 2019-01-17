@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CMsg_defaultSave" xml:space="preserve">
+    <value>保存成功！</value>
+  </data>
+  <data name="CMsg_delete" xml:space="preserve">
+    <value>{0}已成功删除！</value>
+  </data>
+  <data name="CMsg_duplicate" xml:space="preserve">
+    <value>无法保存。找到相同的{0}名称！</value>
+  </data>
+  <data name="CMsg_notdelete" xml:space="preserve">
+    <value>{0}无法删除！</value>
+  </data>
+  <data name="CMsg_notupdate" xml:space="preserve">
+    <value>{0}无法更新！</value>
+  </data>
+  <data name="CMsg_sameError" xml:space="preserve">
+    <value>站和从属站必须不同。</value>
+  </data>
+  <data name="CMsg_save" xml:space="preserve">
+    <value>{0}已成功保存！</value>
+  </data>
+  <data name="CMsg_saveall" xml:space="preserve">
+    <value>全部保存</value>
+  </data>
+  <data name="CMsg_unsave" xml:space="preserve">
+    <value>{0}无法保存！</value>
+  </data>
+  <data name="CMsg_update" xml:space="preserve">
+    <value>{0}更新成功！</value>
+  </data>
+  <data name="FileRead" xml:space="preserve">
+    <value>成功保存</value>
+  </data>
+  <data name="LblAction" xml:space="preserve">
+    <value>行动</value>
+  </data>
+  <data name="LblAddDetailItem" xml:space="preserve">
+    <value>添加+</value>
+  </data>
+  <data name="LblAddPlus" xml:space="preserve">
+    <value>添加+</value>
+  </data>
+  <data name="LblApprove" xml:space="preserve">
+    <value>批准</value>
+  </data>
+  <data name="LblApproveOrReject" xml:space="preserve">
+    <value>批准/拒绝</value>
+  </data>
+  <data name="LblChange" xml:space="preserve">
+    <value>更改</value>
+  </data>
+  <data name="LblCreateNew" xml:space="preserve">
+    <value>创建新的</value>
+  </data>
+  <data name="LblDelete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="LblDetail" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="LblEdit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="lblFiltered" xml:space="preserve">
+    <value>过滤</value>
+  </data>
+  <data name="LblFirst" xml:space="preserve">
+    <value>第一</value>
+  </data>
+  <data name="LblFromDate" xml:space="preserve">
+    <value>从日期</value>
+  </data>
+  <data name="LblHide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="LblIsActive" xml:space="preserve">
+    <value>活跃</value>
+  </data>
+  <data name="LblIssueItem" xml:space="preserve">
+    <value>问题项目</value>
+  </data>
+  <data name="LblLast" xml:space="preserve">
+    <value>持续</value>
+  </data>
+  <data name="lblList" xml:space="preserve">
+    <value>名单</value>
+  </data>
+  <data name="LblName" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="LblNew" xml:space="preserve">
+    <value>新</value>
+  </data>
+  <data name="LblNext" xml:space="preserve">
+    <value>下一个</value>
+  </data>
+  <data name="lblPageSize" xml:space="preserve">
+    <value>页面大小</value>
+  </data>
+  <data name="LblPendingList" xml:space="preserve">
+    <value>待处理清单</value>
+  </data>
+  <data name="LblPrepare" xml:space="preserve">
+    <value>准备</value>
+  </data>
+  <data name="LblPrevious" xml:space="preserve">
+    <value>以前</value>
+  </data>
+  <data name="LblPrintOut" xml:space="preserve">
+    <value>打印</value>
+  </data>
+  <data name="LblReceiveOrReject" xml:space="preserve">
+    <value>接收/拒收</value>
+  </data>
+  <data name="LblRefresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="LblRemove" xml:space="preserve">
+    <value>去掉</value>
+  </data>
+  <data name="LblReport" xml:space="preserve">
+    <value>报告</value>
+  </data>
+  <data name="LblReset" xml:space="preserve">
+    <value>重启</value>
+  </data>
+  <data name="LblReview" xml:space="preserve">
+    <value>评论</value>
+  </data>
+  <data name="LblReviewedList" xml:space="preserve">
+    <value>评论列表</value>
+  </data>
+  <data name="LblRevise" xml:space="preserve">
+    <value>修改</value>
+  </data>
+  <data name="LblSave" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="LblSaveRevision" xml:space="preserve">
+    <value>保存修订</value>
+  </data>
+  <data name="LblSearch" xml:space="preserve">
+    <value>保存修订</value>
+  </data>
+  <data name="LblSelect" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="LblShow" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="LblShowAllUnreceived" xml:space="preserve">
+    <value>显示全部未复制</value>
+  </data>
+  <data name="LblSubmit" xml:space="preserve">
+    <value>提交</value>
+  </data>
+  <data name="LblUpdate" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="LblView" xml:space="preserve">
+    <value>视图</value>
+  </data>
+  <data name="LblViewAll" xml:space="preserve">
+    <value>转到列表</value>
+  </data>
+  <data name="LblYear" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="MsgChooseAFile" xml:space="preserve">
+    <value>请选择一个文件。</value>
+  </data>
+  <data name="MsgErrorInUploadingFile" xml:space="preserve">
+    <value>在服务器上传文件时出错！</value>
+  </data>
+  <data name="MsgNoPermissionToCreate" xml:space="preserve">
+    <value>您无权创建</value>
+  </data>
+  <data name="MsgNoPermissionToDelete" xml:space="preserve">
+    <value>您无权删除</value>
+  </data>
+  <data name="MsgNoPermissionToRead" xml:space="preserve">
+    <value>您无权阅读</value>
+  </data>
+  <data name="MsgNoPermissionToUpdate" xml:space="preserve">
+    <value>您无权更新</value>
+  </data>
+  <data name="MsgProvideDetails" xml:space="preserve">
+    <value>请提供{0}</value>
+  </data>
+  <data name="MsgConfirmRemoveFromTheDetails" xml:space="preserve">
+    <value>从细节中删除？</value>
+  </data>
+  <data name="MsgConfirm_Delete" xml:space="preserve">
+    <value>你确定要删除这个吗？</value>
+  </data>
+  <data name="MsgDeleted" xml:space="preserve">
+    <value>删除成功！</value>
+  </data>
+  <data name="MsgErrorInLoading" xml:space="preserve">
+    <value>数据加载时发生错误</value>
+  </data>
+  <data name="MsgErrorInSaving" xml:space="preserve">
+    <value>保存数据时出错</value>
+  </data>
+  <data name="MsgHeaderSuccess" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="MsgNot_deleted" xml:space="preserve">
+    <value>不能删除！</value>
+  </data>
+  <data name="MsgNot_Saved" xml:space="preserve">
+    <value>无法保存。</value>
+  </data>
+  <data name="MsgNot_Updated" xml:space="preserve">
+    <value>无法更新！</value>
+  </data>
+  <data name="MsgSaved" xml:space="preserve">
+    <value>保存成功。</value>
+  </data>
+  <data name="MsgUpdated" xml:space="preserve">
+    <value>更新成功。</value>
+  </data>
+  <data name="TextBoxSearch_Watermark" xml:space="preserve">
+    <value>在此输入搜索文字</value>
+  </data>
+  <data name="VMsgEmptyList" xml:space="preserve">
+    <value>{0}为空</value>
+  </data>
+  <data name="VMsgRequired_Name" xml:space="preserve">
+    <value>{0}是必需的。</value>
+  </data>
+  <data name="VMsgToo_Large" xml:space="preserve">
+    <value>太大了</value>
+  </data>
+  <data name="SiteTitle" xml:space="preserve">
+    <value>瓷砖生产管理</value>
+  </data>
+  <data name="LblDate" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="LblYearMonth" xml:space="preserve">
+    <value>年 - 月</value>
+  </data>
+  <data name="LblPendingIssueList" xml:space="preserve">
+    <value>待处理问题清单</value>
+  </data>
+  <data name="LblPendingListForApproval" xml:space="preserve">
+    <value>待批准清单</value>
+  </data>
+  <data name="LblPendingPurchaseRequisitionList" xml:space="preserve">
+    <value>等待采购申请清单</value>
+  </data>
+  <data name="LblStockStatus" xml:space="preserve">
+    <value>主要原材料的库存情况</value>
+  </data>
+  <data name="ProductionHighchart" xml:space="preserve">
+    <value>最近10天的生产数据</value>
+  </data>
+  <data name="SalesHighchart" xml:space="preserve">
+    <value>最近10天销售数据</value>
+  </data>
+  <data name="CTN" xml:space="preserve">
+    <value>纸板箱</value>
+  </data>
+  <data name="Name_of_item" xml:space="preserve">
+    <value>项目的名称</value>
+  </data>
+  <data name="PCS" xml:space="preserve">
+    <value>件</value>
+  </data>
+  <data name="Product_In_Date" xml:space="preserve">
+    <value>产品在日期</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>数量</value>
+  </data>
+  <data name="Reorder_Level" xml:space="preserve">
+    <value>重新订购级别</value>
+  </data>
+  <data name="Sales_Date" xml:space="preserve">
+    <value>销售日期</value>
+  </data>
+  <data name="SFT" xml:space="preserve">
+    <value>平方英尺</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="LblToDate" xml:space="preserve">
+    <value>至今</value>
+  </data>
+  <data name="LblMonthYear" xml:space="preserve">
+    <value>月 - 年</value>
+  </data>
+  <data name="GradeA" xml:space="preserve">
+    <value>A级</value>
+  </data>
+  <data name="GradeWiseStock" xml:space="preserve">
+    <value>前20名成品库存</value>
+  </data>
+  <data name="Productcode" xml:space="preserve">
+    <value>产品代码</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>总</value>
+  </data>
+  <data name="LblGenerate" xml:space="preserve">
+    <value>生成</value>
+  </data>
+  <data name="LblViewReport" xml:space="preserve">
+    <value>查看报告</value>
+  </data>
+  <data name="LblCategory" xml:space="preserve">
+    <value>项目类别</value>
+  </data>
+  <data name="LblWarehouseStockReport" xml:space="preserve">
+    <value>仓库库存报告</value>
+  </data>
+  <data name="LblPreview" xml:space="preserve">
+    <value>预习</value>
+  </data>
+  <data name="LblGenFrNewDealer" xml:space="preserve">
+    <value>为新经销商生成</value>
+  </data>
+</root>

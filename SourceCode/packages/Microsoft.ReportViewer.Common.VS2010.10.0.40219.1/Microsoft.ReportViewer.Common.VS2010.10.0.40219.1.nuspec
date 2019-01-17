@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.ReportViewer.Common.VS2010</id>
+    <version>10.0.40219.1</version>
+    <title>Microsoft.ReportViewer.Common VS2010</title>
+    <authors>David.DeSloovere</authors>
+    <owners>David.DeSloovere</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Unofficial package for the VS2010 Microsoft.ReportViewer.Common assemblies from Microsoft.
+
+Use this package if you don't have VS2010 installed or you need the references on a build server. Contains Microsoft.ReportViewer.Common as found under "C:\Program Files (x86)\Microsoft Visual Studio 10.0\ReportViewer".</description>
+    <summary>Unofficial package for the VS2010 Microsoft.ReportViewer.Common assemblies from Microsoft.</summary>
+    <copyright>Microsoft</copyright>
+  </metadata>
+</package>

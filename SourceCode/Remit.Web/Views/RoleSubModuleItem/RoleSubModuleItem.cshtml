@@ -1,0 +1,377 @@
+﻿@{
+    ViewBag.Title = @Resources.ResourceModule.LblSubModuleItem;
+    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12" ng-controller="roleSubModuleItemCtrl">
+
+  @* ************ FORM - SECTION (Start)*************** *@
+  <div class="panel panel-default">
+    <div class="panel-heading text-lg text-bold text-uppercase">@Resources.ResourceModule.LblRoleSubModuleItem</div>
+    <div class="panel-body  border-green pt pb">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="form-horizontal">
+            <form name="form" novalidate>
+
+              <div class="form-group" show-errors id="searchdivid">
+                <div class=" padding-right-zero">
+                  <label class="col-xs-12 col-sm-3 col-md-3 control-label default-color">
+                    <b class="starStyle">*</b> @Resources.ResourceModule.LblRole
+                  </label>
+                </div>
+                <div class="col-xs-12 col-sm-5 col-md-5">
+                  <select data-ng-model="RoleId" class="form-control" ng-change="selectedRole(RoleId)"
+                          data-ng-options="c.Id as c.Name for c in allRoleFromDb | orderBy: 'Name'" name="RoleId" ng-required="true">
+                    <option value="">@Resources.ResourceModule.LblSelectRole</option>
+                  </select>
+                  <b class="help-block" ng-if="form.Name.$error.required">
+                    @string.Format(Resources.ResourceCommon.VMsgRequired_Name, Resources.ResourceModule.LblRole)
+                  </b>
+                </div>
+              </div>
+
+
+            <div class="" ng-show="RoleId">
+              <div class="col-xs-12 col-sm-12 col-md-12 padding-left-right-zero">
+                <div class="row mb">
+                  <div class="col-sm-8 padding-left-zero">
+                    <div class="col-sm-6">
+                        <div class="col-sm-6 padding-left-right-zero">
+                            <input type="text" ng-model="SearchText" placeholder='@Resources.ResourceCommon.TextBoxSearch_Watermark' class="form-control" />
+                        </div>
+                        <div class="col-sm-6 padding-left-right-zero">
+                            <select data-ng-model="SelectedModule" class="form-control"
+                                    data-ng-options="c.Id as c.Name for c in allModuleFromDb | orderBy: 'Name'" name="ModuleId">
+                                <option value="">Select Module</option>
+                            </select>
+                            </div>
+                        </div>
+                    <div class="col-sm-6 text-center-vertical">
+                     @Resources.ResourceCommon.lblFiltered <b>{{ filtered.length }}</b> of <b>{{ allRoleSubModuleItemByRole.length}}</b> @Resources.ResourceModule.LblTotalSubModuleItem
+                    </div>
+                  </div>
+                  <div class="col-sm-4 padding-right-zero">
+                    <div class="col-sm-6 text-center-vertical text-right">
+                      <label>@Resources.ResourceCommon.lblPageSize:</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <select ng-model="entryLimit" class="form-control">
+                        <option>3</option>
+                        <option>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                        <option>100</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                          <td>@Resources.ResourceModule.LblSubModuleItem</td>
+                          <td>@Resources.ResourceModule.LblCreate </td>
+                          <td>@Resources.ResourceModule.LblRead</td>
+                          <td>@Resources.ResourceModule.LblUpdate </td>
+                          <td>@Resources.ResourceModule.LblDelete</td>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                          <td>@Resources.ResourceModule.LblSubModuleItem</td>
+                          <td>@Resources.ResourceModule.LblCreate </td>
+                          <td>@Resources.ResourceModule.LblRead</td>
+                          <td>@Resources.ResourceModule.LblUpdate </td>
+                          <td>@Resources.ResourceModule.LblDelete</td>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr ng-repeat="aSubModuleItem in filtered = (allRoleSubModuleItemByRole  | filter:SearchText | filter:{'ModuleId':SelectedModule}:false | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+
+                                <td>
+                                    <div id={{aSubModuleItem.rowIndex}}>
+                                        <input type="text" data-ng-model="aSubModuleItem.SubModuleItemIdName" ng-disabled="true" ng-value="aSubModuleItem.SubModuleItemIdName" class="form-control" />
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div id={{aSubModuleItem.rowIndex}}>
+                                        <input type='checkbox' ng-model="aSubModuleItem.CreateOperation" class="form-control">
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div id={{aSubModuleItem.rowIndex}}>
+                                        <input type='checkbox' ng-model="aSubModuleItem.ReadOperation" class="form-control">
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div id={{aSubModuleItem.rowIndex}}>
+                                        <input type='checkbox' ng-model="aSubModuleItem.UpdateOperation" class="form-control">
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div id={{aSubModuleItem.rowIndex}}>
+                                        <input type='checkbox' ng-model="aSubModuleItem.DeleteOperation" class="form-control">
+                                    </div>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length > 0">
+                    <div pagination="" max-size="15" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filtered.length" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-show="filtered.length == 0">
+                  <div class="col-xs-12 col-sm-12 col-md-12 alert alert-danger">
+                    @Resources.ResourceModule.LblNoSubModuleItemFound
+                  </div>
+                </div>
+
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <div class="col-md-offset-3 col-sm-offset-3 col-xs-12 col-sm-8 col-md-8  padding-right-zero">
+                  <input type="button" ng-click="addRoleSubModuleItem()" class="btn btn-primary" value=@Resources.ResourceCommon.LblSave />
+                  <input type="button" ng-click="reset()" class="btn btn-default" value=@Resources.ResourceCommon.LblReset />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  @* ************ FORM - SECTION (End)*************** *@
+
+
+
+  @* ************ POP-UP MODEL (Start)*************** *@
+  <div class="row">
+    <div class="col-xs-12 col-sm-3 col-md-3">
+      <modal title='@Resources.ResourceCommon.MsgHeaderSuccess' visible="showModalforSearch">
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+        <form name="form.update" role="form">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <span>{{messageModalObj.message}}</span>
+            </div>
+          </div>
+        </form>
+      </modal>
+    </div>
+  </div>
+  @* ************ POP-UP MODEL (End)*************** *@
+
+
+</div>
+
+
+
+<script type="text/javascript">
+    app.filter('startFrom', function () {
+        return function (input, start) {
+            if (input) {
+                start = +start; //parse to int
+                return input.slice(start);
+            }
+            return [];
+        }
+    });
+    app.factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        };
+    });
+    app.factory('roleSubModuleItemService', ['$http', function ($http) {
+
+        return {
+            saveRoleSubModuleItem: function (roleSubModuleItemList) {
+                return $http({
+                    url: '/RoleSubModuleItem/CreateRoleSubModuleItem',
+                    method: 'POST',
+                    data: roleSubModuleItemList
+                })
+            },
+
+            getAllRole: function () {
+                return $http.get('/Role/GetRoleList');
+            }, getAllModule: function () {
+                return $http.get('/Module/GetActiveModuleList');
+            },
+            getAllSubModuleItem: function () {
+                return $http.get('/SubModuleItem/GetBaseSubModuleItemList');
+            },
+
+            getAllRoleSubModuleItemByRole: function (id) {
+                return $http.get('/RoleSubModuleItem/GetRoleSubModuleItemByRole/' + id);
+            },
+
+            getAllRoleSubModuleItem: function () {
+                return $http.get('/RoleSubModuleItem/GetRoleSubModuleItemList');
+            },
+            deleteRoleSubModuleItem: function (roleSubModuleItem) {
+                return $http({
+                    url: '/RoleSubModuleItem/DeleteRoleSubModuleItem',
+                    method: 'POST',
+                    data: roleSubModuleItem
+                })
+            }
+        };
+    }]);app.controller('roleSubModuleItemCtrl', function ($scope, $timeout, $http, focus, $location, $anchorScroll, roleSubModuleItemService, $log, $ngBootbox) {
+        $scope.messageModalObj = {};
+        $scope.messageModalObj.message = '';
+
+        $scope.showModalforSearch = false;
+        // Add a new roleSubModuleItem
+        $scope.addRoleSubModuleItem = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.form.$valid) {
+                /*  var roleSubModuleItem = {};
+                roleSubModuleItem["Id"] = $scope.Id;
+                roleSubModuleItem["RoleId"] = $scope.RoleId;
+                roleSubModuleItem["SubModuleItemId"] = $scope.SubModuleItemId;
+                roleSubModuleItem["CreateOperation"] = $scope.ChkCreate;
+                roleSubModuleItem["ReadOperation"] = $scope.ChkRead;
+                roleSubModuleItem["UpdateOperation"] = $scope.ChkUpdate;
+                roleSubModuleItem["DeleteOperation"] = $scope.ChkDelete;*/
+
+                var roleSubModuleItemList = $scope.allRoleSubModuleItemByRole;
+
+                roleSubModuleItemService.saveRoleSubModuleItem(roleSubModuleItemList)
+                .then(function onSuccess(response) {
+
+                    $scope.messageModalObj.message = response.data.message;
+                    $scope.showModalforSearch = true;
+                    $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+                    $scope.reset();
+
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInSaving');
+                });
+            }
+        };
+        // Populate roleSubModuleItem
+        $scope.selectedRow = null;
+        $scope.populateRoleSubModuleItem = function (roleSubModuleItem) {
+            $scope.selectedRow = roleSubModuleItem;
+            $scope.Id = roleSubModuleItem.Id;
+            $scope.RoleId = roleSubModuleItem.RoleId;
+            $scope.SubModuleItemId = roleSubModuleItem.SubModuleItemId;
+            $scope.ChkCreate = roleSubModuleItem.CreateOperation;
+            $scope.ChkRead = roleSubModuleItem.ReadOperation;
+            $scope.ChkUpdate = roleSubModuleItem.UpdateOperation;
+            $scope.ChkDelete = roleSubModuleItem.DeleteOperation;
+            $location.hash('searchDivId');
+            $anchorScroll();
+            focus('focusMe');
+        }
+
+        $scope.reset = function () {
+            $scope.$broadcast('show-errors-reset');
+            $scope.selectedRow = null;
+            $scope.Id = '';
+            $scope.RoleId = '';
+            $scope.SubModuleItemId = '';
+            $scope.ChkCreate = '';
+            $scope.ChkRead = '';
+            $scope.ChkUpdate = '';
+            $scope.ChkDelete = '';
+        }
+
+        $scope.deleteRoleSubModuleItem = function (roleSubModuleItem) {
+            roleSubModuleItemService.deleteRoleSubModuleItem(roleSubModuleItem)
+            .then(function onSuccess(response) {
+                $scope.messageModalObj.message = response.data.message;
+                $scope.showModalforSearch = true;
+                $timeout(function () { $scope.showModalforSearch = false; }, 3000);
+            })
+            .catch(function onError(response) {
+                $ngBootbox.alert('@Resources.ResourceCommon.MsgNot_deleted');
+            });
+        }
+
+
+        $scope.selectedRole = function (role) {
+            $scope.allRoleSubModuleItemByRole = [];
+            if (role == undefined)
+                return;
+            roleSubModuleItemService.getAllRoleSubModuleItemByRole(role)
+                .then(function onSuccess(response) {
+                    $scope.allRoleSubModuleItemByRole = response.data;
+                    if (response.data != null) {
+                        loadPagination();
+                    }
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+
+        loadAllRole();
+
+        function loadAllRole() {
+            $scope.allRoleFromDb = [];
+            roleSubModuleItemService.getAllRole()
+                .then(function onSuccess(response) {
+                    $scope.allRoleFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        loadAllModule();
+        function loadAllModule() {
+            $scope.allModuleFromDb = [];
+            roleSubModuleItemService.getAllModule()
+                .then(function onSuccess(response) {
+                    $scope.allModuleFromDb = response.data;
+                })
+                .catch(function onError(response) {
+                    $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
+                });
+        }
+
+        function loadPagination() {
+            if ($scope.allRoleSubModuleItemByRole != null) {
+                $scope.currentPage = 1; //current page
+                $scope.entryLimit = 10; //max no of items to display in a page
+                $scope.filteredItems = $scope.allRoleSubModuleItemByRole.length; //Initially for no filter
+                $scope.totalItems = $scope.allRoleSubModuleItemByRole.length;
+                //$scope.maxSize = 15;
+
+                $scope.setPage = function (pageNo) {
+                    $scope.currentPage = pageNo;
+                };
+                $scope.filter = function () {
+                    $timeout(function () {
+                        $scope.filteredItems = $scope.filtered.length;
+                    }, 9000);
+                };
+                $scope.sort_by = function (predicate) {
+                    $scope.predicate = predicate;
+                    $scope.reverse = !$scope.reverse;
+                };
+            }
+        }
+
+    });</script>

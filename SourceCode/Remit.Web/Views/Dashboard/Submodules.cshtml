@@ -1,0 +1,200 @@
+﻿@{
+  ViewBag.Title = "Submodules";
+  Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+}
+
+
+<script type="text/javascript">
+  var myEl = angular.element(document.querySelector('#body'));
+  myEl.addClass('itemview');
+
+  app.factory('dashboardService', [
+    '$http', function ($http) {
+      return {
+        getAppointment: function (id) {
+          return $http.get('/Appointment/GetAppointment/' + id);
+        },
+        getAdminDashboardInfo: function (id) {
+          return $http.get('/Dashboard/GetAdminDashboardInfo/' + id);
+        },
+        getAllModule: function () {
+            return $http.get('/Module/GetModuleList');
+        },
+        getLastFimeMessageOfAdmin: function (id) {
+          return $http.get('/Message/GetLastThreeMessgeSentToLoggedUser/' + id);
+        },
+        setModuleIdToSession: function (id) {
+          return $http.get('/Dashboard/SetModuleInSession/' + id);
+        },
+        getSubModuleByModuleId: function (id) {
+          return $http.get('/SubModule/GetSubModulesByModuleId/' + id);
+        }
+      };
+    }
+  ]);
+
+  app.controller('adminViewCtrl', function ($scope, $http, dashboardService, $log, $ngBootbox) {
+    @*//alert('@SFC.Web.Helpers.UserSession.GetUserFromSession().Role.RoleSubModuleItems.FirstOrDefault().UpdateOperation');*@
+
+      var moduleIdforCss = '@ViewBag.ModuleId';
+
+    changeStyle(moduleIdforCss);
+
+    function changeStyle(moduleId) {
+      switch (moduleId) {
+        case '1':
+          $scope.Layout = 'style';
+          break;
+        case '2':
+          $scope.Layout = 'style-Green';
+          break;
+        case '3':
+          $scope.Layout = 'style-red';
+          break;
+        case '4':
+          $scope.Layout = 'style-blue';
+          break;
+        case '5':
+          $scope.Layout = 'style-pink';
+          break;
+        case '6':
+          $scope.Layout = 'style-brown';
+          break;
+        case '7':
+          $scope.Layout = 'style-black';
+          break;
+        default:
+          $scope.Layout = 'style';
+          break;
+      }
+
+    }
+
+
+
+    LoadModules();
+    $scope.SelectedMenu = '';
+    $scope.LoadSubModules = function (moduleId, isFromMainMenu) {
+
+      $scope.SubModules = [];
+      $scope.SelectedModule = moduleId;
+      for (var i = 0; i < $scope.allModuleFromDb.length; i++) {
+        if ($scope.allModuleFromDb[i].Id == moduleId) {
+          $scope.SubModules = $scope.allModuleFromDb[i].SubModules;
+          $scope.isShowMainMenu = isFromMainMenu;
+          AssignModuleToSession(moduleId);
+          break;
+        }
+      }
+      //alert(isFromMainMenu)
+    }
+
+    function AssignModuleToSession(moduleId) {
+      dashboardService.setModuleIdToSession(moduleId)
+        .then(function onSuccess(response) {
+
+        })
+        .catch(function onError(response) {
+          $ngBootbox.alert('Error');
+        });
+    }
+
+    function LoadModules() {
+      $scope.allModuleFromDb = [];
+      dashboardService.getAllModule()
+        .then(function onSuccess(response) {
+          $scope.allModuleFromDb = response.data;
+        })
+        .catch(function onError(response) {
+          $ngBootbox.alert('Error');
+        });
+    }
+
+    LoadSubModules();
+
+    function LoadSubModules() {
+      $scope.allSubModuleFromDb = [];
+      dashboardService.getSubModuleByModuleId('@ViewBag.ModuleId')
+        .then(function onSuccess(response) {
+            $scope.allSubModuleFromDb = response.data;
+        })
+        .catch(function onError(response) {
+          $ngBootbox.alert('Error');
+        });
+    }
+
+    $scope.isShowMainMenu = true;
+    $scope.isShowMainSmallMenu = false;
+
+    $scope.ToggleMainLargeMenu = function () {
+      if ($scope.isShowMainMenu == true) {
+        $scope.isShowMainMenu = false;
+        $scope.isShowMainSmallMenu = true;
+      } else {
+        $scope.isShowMainMenu = true;
+        $scope.isShowMainSmallMenu = false;
+      }
+    }
+  });</script>
+
+
+
+
+<div class="row-eq-height" ng-repeat="allSubModule in allSubModuleFromDb track by $index" ng-if="$index%4==0" style="margin-bottom: 20px;">
+
+    <div class="col-md-3" ng-repeat="i in [$index,$index+1,$index+2,$index+3]" ng-if="allSubModuleFromDb[i]!=null">
+        
+        <div class="panel panel-default" ng-show="allSubModuleFromDb[i].SubModuleItems.length > 0">
+            <div class="panel-heading menuList text-uppercase">{{allSubModuleFromDb[i].NameFromResource}}</div>
+            <div class="panel-body" style="border: 1px solid #e8e8e8; height: 100%; padding: 0">
+
+                <table class="table table-hover" style="margin-bottom: 0" >
+                    <tr ng-repeat="aSubModuleItem in allSubModuleFromDb[i].SubModuleItems">
+                        <td style="padding: 0;">
+                            <a href="{{aSubModuleItem.UrlPath}}"
+                               class="hvr-fade" data-tooltip title="{{aSubModuleItem.Name}}" data-placement="right" data-container="body" style="display: block; font-size: 11px; color: #000000; padding: 10px 10px 10px 15px;border-bottom: 1px solid #f0f0f0">
+                                {{aSubModuleItem.NameFromResource}}
+                                <span style="float: right"><i class="fa fa-chevron-right" style="color: #c0c0c0" aria-hidden="true"></i></span>
+                            </a>
+                          
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3" ng-hide="true">
+        <div class="panel panel-default" @*ng-repeat="aSubModule in allSubModuleFromDb"*@ ng-show="aSubModule.SubModuleItems.length >0">
+            <div class="panel-heading text-lg text-bold text-uppercase">{{aSubModule.NameFromResource}}</div>
+            <div class="panel-body pt pb">
+
+                <table class="table table-hover">
+                    <tr ng-repeat="aSubModuleItem in aSubModule.SubModuleItems">
+                        <td>
+                          <a href="{{aSubModuleItem.UrlPath}}"> {{aSubModuleItem.NameFromResource}}</a>
+                          
+                        </td>
+                    </tr>
+                </table>
+
+
+                @*<div class="col-md-12">
+                <div class="row">
+                    <a ng-repeat="aSubModuleItem in aSubModule.SubModuleItems" href="{{aSubModuleItem.UrlPath}}">
+                        <div class="col-md-4" style="padding: 5px 5px;">
+                            <div class="panel panel-default boxShadowMenuItem" style="margin: 0;">
+                                <div class="panel-body bk-primary text-light fixed-height-panel text-center flex-center-vertically submenuItemBStyle">
+                                    {{aSubModuleItem.NameFromResource}}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
