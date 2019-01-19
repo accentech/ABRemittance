@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Remit.ClientModel;
 using Remit.Model.Models;
 using Remit.Service;
 using System;
@@ -24,14 +25,14 @@ namespace Remit.WebAPI.Controllers
             //this.roleSubModuleItemService = roleSubModuleItemService;
         }
 
-        public JsonResult<List<CountryViewModel>> GetCountryList()
+        public JsonResult<List<CountryModel>> GetCountryList()
         {
             var countryListObj = this.countryService.GetAllCountry();
-            List<CountryViewModel> countryVMList = new List<CountryViewModel>();
+            List<CountryModel> countryVMList = new List<CountryModel>();
 
             foreach (var country in countryListObj)
             {
-                CountryViewModel countryTemp = new CountryViewModel();
+                CountryModel countryTemp = new CountryModel();
                 countryTemp.Id = country.Id;
                 countryTemp.Name = country.Name;
                 countryTemp.Code = country.Code;
@@ -43,11 +44,4 @@ namespace Remit.WebAPI.Controllers
 
     }
 
-    public class CountryViewModel
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-
-    }
 }

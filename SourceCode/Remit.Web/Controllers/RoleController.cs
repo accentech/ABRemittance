@@ -8,6 +8,7 @@ using Remit.Service;
 using Helpers;
 using Remit.CachingService;
 using Remit.Web.Helpers;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -166,11 +167,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetRoleList()
         {
             var roleListObj = this.roleService.GetAllRole();
-            List<RoleViewModel> roleVMList = new List<RoleViewModel>();
+            List<RoleModel> roleVMList = new List<RoleModel>();
 
             foreach (var role in roleListObj)
             {
-                RoleViewModel roleTemp = new RoleViewModel();
+                RoleModel roleTemp = new RoleModel();
                 roleTemp.Id = role.Id;
                 roleTemp.Name = role.Name;
 
@@ -189,9 +190,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class RoleViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
+    
 }

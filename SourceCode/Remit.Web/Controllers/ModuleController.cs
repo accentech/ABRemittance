@@ -9,6 +9,7 @@ using Helpers;
 using System.Globalization;
 using Remit.CachingService;
 using Remit.Web.Helpers;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -178,17 +179,14 @@ namespace Remit.Web.Controllers
             if (LoggedUser != null)
             {
                 var moduleListObj = this.moduleService.GetAllModule();
-                List<ModuleViewModel> moduleVMList = new List<ModuleViewModel>();
+                List<ModuleModel> moduleVMList = new List<ModuleModel>();
 
 
                 foreach (var module in moduleListObj)
                 {
-                    ModuleViewModel moduleTemp = new ModuleViewModel();
+                    ModuleModel moduleTemp = new ModuleModel();
                     moduleTemp.Id = module.Id;
-                    if (module.Name != null)
-                    {
-                        moduleTemp.NameFromResource = GetMenuResourceValueByDatabaseId(module.Name.Replace(" ",""));
-                    }
+                    
                     moduleTemp.Name = module.Name;
                     moduleTemp.ImageName = module.ImageName;
                     moduleTemp.Ordering = module.Ordering;
@@ -209,17 +207,13 @@ namespace Remit.Web.Controllers
             if (LoggedUser != null)
             {
                 var moduleListObj = this.moduleService.GetAllModule().Where(m=>m.IsActive==true);
-                List<ModuleViewModel> moduleVMList = new List<ModuleViewModel>();
+                List<ModuleModel> moduleVMList = new List<ModuleModel>();
 
 
                 foreach (var module in moduleListObj)
                 {
-                    ModuleViewModel moduleTemp = new ModuleViewModel();
-                    moduleTemp.Id = module.Id;
-                    if (module.Name != null)
-                    {
-                        moduleTemp.NameFromResource = module.Name;//GetMenuResourceValueByDatabaseId(module.Name);
-                    }
+                    ModuleModel moduleTemp = new ModuleModel();
+                    moduleTemp.Id = module.Id;                    
                     moduleTemp.Name = module.Name;
                     moduleTemp.ImageName = module.ImageName;
                     moduleTemp.Ordering = module.Ordering;
@@ -240,17 +234,13 @@ namespace Remit.Web.Controllers
             if (LoggedUser != null)
             {
                 var moduleListObj = this.moduleService.GetAllModuleByRoleId(LoggedUser.RoleId);
-                List<ModuleViewModel> moduleVMList = new List<ModuleViewModel>();
+                List<ModuleModel> moduleVMList = new List<ModuleModel>();
 
 
                 foreach (var module in moduleListObj)
                 {
-                    ModuleViewModel moduleTemp = new ModuleViewModel();
+                    ModuleModel moduleTemp = new ModuleModel();
                     moduleTemp.Id = module.Id;
-                    if (module.Name != null)
-                    {
-                        moduleTemp.NameFromResource = GetMenuResourceValueByDatabaseId(module.Name.Replace(" ",""));
-                    }
                     moduleTemp.Name = module.Name;
                     moduleTemp.ImageName = module.ImageName;
                     moduleTemp.Ordering = module.Ordering;
@@ -273,74 +263,5 @@ namespace Remit.Web.Controllers
 
     }
 
-
-
-    public class ModuleViewModel
-    {
-        public ModuleViewModel()
-        {
-            this.SubModules = new List<SubModuleViewModel>();
-        }
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string NameFromResource { get; set; }
-        public string ImageName { get; set; }
-        public int? Ordering { get; set; }
-        public bool IsActive { get; set; }
-        public List<SubModuleViewModel> SubModules { get; set; }
-    }
-
-    public class SubModuleViewModel
-    {
-        public SubModuleViewModel()
-        {
-            this.SubModuleItems = new List<SubModuleItemViewModel>();
-        }
-
-        public int Id { get; set; }
-        public Nullable<int> ModuleId { get; set; }
-        public string Name { get; set; }
-        public string ModuleName { get; set; }
-        public string NameFromResource { get; set; }
-        public int? Ordering { get; set; }
-        public bool IsActive { get; set; }
-        public virtual Module Module { get; set; }
-
-        public List<SubModuleItemViewModel> SubModuleItems { get; set; }
-    }
-
-    public class SubModuleItemViewModel
-    {
-        public SubModuleItemViewModel()
-        {
-            this.RoleSubModuleItem = new RoleSubModuleItemViewModel();
-        }
-
-        public int Id { get; set; }
-        public Nullable<int> SubModuleId { get; set; }
-        public string Name { get; set; }
-        public string NameFromResource { get; set; }
-        public string UrlPath { get; set; }      
-        public int? Ordering { get; set; }
-        public bool? IsBaseItem { get; set; }   
-        public string SubModuleName { get; set; }
-        public string ModuleName { get; set; }
-        public int? ModuleId { get; set; }
-        //public Nullable<int> StationId { get; set; }
-        //public string StationName { get; set; }
-        public int? BaseItemId { get; set; }
-        public string BaseItemName { get; set; }
-        public bool IsActive { get; set; }
-        RoleSubModuleItemViewModel RoleSubModuleItem { get; set; }
-    }
-
-    public class ActivityViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public bool SelectionStatus { get; set; }
-        public string StationName { get; set; }
-    }
 
 }

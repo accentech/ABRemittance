@@ -8,7 +8,7 @@ using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -173,11 +173,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetCountryList()
         {
             var countryListObj = this.countryService.GetAllCountry();
-            List<CountryViewModel> countryVMList = new List<CountryViewModel>();
+            List<CountryModel> countryVMList = new List<CountryModel>();
 
             foreach (var country in countryListObj)
             {
-                CountryViewModel countryTemp = new CountryViewModel();
+                CountryModel countryTemp = new CountryModel();
                 countryTemp.Id = country.Id;
                 countryTemp.Name = country.Name;
                 countryTemp.Code = country.Code;
@@ -193,11 +193,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class CountryViewModel
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-
-    }
+    
 }

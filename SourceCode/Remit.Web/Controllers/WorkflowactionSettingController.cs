@@ -8,7 +8,7 @@ using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
 using Remit.Web.Helpers;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -134,11 +134,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetWorkflowactionSettingList()
         {
             var workflowactionSettingListObj = this.workflowactionSettingService.GetAllWorkflowactionSetting();
-            List<WorkflowactionSettingViewModel> workflowactionSettingVMList = new List<WorkflowactionSettingViewModel>();
+            List<WorkflowactionSettingModel> workflowactionSettingVMList = new List<WorkflowactionSettingModel>();
 
             foreach (var workflowactionSetting in workflowactionSettingListObj)
             {
-                WorkflowactionSettingViewModel workflowactionSettingTemp = new WorkflowactionSettingViewModel();
+                WorkflowactionSettingModel workflowactionSettingTemp = new WorkflowactionSettingModel();
                 workflowactionSettingTemp.Id = workflowactionSetting.Id;
                 workflowactionSettingTemp.SubMouduleItemId = workflowactionSetting.SubMouduleItemId;
                 workflowactionSettingTemp.EmployeeId = workflowactionSetting.EmployeeId;
@@ -172,12 +172,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class WorkflowactionSettingViewModel
-    {
-        public System.Guid Id { get; set; }
-        public Nullable<int> SubMouduleItemId { get; set; }
-        public Nullable<int> EmployeeId { get; set; }
-        public string EmployeeName { get; set; }
-
-    }
+   
 }

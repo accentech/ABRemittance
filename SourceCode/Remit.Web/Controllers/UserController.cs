@@ -155,11 +155,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetUserList()
         {
             var userListObj = this.userService.GetAllUser();
-            List<UserViewModel> userVMList = new List<UserViewModel>();
+            List<UserModel> userVMList = new List<UserModel>();
 
             foreach (var user in userListObj)
             {
-                UserViewModel userTemp = new UserViewModel();
+                UserModel userTemp = new UserModel();
                 userTemp.Id = user.Id;
                 
                 userTemp.LoginName = user.LoginName;
@@ -192,7 +192,7 @@ namespace Remit.Web.Controllers
         {
             var user = this.userService.GetUser(id);
             
-            UserViewModel userTemp = new UserViewModel();
+            UserModel userTemp = new UserModel();
             userTemp.Id = user.Id;
 
             userTemp.LoginName = user.LoginName;
@@ -216,7 +216,7 @@ namespace Remit.Web.Controllers
         }
     }
 
-    class UserViewModel
+    class UserModel
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }

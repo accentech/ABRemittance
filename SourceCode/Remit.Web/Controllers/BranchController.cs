@@ -9,6 +9,7 @@ using Remit.Service;
 using Helpers;
 using Remit.CachingService;
 using Remit.Web.Helpers;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -164,11 +165,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetBranchListWithCondition(int bankId, string countryId)
         {
             var branchListObj = this.branchService.GetAllBranch().Where(c => c.BankId == bankId && c.CountryId == countryId);
-            List<BranchViewModel> branchVMList = new List<BranchViewModel>();
+            List<BranchModel> branchVMList = new List<BranchModel>();
 
             foreach (var branch in branchListObj)
             {
-                BranchViewModel branchTemp = new BranchViewModel();
+                BranchModel branchTemp = new BranchModel();
                 branchTemp.Id = branch.Id;
                 branchTemp.Name = branch.Name;
 
@@ -193,11 +194,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetBranchList()
         {
             var branchListObj = this.branchService.GetAllBranch();
-            List<BranchViewModel> branchVMList = new List<BranchViewModel>();
+            List<BranchModel> branchVMList = new List<BranchModel>();
 
             foreach (var branch in branchListObj)
             {
-                BranchViewModel branchTemp = new BranchViewModel();
+                BranchModel branchTemp = new BranchModel();
                 branchTemp.Id = branch.Id;
                 branchTemp.Name = branch.Name;
                 branchTemp.Address = branch.Address;
@@ -221,11 +222,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetBranchListByBankId(int id)
         {
             var branchListObj = this.branchService.GetAllBranch().Where(c => c.BankId == id);
-            List<BranchViewModel> branchVMList = new List<BranchViewModel>();
+            List<BranchModel> branchVMList = new List<BranchModel>();
 
             foreach (var branch in branchListObj)
             {
-                BranchViewModel branchTemp = new BranchViewModel();
+                BranchModel branchTemp = new BranchModel();
                 branchTemp.Id = branch.Id;
                 branchTemp.Name = branch.Name;
 
@@ -247,16 +248,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class BranchViewModel
-    {
-        public int Id { get; set; }
-        public string CountryId { get; set; }
-        public int? BankId { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string CountryName { get; set; }
-        public string BankName { get; set; }
-    }
+   
 }

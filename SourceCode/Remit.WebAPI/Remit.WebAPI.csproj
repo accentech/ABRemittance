@@ -297,6 +297,10 @@
       <Project>{a8997781-b306-48b9-a2ba-a45efb6e7f96}</Project>
       <Name>Remit.CachingService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Remit.ClientModel\Remit.ClientModel.csproj">
+      <Project>{030fa27a-b5e3-463f-a1ae-d77d01548fa4}</Project>
+      <Name>Remit.ClientModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Remit.Core\Remit.Core.csproj">
       <Project>{c620b128-6555-4f1c-82c7-87e759c948ce}</Project>
       <Name>Remit.Core</Name>

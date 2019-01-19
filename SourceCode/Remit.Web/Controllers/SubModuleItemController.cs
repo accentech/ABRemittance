@@ -9,6 +9,7 @@ using Helpers;
 using Remit.CachingService;
 using Remit.Web.Helpers;
 using System.Xml;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -174,19 +175,15 @@ namespace Remit.Web.Controllers
         public JsonResult GetSubModuleItemList()
         {
             var subModuleItemListObj = this.subModuleItemService.GetAllSubModuleItem();
-            List<SubModuleItemViewModel> subModuleItemVMList = new List<SubModuleItemViewModel>();
+            List<SubModuleItemModel> subModuleItemVMList = new List<SubModuleItemModel>();
 
             foreach (var subModuleItem in subModuleItemListObj)
             {
-                SubModuleItemViewModel subModuleItemTemp = new SubModuleItemViewModel();
+                SubModuleItemModel subModuleItemTemp = new SubModuleItemModel();
                 subModuleItemTemp.Id = subModuleItem.Id;
                 subModuleItemTemp.Name = subModuleItem.Name;
                 if (subModuleItem.SubModuleId != null)
                     subModuleItemTemp.ModuleId = subModuleItem.SubModule.ModuleId;
-                if (subModuleItem.Name != null)
-                {
-                    subModuleItemTemp.NameFromResource = subModuleItem.Name;// GetMenuResourceValueByDatabaseId(subModuleItem.Name);
-                }
                 subModuleItemTemp.SubModuleId = subModuleItem.SubModuleId;
                 subModuleItemTemp.Ordering = subModuleItem.Ordering;
                 if (subModuleItem.SubModuleId != null)
@@ -213,19 +210,15 @@ namespace Remit.Web.Controllers
         public JsonResult GetBaseSubModuleItemList()
         {
             var subModuleItemListObj = this.subModuleItemService.GetAllBaseSubModuleItem();
-            List<SubModuleItemViewModel> subModuleItemVMList = new List<SubModuleItemViewModel>();
+            List<SubModuleItemModel> subModuleItemVMList = new List<SubModuleItemModel>();
 
             foreach (var subModuleItem in subModuleItemListObj)
             {
-                SubModuleItemViewModel subModuleItemTemp = new SubModuleItemViewModel();
+                SubModuleItemModel subModuleItemTemp = new SubModuleItemModel();
                 subModuleItemTemp.Id = subModuleItem.Id;
                 subModuleItemTemp.Name = subModuleItem.Name;
                 if (subModuleItem.SubModuleId != null)
                     subModuleItemTemp.ModuleId = subModuleItem.SubModule.ModuleId;
-                if (subModuleItem.Name != null)
-                {
-                    subModuleItemTemp.NameFromResource = subModuleItem.Name;// GetMenuResourceValueByDatabaseId(subModuleItem.Name);
-                }
                 subModuleItemTemp.SubModuleId = subModuleItem.SubModuleId;
                 subModuleItemTemp.Ordering = subModuleItem.Ordering;
                 if (subModuleItem.SubModuleId != null)

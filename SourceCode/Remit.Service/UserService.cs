@@ -124,6 +124,7 @@ namespace Remit.Service
             catch (Exception e)
             {
                 getUserInfo = null;
+                logger.Error("Error in authenticating user", e);
             }
             return getUserInfo;
         }

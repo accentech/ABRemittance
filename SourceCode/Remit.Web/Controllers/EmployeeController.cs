@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Remit.CachingService;
+using Remit.ClientModel;
 using Remit.Model.Models;
 using Remit.Service;
 using Remit.Web.Helpers;
@@ -321,11 +322,11 @@ namespace Remit.Web.Controllers
     public JsonResult GetEmployeeList()
     {
         var employeeListObj = this.employeeService.GetAllEmployee();
-        List<EmployeeViewModel> employeeVMList = new List<EmployeeViewModel>();
+        List<EmployeeModel> employeeVMList = new List<EmployeeModel>();
 
         foreach (var employee in employeeListObj)
         {
-            EmployeeViewModel employeeTemp = new EmployeeViewModel();
+            EmployeeModel employeeTemp = new EmployeeModel();
             employeeTemp.Id = employee.Id;
             employeeTemp.Code = employee.Code;
             employeeTemp.FullName = employee.FullName;
@@ -360,11 +361,11 @@ namespace Remit.Web.Controllers
     public JsonResult GetEmployeeListOperation()
     {
         var employeeListObj = this.employeeService.GetAllEmployeeByConfig();
-        List<EmployeeViewModel> employeeVMList = new List<EmployeeViewModel>();
+        List<EmployeeModel> employeeVMList = new List<EmployeeModel>();
 
         foreach (var employee in employeeListObj)
         {
-            EmployeeViewModel employeeTemp = new EmployeeViewModel();
+            EmployeeModel employeeTemp = new EmployeeModel();
             employeeTemp.Id = employee.Id;
             employeeTemp.Code = employee.Code;
             employeeTemp.FullName = employee.FullName;
@@ -419,7 +420,7 @@ namespace Remit.Web.Controllers
 
       var allUserSubModuleItemPreferenceList = this.workflowactionSettingService.GetWorkflowactionSettingBySubModuleItemId(subModuleItemId, workflowactionId);
 
-      List<EmployeeViewModel> employeeList = new List<EmployeeViewModel>();
+      List<EmployeeModel> employeeList = new List<EmployeeModel>();
 
       foreach ( var user in allEmployeeList )
       {
@@ -434,26 +435,26 @@ namespace Remit.Web.Controllers
         }
         if ( itemExist != true )
         {
-          EmployeeViewModel employeeViewModelTemp = new EmployeeViewModel();
-          employeeViewModelTemp.Id = user.Id;
-          //employeeViewModelTemp.RoleId = user.RoleId;
+          EmployeeModel employeeModelTemp = new EmployeeModel();
+          employeeModelTemp.Id = user.Id;
+          //employeeModelTemp.RoleId = user.RoleId;
           //if (user.EmployeeId != null)
-          employeeViewModelTemp.FullName = user.FullName;
+          employeeModelTemp.FullName = user.FullName;
 
-          if ( !employeeList.Contains(employeeViewModelTemp) )
+          if ( !employeeList.Contains(employeeModelTemp) )
           {
-            employeeList.Add(employeeViewModelTemp);
+            employeeList.Add(employeeModelTemp);
           }
         }
       }
 
       //..........................For Selected Users.........................................//
 
-      List<EmployeeViewModel> employeePreferanceVMList = new List<EmployeeViewModel>();
+      List<EmployeeModel> employeePreferanceVMList = new List<EmployeeModel>();
 
       foreach ( var userPreferance in allUserSubModuleItemPreferenceList )
       {
-        EmployeeViewModel empPreferanceTemp = new EmployeeViewModel();
+        EmployeeModel empPreferanceTemp = new EmployeeModel();
         if ( userPreferance.EmployeeId != null )
           empPreferanceTemp.Id = (int)userPreferance.EmployeeId;
 
@@ -477,28 +478,28 @@ namespace Remit.Web.Controllers
     {
       var allEmployeeList = this.employeeService.GetAllEmployeeByDepartmentAndDesignation(departmentId, designationId);
 
-      List<EmployeeViewModel> employeeList = new List<EmployeeViewModel>();
+      List<EmployeeModel> employeeList = new List<EmployeeModel>();
 
       foreach ( var emp in allEmployeeList )
       {
         var itemExist = false;
         if ( itemExist != true )
         {
-          EmployeeViewModel employeeViewModelTemp = new EmployeeViewModel();
-          employeeViewModelTemp.Id = emp.Id;
-          //employeeViewModelTemp.RoleId = user.RoleId;
-          employeeViewModelTemp.FullName = emp.FullName;
+          EmployeeModel employeeModelTemp = new EmployeeModel();
+          employeeModelTemp.Id = emp.Id;
+          //employeeModelTemp.RoleId = user.RoleId;
+          employeeModelTemp.FullName = emp.FullName;
 
-          if ( !employeeList.Contains(employeeViewModelTemp) )
+          if ( !employeeList.Contains(employeeModelTemp) )
           {
-            employeeList.Add(employeeViewModelTemp);
+            employeeList.Add(employeeModelTemp);
           }
         }
       }
 
       //..........................For Selected Users.........................................//
 
-      List<EmployeeViewModel> employeePreferanceVMList = new List<EmployeeViewModel>();
+      List<EmployeeModel> employeePreferanceVMList = new List<EmployeeModel>();
 
       return Json(new
       {
@@ -508,36 +509,7 @@ namespace Remit.Web.Controllers
     }
   }
 
-  public class EmployeeViewModel
-  {
-    public EmployeeViewModel()
-    {
-      
-    }
-    public int Id { get; set; }
-    public string Code { get; set; }
-    public string FullName { get; set; }
-    public string PresentAddress { get; set; }
-    public string PermanentAddress { get; set; }
-    public string FatherName { get; set; }
-    public string MotherName { get; set; }
-    public string NationalId { get; set; }
-    public string LatestDepartmentName { get; set; }
-    public string LatestDesignationName { get; set; }
-    public string PassportNo { get; set; }
-    public string PhotoPath { get; set; }
-      
-    public string Email { get; set; }
-    public string OfficePhone { get; set; }
-    public string OfficeMobile { get; set; }
-    public string ResidentPhone { get; set; }
-    public string ResidentMobile { get; set; }
-    public string AuthenticationCode { get; set; }
-    public string BloodGroup { get; set; }
-    public int? LastDepartmentId { get; set; }
-    public int? LastDesignationId { get; set; }
-   
-  }
+ 
 
 
 }

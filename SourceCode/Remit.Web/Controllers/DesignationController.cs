@@ -8,6 +8,7 @@ using Remit.Service;
 using Helpers;
 using Remit.CachingService;
 using Remit.Web.Helpers;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -159,11 +160,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetDesignationList()
         {
             var designationListObj = this.designationService.GetAllDesignation();
-            List<DesignationViewModel> designationVMList = new List<DesignationViewModel>();
+            List<DesignationModel> designationVMList = new List<DesignationModel>();
 
             foreach (var designation in designationListObj)
             {
-                DesignationViewModel designationTemp = new DesignationViewModel();
+                DesignationModel designationTemp = new DesignationModel();
                 designationTemp.Id = designation.Id;
                 designationTemp.Name = designation.Name;
                 designationTemp.DepartmentName = departmentService.GetDepartment(Convert.ToInt32(designation.DepartmentId)).Name;
@@ -177,11 +178,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetDesignationListByConfig()
         {
             var designationListObj = this.designationService.GetAllDesignationByConfig();
-            List<DesignationViewModel> designationVMList = new List<DesignationViewModel>();
+            List<DesignationModel> designationVMList = new List<DesignationModel>();
 
             foreach (var designation in designationListObj)
             {
-                DesignationViewModel designationTemp = new DesignationViewModel();
+                DesignationModel designationTemp = new DesignationModel();
                 designationTemp.Id = designation.Id;
                 designationTemp.Name = designation.Name;
                 designationTemp.DepartmentName = departmentService.GetDepartment(Convert.ToInt32(designation.DepartmentId)).Name;
@@ -195,14 +196,14 @@ namespace Remit.Web.Controllers
         public JsonResult GetDesignationListByDepartmentId(int id) //id is departmentId
         {
             var designationListObj = this.designationService.GetAllDesignationByDepartmentId(id);
-            List<DesignationViewModel> designationVMList = null;
+            List<DesignationModel> designationVMList = null;
 
             if (designationListObj != null)
             {
-                designationVMList = new List<DesignationViewModel>();
+                designationVMList = new List<DesignationModel>();
                 foreach (var designation in designationListObj)
                 {
-                    DesignationViewModel designationTemp = new DesignationViewModel();
+                    DesignationModel designationTemp = new DesignationModel();
                     designationTemp.Id = designation.Id;
                     designationTemp.Name = designation.Name;
                     designationTemp.DepartmentId = designation.DepartmentId;
@@ -222,14 +223,6 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class DesignationViewModel
-    {
-        public int Id { get; set; }
-        public int DepartmentId { get; set; }
-        public string Name { get; set; }
-        public string DepartmentName { get; set; }
-        public virtual Department Department { get; set; }
-
-    }
+   
 
 }

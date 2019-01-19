@@ -8,7 +8,7 @@ using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -169,11 +169,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetBankList()
         {
             var bankListObj = this.bankService.GetAllBank();
-            List<BankViewModel> bankVMList = new List<BankViewModel>();
+            List<BankModel> bankVMList = new List<BankModel>();
 
             foreach (var bank in bankListObj)
             {
-                BankViewModel bankTemp = new BankViewModel();
+                BankModel bankTemp = new BankModel();
                 bankTemp.Id = bank.Id;
                 bankTemp.Name = bank.Name;
                 
@@ -189,11 +189,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class BankViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        
-
-    }
+    
 }

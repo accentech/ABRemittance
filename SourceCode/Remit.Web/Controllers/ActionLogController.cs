@@ -7,7 +7,7 @@ using Remit.CachingService;
 using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -173,11 +173,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetActionLogList()
         {
             var actionLogListObj = this.actionLogService.GetAllActionLog();
-            List<ActionLogViewModel> actionLogVMList = new List<ActionLogViewModel>();
+            List<ActionLogModel> actionLogVMList = new List<ActionLogModel>();
 
             foreach (var actionLog in actionLogListObj)
             {
-                ActionLogViewModel actionLogTemp = new ActionLogViewModel();
+                ActionLogModel actionLogTemp = new ActionLogModel();
                 //actionLogTemp.Id = actionLog.Id;
                 //actionLogTemp.Name = actionLog.Name;
                 //actionLogTemp.Code = actionLog.Code;
@@ -194,11 +194,4 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class ActionLogViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-
-    }
 }

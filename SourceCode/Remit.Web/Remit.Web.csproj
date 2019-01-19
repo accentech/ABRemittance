@@ -1250,7 +1250,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionLogController.cs" />
-    <Compile Include="Controllers\DivisionController.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BranchController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
@@ -1278,9 +1277,7 @@
     <Compile Include="Helpers\ReportService.cs" />
     <Compile Include="Helpers\UserSession.cs" />
     <Compile Include="Helpers\UtilityService.cs" />
-    <Compile Include="Models\DayOfWeekEnum.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\EnumUnitOfMeasurement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\angularPrint.css" />
     <Content Include="Content\font-awesome.css" />
@@ -2434,6 +2431,10 @@
     <ProjectReference Include="..\Remit.CachingService\Remit.CachingService.csproj">
       <Project>{a8997781-b306-48b9-a2ba-a45efb6e7f96}</Project>
       <Name>Remit.CachingService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remit.ClientModel\Remit.ClientModel.csproj">
+      <Project>{030fa27a-b5e3-463f-a1ae-d77d01548fa4}</Project>
+      <Name>Remit.ClientModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\Remit.Core\Remit.Core.csproj">
       <Project>{c620b128-6555-4f1c-82c7-87e759c948ce}</Project>

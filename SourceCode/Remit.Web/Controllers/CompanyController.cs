@@ -8,7 +8,7 @@ using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
 using System.IO;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -216,7 +216,7 @@ namespace Remit.Web.Controllers
         public JsonResult GetCompanyList()
         {
             var companyObj = this.companyService.GetAllCompany().FirstOrDefault();
-            CompanyViewModel companyTemp = new CompanyViewModel();
+            CompanyModel companyTemp = new CompanyModel();
             if (companyObj != null)
             {
                 
@@ -286,26 +286,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class CompanyViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
-        public string Address3 { get; set; }
-        public string Phone { get; set; }
-        public string Fax { get; set; }
-        public string Email { get; set; }
-        public string ContactPerson { get; set; }
-        public string LogoName { get; set; }
-        public int BaseCurrency { get; set; }
-        public int LocalCurrency { get; set; }
-        public string ShipmentAddress { get; set; }
-        public string ShipmentAddress1 { get; set; }
-        public string ShipmentAddress2 { get; set; }
-        public string ShipmentAddress3 { get; set; }
-        public string CompanyUrl { get; set; }
-        public string BaseCurrecySymbol { get; set; }
-    }
+    
 }

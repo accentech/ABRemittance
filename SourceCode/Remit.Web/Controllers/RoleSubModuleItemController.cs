@@ -9,6 +9,7 @@ using Helpers;
 using Remit.CachingService;
 using Remit.Web.Helpers;
 using System.Xml;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -163,11 +164,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetRoleSubModuleItemList()
         {
             var roleSubModuleItemListObj = this.roleSubModuleItemService.GetAllRoleSubModuleItem();
-            List<RoleSubModuleItemViewModel> roleSubModuleItemVMList = new List<RoleSubModuleItemViewModel>();
+            List<RoleSubModuleItemModel> roleSubModuleItemVMList = new List<RoleSubModuleItemModel>();
 
             foreach (var roleSubModuleItem in roleSubModuleItemListObj)
             {
-                RoleSubModuleItemViewModel roleSubModuleItemTemp = new RoleSubModuleItemViewModel();
+                RoleSubModuleItemModel roleSubModuleItemTemp = new RoleSubModuleItemModel();
                 roleSubModuleItemTemp.Id = roleSubModuleItem.Id;
                 roleSubModuleItemTemp.RoleId = roleSubModuleItem.RoleId;
                 if (roleSubModuleItem.RoleId != null)
@@ -234,13 +235,13 @@ namespace Remit.Web.Controllers
         public JsonResult GetRoleSubModuleItemByRole(int id)
         {
             var roleSubModuleItemListObj = roleSubModuleItemService.GetRoleSubModuleItemByRole(id);
-            List<RoleSubModuleItemViewModel> roleSubModuleItemVMList = new List<RoleSubModuleItemViewModel>();
+            List<RoleSubModuleItemModel> roleSubModuleItemVMList = new List<RoleSubModuleItemModel>();
 
             var subModuleItemListObj = this.subModuleItemService.GetAllBaseSubModuleItem();
             foreach (var subModuleItem in subModuleItemListObj)
             {
                 var roleSubModuleItem=roleSubModuleItemListObj.FirstOrDefault(rsm=>rsm.SubModuleItemId==subModuleItem.Id);
-                RoleSubModuleItemViewModel roleSubModuleItemTemp = new RoleSubModuleItemViewModel();
+                RoleSubModuleItemModel roleSubModuleItemTemp = new RoleSubModuleItemModel();
                 
                 if (roleSubModuleItem != null) 
                 {
@@ -295,23 +296,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class RoleSubModuleItemViewModel
-    {
-        public int Id { get; set; }
-        public Nullable<int> RoleId { get; set; }
-        public string RoleIdName { get; set; }
-        public int ModuleId { get; set; }
-        public int SubModuleId { get; set; }
-        public Nullable<int> SubModuleItemId { get; set; }
-        public string SubModuleItemIdName { get; set; }
-        public Nullable<bool> CreateOperation { get; set; }
-        public string CreateOperationName { get; set; }
-        public Nullable<bool> ReadOperation { get; set; }
-        public string ReadOperationName { get; set; }
-        public Nullable<bool> UpdateOperation { get; set; }
-        public string UpdateOperationName { get; set; }
-        public Nullable<bool> DeleteOperation { get; set; }
-        public string DeleteOperationName { get; set; }
-        public string NameFromResource { get; set; }
-    }
+    
 }

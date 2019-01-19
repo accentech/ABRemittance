@@ -7,7 +7,7 @@ using Remit.CachingService;
 using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -172,11 +172,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetWorkflowactionList()
         {
             var workflowactionListObj = this.workflowactionService.GetAllWorkflowaction();
-            List<WorkflowactionViewModel> workflowactionVMList = new List<WorkflowactionViewModel>();
+            List<WorkflowactionModel> workflowactionVMList = new List<WorkflowactionModel>();
 
             foreach (var workflowaction in workflowactionListObj)
             {
-                WorkflowactionViewModel workflowactionTemp = new WorkflowactionViewModel();
+                WorkflowactionModel workflowactionTemp = new WorkflowactionModel();
                 workflowactionTemp.Id = workflowaction.Id;
                 workflowactionTemp.Name = workflowaction.Name;
 
@@ -192,10 +192,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class WorkflowactionViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-    }
+    
 }

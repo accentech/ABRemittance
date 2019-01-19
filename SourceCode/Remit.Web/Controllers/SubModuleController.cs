@@ -8,6 +8,7 @@ using Remit.Service;
 using Helpers;
 using Remit.CachingService;
 using Remit.Web.Helpers;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -165,11 +166,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetSubModuleList()
         {
             var subModuleListObj = this.subModuleService.GetAllSubModule();
-            List<SubModuleViewModel> subModuleVMList = new List<SubModuleViewModel>();
+            List<SubModuleModel> subModuleVMList = new List<SubModuleModel>();
 
             foreach (var subModule in subModuleListObj)
             {
-                SubModuleViewModel subModuleTemp = new SubModuleViewModel();
+                SubModuleModel subModuleTemp = new SubModuleModel();
                 subModuleTemp.Id = subModule.Id;
                 subModuleTemp.Name = subModule.Name;
                 subModuleTemp.ModuleName = moduleService.GetModule(Convert.ToInt32(subModule.ModuleId)).Name;
@@ -187,11 +188,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetActiveSubModuleList()
         {
             var subModuleListObj = this.subModuleService.GetAllSubModule().Where(sm => sm.IsActive == true);
-            List<SubModuleViewModel> subModuleVMList = new List<SubModuleViewModel>();
+            List<SubModuleModel> subModuleVMList = new List<SubModuleModel>();
 
             foreach (var subModule in subModuleListObj)
             {
-                SubModuleViewModel subModuleTemp = new SubModuleViewModel();
+                SubModuleModel subModuleTemp = new SubModuleModel();
                 subModuleTemp.Id = subModule.Id;
                 subModuleTemp.Name = subModule.Name;
                 subModuleTemp.ModuleName = moduleService.GetModule(Convert.ToInt32(subModule.ModuleId)).Name;
@@ -209,11 +210,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetOnlySubModuleByModuleId(int id)// calling from sub module item ui (select module then load sub modules)
         {
             var subModuleListObj = this.subModuleService.GetAllSubModule().Where(sm => sm.IsActive == true && sm.ModuleId == id);
-            List<SubModuleViewModel> subModuleVMList = new List<SubModuleViewModel>();
+            List<SubModuleModel> subModuleVMList = new List<SubModuleModel>();
 
             foreach (var subModule in subModuleListObj)
             {
-                SubModuleViewModel subModuleTemp = new SubModuleViewModel();
+                SubModuleModel subModuleTemp = new SubModuleModel();
                 subModuleTemp.Id = subModule.Id;
                 subModuleTemp.Name = subModule.Name;
                 subModuleTemp.ModuleName = moduleService.GetModule(Convert.ToInt32(subModule.ModuleId)).Name;
@@ -232,21 +233,17 @@ namespace Remit.Web.Controllers
         {
             int mouduleId = id;
             var loggedUser = UserSession.GetUserFromSession();
-            List<SubModuleViewModel> subModuleVMList = new List<SubModuleViewModel>();
+            List<SubModuleModel> subModuleVMList = new List<SubModuleModel>();
             if (loggedUser != null)
             {
                 var subModuleListObj = this.subModuleService.GetSubModulesByModuleIdAndRoleId(mouduleId, (int)loggedUser.RoleId).Where(sm => sm.IsActive == true);
-                List<ModuleViewModel> moduleVMList = new List<ModuleViewModel>();
+                List<ModuleModel> moduleVMList = new List<ModuleModel>();
 
                 foreach (var subModule in subModuleListObj.OrderBy(sm => sm.Ordering))
                 {
-                    SubModuleViewModel subModuleVM = new SubModuleViewModel();
+                    SubModuleModel subModuleVM = new SubModuleModel();
                     subModuleVM.Id = subModule.Id;
                     subModuleVM.Name = subModule.Name;
-                    if (subModule.Name != null)
-                    {
-                        subModuleVM.NameFromResource = GetMenuResourceValueByDatabaseId(subModule.Name);
-                    }
                     subModuleVM.ModuleId = subModule.ModuleId;
                     subModuleVM.Ordering = subModule.Ordering;
 
@@ -255,17 +252,13 @@ namespace Remit.Web.Controllers
 
                     if (subModule.SubModuleItems.Count >= 1)
                     {
-                        List<SubModuleItemViewModel> subModuleItemVMList = new List<SubModuleItemViewModel>();
+                        List<SubModuleItemModel> subModuleItemVMList = new List<SubModuleItemModel>();
 
                         foreach (var subModuleItem in subModule.SubModuleItems.Where(smi => smi.IsActive == true).OrderBy(smi => smi.Ordering))
                         {
-                            SubModuleItemViewModel subModuleItemVM = new SubModuleItemViewModel();
+                            SubModuleItemModel subModuleItemVM = new SubModuleItemModel();
                             subModuleItemVM.Id = subModuleItem.Id;
                             subModuleItemVM.Name = subModuleItem.Name;
-                            if (subModuleItem.Name != null)
-                            {
-                                subModuleItemVM.NameFromResource = GetSubModuleItemResourceValueByDatabaseId(subModuleItem.UrlPath); //subModuleItem.Name;// GetMenuResourceValueByDatabaseId(subModuleItem.Name);
-                            }
                             subModuleItemVM.SubModuleId = subModuleItem.SubModuleId;
                             subModuleItemVM.UrlPath = subModuleItem.UrlPath;
                             //subModuleItemVM.ActivityId = subModuleItem.ActivityId;

@@ -8,15 +8,15 @@ using Remit.Model.Models;
 
 namespace Remit.Data.Repository
 {
-    public class DivisionRepository : RepositoryBase<Division>, IDivisionRepository
+    public class ExHUserRepository : RepositoryBase<ExHUser>, IExHUserRepository
     {
-        public DivisionRepository(IDatabaseFactory databaseFactory)
+        public ExHUserRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
     }
 
-    public interface IDivisionRepository : IRepository<Division>
+    public interface IExHUserRepository : IRepository<ExHUser>
     {
     }
 

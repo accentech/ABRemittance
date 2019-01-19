@@ -7,7 +7,7 @@ using Remit.CachingService;
 using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -182,11 +182,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetCurrencyList()
         {
             var currencyListObj = this.currencyService.GetAllCurrency();
-            List<CurrencyViewModel> currencyVMList = new List<CurrencyViewModel>();
+            List<CurrencyModel> currencyVMList = new List<CurrencyModel>();
 
             foreach (var currency in currencyListObj)
             {
-                CurrencyViewModel currencyTemp = new CurrencyViewModel();
+                CurrencyModel currencyTemp = new CurrencyModel();
                 currencyTemp.Id = currency.Id;
                 currencyTemp.Name = currency.Name;
                 currencyTemp.Symbol = currency.Symbol;
@@ -202,10 +202,5 @@ namespace Remit.Web.Controllers
         }
     }
     
-    public class CurrencyViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Symbol { get; set; }
-    }
+    
 }

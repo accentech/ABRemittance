@@ -7,7 +7,7 @@ using Remit.CachingService;
 using Remit.Model.Models;
 using Remit.Service;
 using Helpers;
-
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -172,11 +172,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetDepartmentList()
         {
             var departmentListObj = this.departmentService.GetAllDepartment();
-            List<DepartmentViewModel> departmentVMList = new List<DepartmentViewModel>();
+            List<DepartmentModel> departmentVMList = new List<DepartmentModel>();
 
             foreach (var department in departmentListObj)
             {
-                DepartmentViewModel departmentTemp = new DepartmentViewModel();
+                DepartmentModel departmentTemp = new DepartmentModel();
                 departmentTemp.Id = department.Id;
                 departmentTemp.Name = department.Name;
                 departmentTemp.Code = department.Code;
@@ -191,11 +191,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetDepartmentListOperation()
         {
             var departmentListObj = this.departmentService.GetAllDepartmentByConfig();
-            List<DepartmentViewModel> departmentVMList = new List<DepartmentViewModel>();
+            List<DepartmentModel> departmentVMList = new List<DepartmentModel>();
 
             foreach (var department in departmentListObj)
             {
-                DepartmentViewModel departmentTemp = new DepartmentViewModel();
+                DepartmentModel departmentTemp = new DepartmentModel();
                 departmentTemp.Id = department.Id;
                 departmentTemp.Name = department.Name;
                 departmentTemp.Code = department.Code;
@@ -214,13 +214,5 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class DepartmentViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string Information { get; set; }
-        public string CodeName { get; set; }
-
-    }
+    
 }

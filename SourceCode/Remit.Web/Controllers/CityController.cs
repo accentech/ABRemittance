@@ -9,6 +9,7 @@ using Remit.Service;
 using Helpers;
 using Remit.CachingService;
 using Remit.Web.Helpers;
+using Remit.ClientModel;
 
 namespace Remit.Web.Controllers
 {
@@ -166,11 +167,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetCityList()
         {
             var cityListObj = this.cityService.GetAllCity();
-            List<CityViewModel> cityVMList = new List<CityViewModel>();
+            List<CityModel> cityVMList = new List<CityModel>();
 
             foreach (var city in cityListObj)
             {
-                CityViewModel cityTemp = new CityViewModel();
+                CityModel cityTemp = new CityModel();
                 cityTemp.Id = city.Id;
                 cityTemp.Name = city.Name;
                 if (city.Country != null)
@@ -189,11 +190,11 @@ namespace Remit.Web.Controllers
         public JsonResult GetCityByCountry(string id)
         {
             var cityListObj = this.cityService.GetAllCity().Where(c=> c.CountryId == id);
-            List<CityViewModel> cityVMList = new List<CityViewModel>();
+            List<CityModel> cityVMList = new List<CityModel>();
 
             foreach (var city in cityListObj)
             {
-                CityViewModel cityTemp = new CityViewModel();
+                CityModel cityTemp = new CityModel();
                 cityTemp.Id = city.Id;
                 cityTemp.Name = city.Name;
 
@@ -216,14 +217,6 @@ namespace Remit.Web.Controllers
         }
     }
 
-    public class CityViewModel
-    {
-        public int Id { get; set; }
-        public string CountryId { get; set; }
-        public string Name { get; set; }
-        public string CountryName { get; set; }
-        public virtual Country Country { get; set; }
-
-    }
+   
 
 }
