@@ -49,7 +49,7 @@ namespace Remit.Web
                     httpContext.Response.Write(myString);
                     //httpContext.Response.Redirect("~/Error?msg=" + myString);
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     //Console.WriteLine(exception);
                     //throw;

@@ -49,7 +49,7 @@ namespace Remit.Web.Helpers
                         m.CC.Add(aCarbonCopy);
                 sc.Send(m);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 mailStatus = false;
             }

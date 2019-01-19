@@ -20,7 +20,6 @@ namespace Remit.Service
         Department GetDepartment(int id);
         
         IEnumerable<Department> GetAllDepartment();
-        IEnumerable<Department> GetAllDepartmentByConfig();
         void SaveRecord();
 
         bool CheckIsExist(Department department);
@@ -109,12 +108,7 @@ namespace Remit.Service
             return departmentRepository.GetAll();
         }
 
-        public IEnumerable<Department> GetAllDepartmentByConfig()
-        {
-            int departmentid = int.Parse(@System.Configuration.ConfigurationSettings.AppSettings["Department"]);
-            return departmentRepository.GetMany(d => d.Id == departmentid);
-        }
-
+        
         public void SaveRecord()
         {
             unitOfWork.Commit();

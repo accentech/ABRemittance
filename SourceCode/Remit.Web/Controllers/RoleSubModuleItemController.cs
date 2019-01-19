@@ -217,18 +217,7 @@ namespace Remit.Web.Controllers
         }
 
 
-        private string GetMenuResourceValueByDatabaseId(string resourceName)
-        {
-            try
-            {
-                return HttpContext.GetGlobalResourceObject("ResourceMenu", resourceName).ToString();
-            }
-            catch (Exception e)
-            {
-                //
-            }
-            return null;
-        }
+        
 
 
 

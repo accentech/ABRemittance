@@ -1,8 +1,8 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using Transcend.Model.Models.Mapping;
+using Remit.Model.Models.Mapping;
 
-namespace Transcend.Model.Models
+namespace Remit.Model.Models
 {
     public partial class dbRemittanceContext : DbContext
     {
@@ -17,6 +17,7 @@ namespace Transcend.Model.Models
         }
 
         public DbSet<ActionLog> ActionLogs { get; set; }
+        public DbSet<Agent> Agents { get; set; }
         public DbSet<Api> Apis { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<BusinessUser> BusinessUsers { get; set; }
@@ -32,10 +33,11 @@ namespace Transcend.Model.Models
         public DbSet<ExHIPAddress> ExHIPAddresses { get; set; }
         public DbSet<ExHRemitData> ExHRemitDatas { get; set; }
         public DbSet<ExHRemitDataDetail> ExHRemitDataDetails { get; set; }
-        public DbSet<ExHUser> ExHUsers { get; set; }
         public DbSet<Module> Modules { get; set; }
+        public DbSet<NotificationSetting> NotificationSettings { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RoleSubModuleItem> RoleSubModuleItems { get; set; }
+        public DbSet<SubAgent> SubAgents { get; set; }
         public DbSet<SubModule> SubModules { get; set; }
         public DbSet<SubModuleItem> SubModuleItems { get; set; }
         public DbSet<Workflowaction> Workflowactions { get; set; }
@@ -44,6 +46,7 @@ namespace Transcend.Model.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new ActionLogMap());
+            modelBuilder.Configurations.Add(new AgentMap());
             modelBuilder.Configurations.Add(new ApiMap());
             modelBuilder.Configurations.Add(new BranchMap());
             modelBuilder.Configurations.Add(new BusinessUserMap());
@@ -59,10 +62,11 @@ namespace Transcend.Model.Models
             modelBuilder.Configurations.Add(new ExHIPAddressMap());
             modelBuilder.Configurations.Add(new ExHRemitDataMap());
             modelBuilder.Configurations.Add(new ExHRemitDataDetailMap());
-            modelBuilder.Configurations.Add(new ExHUserMap());
             modelBuilder.Configurations.Add(new ModuleMap());
+            modelBuilder.Configurations.Add(new NotificationSettingMap());
             modelBuilder.Configurations.Add(new RoleMap());
             modelBuilder.Configurations.Add(new RoleSubModuleItemMap());
+            modelBuilder.Configurations.Add(new SubAgentMap());
             modelBuilder.Configurations.Add(new SubModuleMap());
             modelBuilder.Configurations.Add(new SubModuleItemMap());
             modelBuilder.Configurations.Add(new WorkflowactionMap());

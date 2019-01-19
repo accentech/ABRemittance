@@ -188,25 +188,7 @@ namespace Remit.Web.Controllers
             return Json(departmentVMList, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetDepartmentListOperation()
-        {
-            var departmentListObj = this.departmentService.GetAllDepartmentByConfig();
-            List<DepartmentModel> departmentVMList = new List<DepartmentModel>();
-
-            foreach (var department in departmentListObj)
-            {
-                DepartmentModel departmentTemp = new DepartmentModel();
-                departmentTemp.Id = department.Id;
-                departmentTemp.Name = department.Name;
-                departmentTemp.Code = department.Code;
-                departmentTemp.Information = department.Information;
-                departmentTemp.CodeName = department.Code + " (" + department.Name + ")";
-
-                departmentVMList.Add(departmentTemp);
-            }
-            return Json(departmentVMList, JsonRequestBehavior.AllowGet);
-        }
-
+        
         public JsonResult GetDepartment(int id)
         {
             var department = this.departmentService.GetDepartment(id);

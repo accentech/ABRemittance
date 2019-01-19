@@ -9,5 +9,6 @@ namespace Remit.Model.Models
         public Nullable<int> ExHRemitDataId { get; set; }
         public string RawRemitData { get; set; }
         public string ParsedStatus { get; set; }
+        public virtual ExHRemitData ExHRemitData { get; set; }
     }
 }

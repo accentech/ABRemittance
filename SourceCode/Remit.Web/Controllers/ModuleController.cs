@@ -160,18 +160,7 @@ namespace Remit.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetMenuResourceValueByDatabaseId(string resourceId)
-        {
-            try
-            {
-                return HttpContext.GetGlobalResourceObject("ResourceMenu", resourceId).ToString();
-            }
-            catch (Exception e)
-            {
-                return resourceId;
-            }
-            //return null;
-        }
+        
 
         public JsonResult GetAllModuleList()
         {

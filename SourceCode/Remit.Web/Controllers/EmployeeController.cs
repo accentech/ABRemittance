@@ -358,43 +358,7 @@ namespace Remit.Web.Controllers
         return Json(employeeVMList, JsonRequestBehavior.AllowGet);
     }
 
-    public JsonResult GetEmployeeListOperation()
-    {
-        var employeeListObj = this.employeeService.GetAllEmployeeByConfig();
-        List<EmployeeModel> employeeVMList = new List<EmployeeModel>();
-
-        foreach (var employee in employeeListObj)
-        {
-            EmployeeModel employeeTemp = new EmployeeModel();
-            employeeTemp.Id = employee.Id;
-            employeeTemp.Code = employee.Code;
-            employeeTemp.FullName = employee.FullName;
-            employeeTemp.PresentAddress = employee.PresentAddress;
-            employeeTemp.PermanentAddress = employee.PermanentAddress;
-            employeeTemp.FatherName = employee.FatherName;
-            employeeTemp.MotherName = employee.MotherName;
-            employeeTemp.Email = employee.Email;
-            employeeTemp.NationalId = employee.NationalId;
-            employeeTemp.OfficeMobile = employee.OfficeMobile;
-            employeeTemp.OfficePhone = employee.OfficePhone;
-            employeeTemp.PassportNo = employee.PassportNo;
-            employeeTemp.PhotoPath = employee.PhotoPath;
-            employeeTemp.ResidentMobile = employee.ResidentMobile;
-            employeeTemp.ResidentPhone = employee.ResidentPhone;
-            employeeTemp.BloodGroup = employee.BloodGroup;
-            employeeTemp.AuthenticationCode = employee.AuthenticationCode;
-
-
-           
-
-            if (employeeTemp.Id != 1)
-                employeeVMList.Add(employeeTemp);
-            else if (UserSession.IsAdmin())
-                employeeVMList.Add(employeeTemp);
-        }
-        return Json(employeeVMList, JsonRequestBehavior.AllowGet);
-    }
-
+   
 
       public JsonResult GetEmployeeDep(int id)
       {

@@ -175,24 +175,7 @@ namespace Remit.Web.Controllers
             return Json(designationVMList, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetDesignationListByConfig()
-        {
-            var designationListObj = this.designationService.GetAllDesignationByConfig();
-            List<DesignationModel> designationVMList = new List<DesignationModel>();
-
-            foreach (var designation in designationListObj)
-            {
-                DesignationModel designationTemp = new DesignationModel();
-                designationTemp.Id = designation.Id;
-                designationTemp.Name = designation.Name;
-                designationTemp.DepartmentName = departmentService.GetDepartment(Convert.ToInt32(designation.DepartmentId)).Name;
-                designationTemp.DepartmentId = designation.DepartmentId;
-
-                designationVMList.Add(designationTemp);
-            }
-            return Json(designationVMList, JsonRequestBehavior.AllowGet);
-        }
-
+       
         public JsonResult GetDesignationListByDepartmentId(int id) //id is departmentId
         {
             var designationListObj = this.designationService.GetAllDesignationByDepartmentId(id);

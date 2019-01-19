@@ -7,6 +7,7 @@ namespace Remit.Model.Models
     {
         public SubModuleItem()
         {
+            this.NotificationSettings = new List<NotificationSetting>();
             this.RoleSubModuleItems = new List<RoleSubModuleItem>();
             this.SubModuleItem1 = new List<SubModuleItem>();
             this.WorkflowactionSettings = new List<WorkflowactionSetting>();
@@ -20,6 +21,7 @@ namespace Remit.Model.Models
         public Nullable<bool> IsBaseItem { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> BaseItemId { get; set; }
+        public virtual ICollection<NotificationSetting> NotificationSettings { get; set; }
         public virtual ICollection<RoleSubModuleItem> RoleSubModuleItems { get; set; }
         public virtual SubModule SubModule { get; set; }
         public virtual ICollection<SubModuleItem> SubModuleItem1 { get; set; }

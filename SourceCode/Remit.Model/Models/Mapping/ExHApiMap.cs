@@ -19,6 +19,12 @@ namespace Remit.Model.Models.Mapping
             this.Property(t => t.ActivationDate).HasColumnName("ActivationDate");
             this.Property(t => t.CreatedBy).HasColumnName("CreatedBy");
             this.Property(t => t.CreationDate).HasColumnName("CreationDate");
+
+            // Relationships
+            this.HasOptional(t => t.Api)
+                .WithMany(t => t.ExHApis)
+                .HasForeignKey(d => d.APIId);
+
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Remit.Model.Models
         public Nullable<System.DateTime> ActivationDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
+        public virtual Api Api { get; set; }
     }
 }

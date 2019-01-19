@@ -153,7 +153,7 @@ namespace Remit.Service
 
         public bool CheckUserInWorkflowactionSettingForUrl(string urlPath, int userId, int workflowactionId)
         {
-            var workflowactionSettingObj = this.workflowactionSettingRepository.Get(ap => ap.SubModuleItem.UrlPath == urlPath && ap.WorkflowactionId == workflowactionId && ap.Employee.BusinessUsers.Any(u => u.Id == userId));
+            var workflowactionSettingObj = new List<WorkflowactionSetting>();// this.workflowactionSettingRepository.Get(ap => ap.SubModuleItem.UrlPath == urlPath && ap.WorkflowactionId == workflowactionId && ap.Employee.BusinessUsers.Any(u => u.Id == userId));
             if (workflowactionSettingObj == null)
                 return false;
             return true;

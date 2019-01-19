@@ -273,10 +273,9 @@ namespace Remit.Web.Controllers
                         file.SaveAs(Server.MapPath(Path.Combine("~/CompanyLogo/", fileName + Path.GetExtension(file.FileName))));
                         this.companyService.UpdateCompany(companyObj);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-
-                        //
+                        return false;
                     }
 
                     return true;

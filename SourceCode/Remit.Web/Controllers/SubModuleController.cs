@@ -275,23 +275,7 @@ namespace Remit.Web.Controllers
             }
             return null;
         }
-        private string GetMenuResourceValueByDatabaseId(string resourceId)
-        {
-            try
-            {
-                string nospaceresourceId = string.Empty;
-                if (resourceId != null)
-                {
-                    nospaceresourceId = resourceId.Replace(" ", "");
-                }
-                return HttpContext.GetGlobalResourceObject("ResourceMenu", nospaceresourceId).ToString();  
-            }
-            catch (Exception e)
-            {
-                //
-            }
-            return null;
-        }
+        
 
         //private string GetSubModuleItemResourceValueByDatabaseId(string resourceId)
         //{
@@ -352,11 +336,10 @@ namespace Remit.Web.Controllers
             {
                 return HttpContext.GetGlobalResourceObject("ResourceSubModuleItem", subModuleResourceId).ToString();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return subModuleResourceId;
             }
-            return null;
         }
 
         public JsonResult GetSubModule(int id)

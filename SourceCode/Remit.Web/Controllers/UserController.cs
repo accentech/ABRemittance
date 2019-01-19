@@ -159,26 +159,7 @@ namespace Remit.Web.Controllers
 
             foreach (var user in userListObj)
             {
-                UserModel userTemp = new UserModel();
-                userTemp.Id = user.Id;
-                
-                userTemp.LoginName = user.LoginName;
-                //userTemp.FullName = user.FullName;
-                //userTemp.Email = user.Email;
-                userTemp.RoleId = user.RoleId;
-                if (user.RoleId != null)
-                    userTemp.RoleName = roleService.GetRole(Convert.ToInt32(user.RoleId)).Name;
-                if (user.IsActive == true)
-                    userTemp.IsActive = true;
-                else
-                    userTemp.IsActive = false;
-
-                if (user.EmployeeId != null)
-                {
-                    userTemp.EmployeeId = user.Employee.Id;
-                    userTemp.FullName = user.Employee.FullName;
-                    userTemp.EmployeeCode = user.Employee.Code;
-                }
+                UserModel userTemp = PrepareUser(user);
 
                 if (userTemp.RoleId != 1)
                     userVMList.Add(userTemp);
@@ -188,10 +169,8 @@ namespace Remit.Web.Controllers
             return Json(userVMList, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUser(int id)
+        private UserModel PrepareUser(BusinessUser user)
         {
-            var user = this.userService.GetUser(id);
-            
             UserModel userTemp = new UserModel();
             userTemp.Id = user.Id;
 
@@ -208,10 +187,19 @@ namespace Remit.Web.Controllers
 
             if (user.EmployeeId != null)
             {
-                userTemp.EmployeeId = user.Employee.Id;
-                userTemp.FullName = user.Employee.FullName;
-                userTemp.EmployeeCode = user.Employee.Code;
+                //userTemp.EmployeeId = user.EmployeeId;//TODO
+                userTemp.FullName = user.FullName;
+                //userTemp.EmployeeCode = user.EmployeeId;/TODO
             }
+
+            return userTemp;
+        }
+
+        public JsonResult GetUser(int id)
+        {
+            var user = this.userService.GetUser(id);
+
+            UserModel userTemp = PrepareUser(user);
             return Json(userTemp, JsonRequestBehavior.AllowGet);
         }
     }

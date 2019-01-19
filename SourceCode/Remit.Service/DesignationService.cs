@@ -21,7 +21,6 @@ namespace Remit.Service
 
         IEnumerable<Designation> GetAllDesignation();
         IEnumerable<Designation> GetAllDesignationByDepartmentId(int departmentId);
-        IEnumerable<Designation> GetAllDesignationByConfig();
         void SaveRecord();
 
         bool CheckIsExist(Designation designation);
@@ -109,12 +108,7 @@ namespace Remit.Service
         {
             return designationRepository.GetAll();
         }
-        public IEnumerable<Designation> GetAllDesignationByConfig()
-        {
-            int pilotid = int.Parse(@System.Configuration.ConfigurationSettings.AppSettings["Designation:Pilot"]);
-            int crewid = int.Parse(@System.Configuration.ConfigurationSettings.AppSettings["Designation:CabinCrew"]);
-            return designationRepository.GetMany(d => d.Id == pilotid || d.Id == crewid);
-        }
+        
 
         public IEnumerable<Designation> GetAllDesignationByDepartmentId(int departmentId)
         {

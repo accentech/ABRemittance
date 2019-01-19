@@ -7,14 +7,14 @@ namespace Remit.Model.Models
     {
         public ExchangeHouse()
         {
+            this.BusinessUsers = new List<BusinessUser>();
             this.ExHIPAddresses = new List<ExHIPAddress>();
-            this.ExHUsers = new List<ExHUser>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string ContactAddress { get; set; }
-        public string ContavtPhone { get; set; }
+        public string ContactPhone { get; set; }
         public string Fax { get; set; }
         public string CountryOfOrigin { get; set; }
         public string DateOfBusinessWithBank { get; set; }
@@ -30,7 +30,8 @@ namespace Remit.Model.Models
         public string CurrentStatus { get; set; }
         public string RemittanceTransactionMechanism { get; set; }
         public string ExHCode { get; set; }
+        public virtual ICollection<BusinessUser> BusinessUsers { get; set; }
+        public virtual Country Country { get; set; }
         public virtual ICollection<ExHIPAddress> ExHIPAddresses { get; set; }
-        public virtual ICollection<ExHUser> ExHUsers { get; set; }
     }
 }

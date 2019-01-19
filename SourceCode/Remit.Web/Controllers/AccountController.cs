@@ -147,7 +147,7 @@ namespace Remit.Web.Controllers
 
                 UserSession.SetUserFromSession(aUser);
                 UserSession.SetTimeZoneOffset(timeZoneOffset);
-                UserSession.SetUserFullNameInSession(aUser.Employee.FullName);
+                UserSession.SetUserFullNameInSession(aUser.FullName);
                 UserSession.SetCurrentUICulture(language);
 
                 return Json(new

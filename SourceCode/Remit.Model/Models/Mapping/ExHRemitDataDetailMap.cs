@@ -20,6 +20,12 @@ namespace Remit.Model.Models.Mapping
             this.Property(t => t.ExHRemitDataId).HasColumnName("ExHRemitDataId");
             this.Property(t => t.RawRemitData).HasColumnName("RawRemitData");
             this.Property(t => t.ParsedStatus).HasColumnName("ParsedStatus");
+
+            // Relationships
+            this.HasOptional(t => t.ExHRemitData)
+                .WithMany(t => t.ExHRemitDataDetails)
+                .HasForeignKey(d => d.ExHRemitDataId);
+
         }
     }
 }

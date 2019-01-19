@@ -242,18 +242,7 @@ namespace Remit.Web.Controllers
             return Json(subModuleItemVMList, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetMenuResourceValueByDatabaseId(string resourceId)
-        {
-            try
-            {
-                return HttpContext.GetGlobalResourceObject("ResourceMenu", resourceId).ToString();
-            }
-            catch (Exception e)
-            {
-                //
-            }
-            return null;
-        }
+        
 
         public JsonResult GetSubModuleItem(int id)
         {

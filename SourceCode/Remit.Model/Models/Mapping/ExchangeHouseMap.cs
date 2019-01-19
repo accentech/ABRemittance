@@ -17,15 +17,15 @@ namespace Remit.Model.Models.Mapping
             this.Property(t => t.ContactAddress)
                 .HasMaxLength(200);
 
-            this.Property(t => t.ContavtPhone)
+            this.Property(t => t.ContactPhone)
                 .HasMaxLength(50);
 
             this.Property(t => t.Fax)
                 .HasMaxLength(50);
 
             this.Property(t => t.CountryOfOrigin)
-                .IsFixedLength()
-                .HasMaxLength(10);
+                .IsRequired()
+                .HasMaxLength(50);
 
             this.Property(t => t.DateOfBusinessWithBank)
                 .HasMaxLength(50);
@@ -47,7 +47,7 @@ namespace Remit.Model.Models.Mapping
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.Name).HasColumnName("Name");
             this.Property(t => t.ContactAddress).HasColumnName("ContactAddress");
-            this.Property(t => t.ContavtPhone).HasColumnName("ContavtPhone");
+            this.Property(t => t.ContactPhone).HasColumnName("ContactPhone");
             this.Property(t => t.Fax).HasColumnName("Fax");
             this.Property(t => t.CountryOfOrigin).HasColumnName("CountryOfOrigin");
             this.Property(t => t.DateOfBusinessWithBank).HasColumnName("DateOfBusinessWithBank");
@@ -63,6 +63,12 @@ namespace Remit.Model.Models.Mapping
             this.Property(t => t.CurrentStatus).HasColumnName("CurrentStatus");
             this.Property(t => t.RemittanceTransactionMechanism).HasColumnName("RemittanceTransactionMechanism");
             this.Property(t => t.ExHCode).HasColumnName("ExHCode");
+
+            // Relationships
+            this.HasRequired(t => t.Country)
+                .WithMany(t => t.ExchangeHouses)
+                .HasForeignKey(d => d.CountryOfOrigin);
+
         }
     }
 }

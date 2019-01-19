@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = @Resources.ResourceNotificationSetting.LblNotificationSetting;
-    Layout = "~/Views/Shared/_Angular1_6_7NewMenuView.cshtml";
+    Layout = "~/Views/Shared/_MenuLayout.cshtml";
 }
 
 @*<div class="panel panel-default">
@@ -153,7 +153,9 @@
                 return $http.get('/Designation/GetDesignationListByDepartmentId/' + id);
             },
         };
-    }]);app.controller('notificationSettingCtrl', function ($scope, $http, focus, $location, $anchorScroll, $timeout, notificationSettingService, $log, $ngBootbox) {
+    }]);
+
+    function notificationSettingCtrl($scope, $http, focus, $location, $anchorScroll, $timeout, notificationSettingService, $log, $ngBootbox) {
         $scope.messageModalObj = {};
         //$scope.messageModalObj.message = '';
         $scope.showModalforSubmitMessage = false;
@@ -179,13 +181,13 @@
                 }
 
                 notificationSettingService.saveNotificationSettingList($scope.NotificationSettingList, $scope.SubModuleItemId, $scope.WorkflowactionId)
-                .then(function onSuccess(response) {
+                .success(function (data) {
                     loadAllUsresForUrlDropDown();
-                    $scope.messageModalObj.message = response.data.message;
+                    $scope.messageModalObj.message = data.message;
                     $scope.showModalforSubmitMessage = true;
                     $timeout(function () { $scope.showModalforSubmitMessage = false; }, 3000);
                 })
-                .catch(function onError(response) {
+                .error(function (xhr) {
                     //$ngBootbox.alert('Error in saving data');
                 });
             }
@@ -208,11 +210,11 @@
 
             if ($scope.SubModuleItemId != null)
                 notificationSettingService.getAllAvaiableUserForASubModuleItemByDeptDesignation($scope.WorkflowactionId, $scope.SubModuleItemId, $scope.DepartmentId, $scope.DesignationId)
-                .then(function onSuccess(response) {
-                    $scope.availableEmployees = response.data.availableEmployees;
-                    $scope.selectedEmployees = response.data.selectedEmployees;
+                .success(function (data) {
+                    $scope.availableEmployees = data.availableEmployees;
+                    $scope.selectedEmployees = data.selectedEmployees;
                 })
-                .catch(function onError(response) {
+                .error(function (xhr) {
                     //$ngBootbox.alert('Error in loading available medicine list');
                 });
         }
@@ -229,11 +231,11 @@
 
             if ($scope.SubModuleItemId != null)
                 notificationSettingService.getAllAvaiableUserForASubModuleItemByDeptDesignation($scope.WorkflowactionId, $scope.SubModuleItemId, $scope.DepartmentId, $scope.DesignationId)
-                .then(function onSuccess(response) {
-                    $scope.availableEmployees = response.data.availableEmployees;
-                    $scope.selectedEmployees = response.data.selectedEmployees;
+                .success(function (data) {
+                    $scope.availableEmployees = data.availableEmployees;
+                    $scope.selectedEmployees = data.selectedEmployees;
                 })
-                .catch(function onError(response) {
+                .error(function (xhr) {
                     //$ngBootbox.alert('Error in loading available medicine list');
                 });
         }
@@ -242,10 +244,10 @@
         function loadAllSubModuleItem() {
             $scope.allSubModuleItemFromDb = [];
             notificationSettingService.getAllSubModuleItem()
-                .then(function onSuccess(response) {
-                    $scope.allSubModuleItemFromDb = response.data;
+                .success(function (data) {
+                    $scope.allSubModuleItemFromDb = data;
                 })
-                .catch(function onError(response) {
+                .error(function (xhr) {
                     //$ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
                 });
         }
@@ -271,10 +273,10 @@
         loadAllWorkflowaction();
         function loadAllWorkflowaction() {
             notificationSettingService.getAllWorkflowaction()
-                .then(function onSuccess(response) {
-                    $scope.allWorkflowactionFromDb = response.data;
+                .success(function (data) {
+                    $scope.allWorkflowactionFromDb = data;
                 })
-                .catch(function onError(response) {
+                .error(function (xhr) {
                     $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
                 });
         }
@@ -286,10 +288,10 @@
             //$scope.allDepartmentFromDb = [];
 
             notificationSettingService.getAllDepartment()
-                .then(function onSuccess(response) {
-                    $scope.allDepartmentFromDb = response.data;
+                .success(function (data) {
+                    $scope.allDepartmentFromDb = data;
                 })
-                .catch(function onError(response) {
+                .error(function (xhr) {
                     $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
                 });
         }
@@ -301,12 +303,14 @@
 
             if ($scope.DepartmentId != undefined && $scope.DepartmentId != '' && $scope.DepartmentId != null) {
                 notificationSettingService.getAllDesignationByDept($scope.DepartmentId)
-                    .then(function onSuccess(response) {
-                        $scope.allDesignationByDepartment = response.data;
+                    .success(function (data) {
+                        $scope.allDesignationByDepartment = data;
                     })
-                    .catch(function onError(response) {
+                    .error(function (xhr) {
                         $ngBootbox.alert('@Resources.ResourceCommon.MsgErrorInLoading');
                     });
             }
         }
-    });</script>
+    }
+
+</script>

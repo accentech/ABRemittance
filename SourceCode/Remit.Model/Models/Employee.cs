@@ -7,7 +7,7 @@ namespace Remit.Model.Models
     {
         public Employee()
         {
-            this.BusinessUsers = new List<BusinessUser>();
+            this.NotificationSettings = new List<NotificationSetting>();
             this.WorkflowactionSettings = new List<WorkflowactionSetting>();
         }
 
@@ -28,7 +28,7 @@ namespace Remit.Model.Models
         public string BloodGroup { get; set; }
         public string PhotoPath { get; set; }
         public string AuthenticationCode { get; set; }
-        public virtual ICollection<BusinessUser> BusinessUsers { get; set; }
+        public virtual ICollection<NotificationSetting> NotificationSettings { get; set; }
         public virtual ICollection<WorkflowactionSetting> WorkflowactionSettings { get; set; }
     }
 }

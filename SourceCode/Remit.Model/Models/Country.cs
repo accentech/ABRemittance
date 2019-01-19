@@ -9,6 +9,7 @@ namespace Remit.Model.Models
         {
             this.Branches = new List<Branch>();
             this.Cities = new List<City>();
+            this.ExchangeHouses = new List<ExchangeHouse>();
         }
 
         public string Id { get; set; }
@@ -16,5 +17,6 @@ namespace Remit.Model.Models
         public string Code { get; set; }
         public virtual ICollection<Branch> Branches { get; set; }
         public virtual ICollection<City> Cities { get; set; }
+        public virtual ICollection<ExchangeHouse> ExchangeHouses { get; set; }
     }
 }

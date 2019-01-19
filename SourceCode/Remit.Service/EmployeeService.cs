@@ -20,7 +20,6 @@ namespace Remit.Service
         Employee GetEmployee(int id);
 
         IEnumerable<Employee> GetAllEmployee();
-        IEnumerable<Employee> GetAllEmployeeByConfig();
         IEnumerable<Employee> GetAllEmployeeByDepartmentAndDesignation(int? departmentId, int? designationId);
         void SaveRecord();
 
@@ -110,12 +109,7 @@ namespace Remit.Service
             return employeeRepository.GetAll();
         }
 
-        public IEnumerable<Employee> GetAllEmployeeByConfig()
-        {
-            int pilotid = int.Parse(@System.Configuration.ConfigurationSettings.AppSettings["Designation:Pilot"]);
-            int crewid = int.Parse(@System.Configuration.ConfigurationSettings.AppSettings["Designation:CabinCrew"]);
-            return this.employeeRepository.GetAll();
-        }
+        
 
         public IEnumerable<Employee> GetAllEmployeeByDepartmentAndDesignation(int? departmentId, int? designationId)
         {

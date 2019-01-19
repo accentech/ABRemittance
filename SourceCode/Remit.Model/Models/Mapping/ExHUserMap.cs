@@ -32,9 +32,9 @@ namespace Remit.Model.Models.Mapping
             this.Property(t => t.ReferenceForUser).HasColumnName("ReferenceForUser");
 
             // Relationships
-            this.HasOptional(t => t.ExchangeHouse)
-                .WithMany(t => t.ExHUsers)
-                .HasForeignKey(d => d.ExchangeHouseId);
+            //this.HasOptional(t => t.ExchangeHouse)
+            //    .WithMany(t => t.ExHUsers)
+            //    .HasForeignKey(d => d.ExchangeHouseId);
 
         }
     }

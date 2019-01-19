@@ -5,6 +5,11 @@ namespace Remit.Model.Models
 {
     public partial class Branch
     {
+        public Branch()
+        {
+            this.BusinessUsers = new List<BusinessUser>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -13,5 +18,6 @@ namespace Remit.Model.Models
         public Nullable<int> BankId { get; set; }
         public string CountryId { get; set; }
         public virtual Country Country { get; set; }
+        public virtual ICollection<BusinessUser> BusinessUsers { get; set; }
     }
 }
