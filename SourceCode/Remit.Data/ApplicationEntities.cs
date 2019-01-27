@@ -27,6 +27,7 @@ namespace Remit.Data.Models
 
         public DbSet<ActionLog> ActionLogs { get; set; }
         public DbSet<Api> Apis { get; set; }
+        public DbSet<Bank> Banks { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<BusinessUser> BusinessUsers { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -58,6 +59,7 @@ namespace Remit.Data.Models
         {
             modelBuilder.Configurations.Add(new ActionLogMap());
             modelBuilder.Configurations.Add(new ApiMap());
+            modelBuilder.Configurations.Add(new BankMap());
             modelBuilder.Configurations.Add(new BranchMap());
             modelBuilder.Configurations.Add(new BusinessUserMap());
             modelBuilder.Configurations.Add(new CityMap());
